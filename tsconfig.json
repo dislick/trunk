@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "module": "commonjs",
+    "jsx": "react",
+    "experimentalDecorators": true,
+    "allowJs": true,
+    "emitDecoratorMetadata": true,
+    "strictNullChecks": false,
+    "sourceMap": true,
+  },
+  "lib": [ "dom", "es2015" ],
+  "exclude": [
+    "node_modules",
+    "build"
+  ]
+}
