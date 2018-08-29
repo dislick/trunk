@@ -5,8 +5,10 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "webpack": "webpack --config src/client/webpack.development.config.js",
-    "start:dev": "webpack-dev-server --config src/client/webpack.development.config.js"
+    "start:client": "webpack-dev-server --config src/client/webpack.development.config.js",
+    "start:server": "gulp --gulpfile src/server/Gulpfile.js express",
+    "build:client": "webpack --config src/client/webpack.development.config.js",
+    "build:server": "gulp --gulpfile src/server/Gulpfile.js build"
   },
   "keywords": [
     "bittorrent"
@@ -17,9 +19,15 @@
     "express": "^4.16.3"
   },
   "devDependencies": {
+    "@types/node": "^10.9.3",
     "clean-webpack-plugin": "^0.1.19",
     "css-loader": "^1.0.0",
     "file-loader": "^2.0.0",
+    "gulp": "^4.0.0",
+    "gulp-clean": "^0.4.0",
+    "gulp-live-server": "0.0.31",
+    "gulp-sourcemaps": "^2.6.4",
+    "gulp-typescript": "^5.0.0-alpha.3",
     "html-webpack-plugin": "^3.2.0",
     "image-webpack-loader": "^4.3.1",
     "postcss-loader": "^3.0.0",

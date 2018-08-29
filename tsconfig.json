@@ -8,6 +8,9 @@
     "emitDecoratorMetadata": true,
     "strictNullChecks": false,
     "sourceMap": true,
+    "typeRoots": [
+      "node_modules/@types"
+    ],
   },
   "lib": [ "dom", "es2015" ],
   "exclude": [

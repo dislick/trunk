@@ -1,2 +1,3 @@
 node_modules/
-src/build/
+src/build-client/
+src/build-server/

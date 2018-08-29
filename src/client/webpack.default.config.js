@@ -1,6 +1,6 @@
 const path = require('path');
 
-const BUILD_DIR = path.resolve(__dirname, '../build');
+const BUILD_DIR = path.resolve(__dirname, '../build-client');
 
 module.exports = {
   output: {

@@ -17,7 +17,7 @@ module.exports = merge(defaultConfig, {
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify('development'),
     }),
-    new CleanWebpackPlugin(['build'], {
+    new CleanWebpackPlugin(['build-client'], {
       root: CLIENT_DIR,
       verbose: true,
       dry: false,
