@@ -7,6 +7,8 @@ import * as bodyParser from 'body-parser';
  * Controllers
  */
 import * as LoginController from './controllers/login_controller';
+import * as PostController from './controllers/post_controller';
+import { authMiddleware } from './middlewares/auth_middleware';
 
 const app = express();
 
@@ -25,8 +27,10 @@ app.use('/', express.static(path.join(__dirname, '../build-client')));
 /**
  * API Endpoints
  */
-app.get('/login', LoginController.loginUser);
+app.post('/login', LoginController.loginUser);
 app.post('/register', LoginController.registerUser);
+
+app.get('/posts', authMiddleware, PostController.getPosts);
 
 
 app.listen(config.port, () => console.log(`trunk API listening on port ${config.port}`));

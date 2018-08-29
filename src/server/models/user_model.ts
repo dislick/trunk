@@ -2,8 +2,17 @@ import * as bcrypt from 'bcrypt';
 import { config } from '../config';
 import { pool } from './database';
 import * as crypto from 'crypto';
-import { DuplicateEntryError } from '../utils/error';
+import { DuplicateEntryError, NotFoundError } from '../utils/error';
 import { UserLevel } from '../enums/level_enum';
+
+export interface UserModel {
+  id: number;
+  username: string;
+  email: string;
+  password_hash: string;
+  torrent_auth_key: string;
+  level: number;
+}
 
 /**
  * Registers a new user in the database. Make sure that the values provided here
@@ -12,7 +21,7 @@ import { UserLevel } from '../enums/level_enum';
  * @param email Email of the user
  * @param password Password in plain text
  */
-export const registerUserInDatabase = async (username: string, email: string, password: string): Promise<{ id: number, torrentAuthKey: string }> => {
+export const registerUserInDatabase = async (username: string, email: string, password: string): Promise<UserModel> => {
   // Hash password with bcrypt
   const hash = await bcrypt.hash(password, config.bcryptRounds);
 
@@ -40,9 +49,48 @@ export const registerUserInDatabase = async (username: string, email: string, pa
 
     return {
       id: result.rows[0].id,
-      torrentAuthKey: torrentAuthKey,
+      username,
+      email,
+      password_hash: hash,
+      torrent_auth_key: torrentAuthKey,
+      level: UserLevel.NORMAL,
     };
   } catch (ex) {
     throw new DuplicateEntryError('Username or email already exists');
   }
+};
+
+/**
+ * Find a user in the database using an ID.
+ * @param userId 
+ */
+export const findUser = async (userId: number): Promise<UserModel> => {
+  const query = `
+    SELECT * from "user" WHERE id = $1`;
+
+  let result = await pool.query(query, [userId]);
+
+  if (result.rows.length <= 0) {
+    throw new NotFoundError('User not found');
+  }
+
+  return result.rows[0];
+};
+
+export const validateUser = async (username: string, password: string): Promise<{ isPasswordCorrect: boolean, userId: number}> => {
+  const query = `
+    SELECT * from "user" WHERE username = $1`;
+
+  let result = await pool.query(query, [username]);
+
+  if (result.rows.length <= 0) {
+    throw new NotFoundError('User not found');
+  }
+
+  let user: UserModel = result.rows[0];
+
+  return {
+    isPasswordCorrect: await bcrypt.compare(password, user.password_hash),
+    userId: user.id,
+  };
 };

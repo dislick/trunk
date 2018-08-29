@@ -1,10 +1,35 @@
 import { Request, Response } from 'express';
-import { registerUserInDatabase } from '../models/user_model';
+import { registerUserInDatabase, validateUser } from '../models/user_model';
 import { isString } from 'lodash';
 import { DuplicateEntryError } from '../utils/error';
+import * as jwt from 'jsonwebtoken';
+import { config } from '../config';
 
-export const loginUser = (request: Request, response: Response) => {
-  response.send('hello!!');
+export interface JWTPayload {
+  id: number;
+}
+
+export const loginUser = async (request: Request, response: Response) => {
+  let { username, password } = request.body;
+
+  if (!isString(username) || !isString(password)) {
+    return response.status(400).send();
+  }
+
+  let { isPasswordCorrect, userId } = await validateUser(username, password);
+
+  if (isPasswordCorrect) {
+    let token = generateJWT(userId);
+    response.send({
+      auth: true,
+      token: token,
+    })
+  } else {
+    response.status(401).send({
+      auth: false,
+      message: 'Incorrect credentials'
+    });
+  }
 };
 
 export const registerUser = async (request: Request, response: Response) => {
@@ -23,13 +48,24 @@ export const registerUser = async (request: Request, response: Response) => {
 
   try {
     let result = await registerUserInDatabase(username, email, password);
-    console.log(result);
+    let token = generateJWT(result.id);
+
+    response.status(200).send({
+      auth: true,
+      token: token,
+    });
   } catch (error) {
     if (error instanceof DuplicateEntryError) {
       return response.status(400).send();
     }
     return response.status(500).send();
   }
+};
 
-  response.send({ __status: 200 });
+const generateJWT = (userId: number): string => {
+  // Generate JSON Web Token
+  let payload: JWTPayload = { id: userId };
+  return jwt.sign(payload, config.jwtSecret, {
+    expiresIn: 86400 // 24h in seconds
+  });
 };
