@@ -28,7 +28,7 @@ app.use('/', express.static(path.join(__dirname, '../build-client')));
  * API Endpoints
  */
 app.post('/login', LoginController.loginUser);
-app.post('/register', LoginController.registerUser);
+app.post('/register/:inviteCode', LoginController.registerUser);
 
 app.get('/posts', authMiddleware, PostController.getPosts);
 

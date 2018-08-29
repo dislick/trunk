@@ -4,11 +4,15 @@ import { isString } from 'lodash';
 import { DuplicateEntryError } from '../utils/error';
 import * as jwt from 'jsonwebtoken';
 import { config } from '../config';
+import { isInviteValid, claimInviteCode } from '../models/invite_model';
 
 export interface JWTPayload {
   id: number;
 }
 
+/**
+ * API Endpoint POST /login 
+ */
 export const loginUser = async (request: Request, response: Response) => {
   let { username, password } = request.body;
 
@@ -32,8 +36,12 @@ export const loginUser = async (request: Request, response: Response) => {
   }
 };
 
+/**
+ * API Endpoint POST /register 
+ */
 export const registerUser = async (request: Request, response: Response) => {
-  let { username, email, password } = request.body;
+  const { username, email, password } = request.body;
+  const { inviteCode } = request.params;
 
   // Basic validation
   if (!isString(username) || username.length < 3 || username.length > 64) {
@@ -47,8 +55,15 @@ export const registerUser = async (request: Request, response: Response) => {
   }
 
   try {
-    let result = await registerUserInDatabase(username, email, password);
-    let token = generateJWT(result.id);
+    let isValid = await isInviteValid(inviteCode);
+
+    if (!isValid) {
+      return response.status(401).send({ auth: false, message: 'Invalid invite code' });
+    }
+
+    let newUser = await registerUserInDatabase(username, email, password);
+    await claimInviteCode(inviteCode, newUser.id);
+    let token = generateJWT(newUser.id);
 
     response.status(200).send({
       auth: true,
