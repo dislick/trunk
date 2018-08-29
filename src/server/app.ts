@@ -1,11 +1,32 @@
 import * as express from 'express';
 import * as path from 'path';
+import { config } from './config';
+import * as bodyParser from 'body-parser';
+
+/** 
+ * Controllers
+ */
+import * as LoginController from './controllers/login_controller';
+
 const app = express();
 
-app.get('/', (req, res) => {
-  let x = path.join(__dirname, '../build-client/index.html');
-  console.log(x, x);
-  res.sendFile(x);
-});
 
-app.listen(3000, () => console.log('Example app listening on port 3000!'));
+/**
+ * Middlewares
+ */
+app.use(bodyParser.json());
+
+
+/**
+ * Serve client app
+ */
+app.use('/', express.static(path.join(__dirname, '../build-client')));
+
+/**
+ * API Endpoints
+ */
+app.get('/login', LoginController.loginUser);
+app.post('/register', LoginController.registerUser);
+
+
+app.listen(config.port, () => console.log(`trunk API listening on port ${config.port}`));
