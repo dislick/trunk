@@ -16,7 +16,7 @@ export interface UserModel {
 
 /**
  * Registers a new user in the database. Make sure that the values provided here
- * have been checked for validity.
+ * have been checked for validity and that the user has a valid invite code!
  * @param username Name of the user
  * @param email Email of the user
  * @param password Password in plain text
@@ -26,7 +26,7 @@ export const registerUserInDatabase = async (username: string, email: string, pa
   const hash = await bcrypt.hash(password, config.bcryptRounds);
 
   // Generate torrent_auth_key. This is mostly random by hashing some user
-  // provided values with a random string and the current date.
+  // provided values with a random string and the current time.
   const shaHash = crypto.createHash('sha1');
   const torrentAuthKey: string = shaHash.update(
     username + email + Math.random().toString() + Date.now().toString()

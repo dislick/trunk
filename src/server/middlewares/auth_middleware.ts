@@ -16,7 +16,7 @@ export const authMiddleware = (request: Request, response: Response, next: NextF
   let token = request.headers['x-access-token'];
 
   if (!token || !isString(token)) {
-    return response.status(401).send({ auth: false, message: 'No token provided' });
+    return response.status(401).send({ auth: false, message: 'No token provided, set header x-access-token' });
   }
 
   jwt.verify(token, config.jwtSecret, (error, decoded: JWTPayload) => {

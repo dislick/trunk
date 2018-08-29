@@ -27,7 +27,7 @@ export const loginUser = async (request: Request, response: Response) => {
     response.send({
       auth: true,
       token: token,
-    })
+    });
   } else {
     response.status(401).send({
       auth: false,
@@ -77,8 +77,11 @@ export const registerUser = async (request: Request, response: Response) => {
   }
 };
 
+/**
+ * Generate a JSON Web Token.
+ * @param userId ID of the user
+ */
 const generateJWT = (userId: number): string => {
-  // Generate JSON Web Token
   let payload: JWTPayload = { id: userId };
   return jwt.sign(payload, config.jwtSecret, {
     expiresIn: 86400 // 24h in seconds

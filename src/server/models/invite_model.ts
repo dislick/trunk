@@ -23,7 +23,7 @@ export const isInviteValid = async (inviteCode: string): Promise<boolean> => {
 
 export const claimInviteCode = async (inviteCode: string, claimedBy: number) => {
   const query = `
-    UPDATE invite 
+    UPDATE "invite" 
     SET 
       is_claimed = true, 
       claimed_at = now(), 
