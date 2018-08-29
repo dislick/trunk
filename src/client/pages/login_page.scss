@@ -1,0 +1,27 @@
+@import '../styles/colors.scss';
+
+.login-page-wrapper {
+  background-color: $lighter-black-color;
+  flex: 1 1 100%;
+  display: flex;
+  justify-content: center;
+
+  .login-inner {
+    flex: 1 1 auto;
+    max-width: 300px;
+    padding: 16px;
+    text-align: center;
+
+    .logo {
+      width: 170px;
+      margin-top: 48px;
+    }
+
+    .textbox-wrapper {
+      margin: 48px 0 64px 0;
+      & > *:not(:last-child) {
+        margin-bottom: 32px;
+      }
+    }
+  }
+}

@@ -1,0 +1,22 @@
+@import '../styles/colors.scss';
+
+.trunk-textfield {
+  width: 100%;
+  box-sizing: border-box;
+  -webkit-appearance: none;
+  background-color: transparent;
+  border: none;
+  color: $grey-color;
+  font-size: 16px;
+  border-bottom: 1px solid $grey-color;
+  padding-bottom: 7px;
+  border-radius: 0;
+  padding-left: 0;
+  padding-right: 0;
+
+  &:focus {
+    outline: none;
+    border-color: white;
+    color: white;
+  }
+}

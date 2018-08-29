@@ -1,0 +1,28 @@
+@import '../styles/colors.scss';
+
+.trunk-button {
+  background-color: $main-color;
+  padding: 12px 0;
+  border-radius: 45px;
+  cursor: pointer;
+  width: 100%;
+  border: none;
+  -webkit-appearance: none;
+  border: 2px solid $main-color;
+
+  &:focus {
+    border-color: lighten($main-color, 25%);
+    outline: none;
+  }
+
+  &:hover {
+    background-color: lighten($main-color, 3%);
+  }
+  
+  p {
+    color: white;
+    text-transform: uppercase;
+    font-size: 13px;
+    font-weight: bold;
+  }
+}
