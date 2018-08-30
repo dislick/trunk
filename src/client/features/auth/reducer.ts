@@ -1,7 +1,7 @@
 import { ActionType } from 'typesafe-actions';
 import * as authActions from './actions';
 import { combineReducers } from 'redux';
-import { SET_USERNAME, SET_PASSWORD } from './constants';
+import { SET_USERNAME, SET_PASSWORD, SUBMIT_LOGIN_SUCCESS } from './constants';
 
 export type AuthActions = ActionType<typeof authActions>;
 
@@ -24,6 +24,8 @@ export default combineReducers<AuthState, AuthActions>({
         return { ...state, username: action.payload };
       case SET_PASSWORD:
         return { ...state, password: action.payload };
+      case SUBMIT_LOGIN_SUCCESS:
+        return { ...state, username: action.payload.id.toString() };
     }
 
     return state;

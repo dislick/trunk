@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
 import { StateType } from 'typesafe-actions';
-import authReducer, { AuthActions } from './features/auth/reducer';
+import { authReducer, AuthActions } from './features/auth';
 
 const rootReducer = combineReducers({
   authReducer,

@@ -11,4 +11,5 @@ const mapStateToProps = (state: RootState) => ({
 export const LoginPageConnected = connect(mapStateToProps, {
   onChangeUsername: authActions.setUsername,
   onChangePassword: authActions.setPassword,
+  onSubmit: authActions.submitLogin.request,
 })(LoginPage);
