@@ -6,11 +6,10 @@ import rootReducer from './reducer';
 export const history = createBrowserHistory()
 
 export const store = createStore(
-  connectRouter(history)(rootReducer), // new root reducer with router state
+  connectRouter(history)(rootReducer),
   compose(
     applyMiddleware(
-      routerMiddleware(history), // for dispatching history actions
-      // ... other middlewares ...
+      routerMiddleware(history),
     ),
   ),
 );
