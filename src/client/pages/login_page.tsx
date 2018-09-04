@@ -3,6 +3,7 @@ import { TextField } from '../components/textfield';
 import { Button } from '../components/button';
 
 import './login_page.scss';
+import { Spinner } from '../components/spinner';
 
 interface Props {
   username: string;
@@ -25,6 +26,7 @@ export const LoginPage = (props: Props) => (
           placeholder='Username or Email'
           name='email'
           onChange={event => props.onChangeUsername(event.target.value)}
+          onEnter={props.onSubmit}
         />
         <TextField
           value={props.password}
@@ -32,12 +34,18 @@ export const LoginPage = (props: Props) => (
           name='password'
           type='password'
           onChange={event => props.onChangePassword(event.target.value)}
+          onEnter={props.onSubmit}
         />
       </div>
+      
+      {props.providedInvalidCredentials && <p className='error'>Invalid credentials</p>}
 
-      {props.isFetching && <p>isFetching</p>}
-      {props.providedInvalidCredentials && <p>Invalid credentials</p>}
-      <Button onClick={props.onSubmit}>Login</Button>
+      {props.isFetching
+        ?
+        <Spinner />
+        :
+        <Button onClick={props.onSubmit}>Login</Button>
+      }
     </div>
   </div>
 );

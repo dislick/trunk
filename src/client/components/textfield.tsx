@@ -8,6 +8,7 @@ export interface TextFieldProps {
   name?: string;
   type?: string;
   onChange: (event) => void;
+  onEnter?: () => void;
 }
 
 export const TextField = (props: TextFieldProps) => {
@@ -19,6 +20,11 @@ export const TextField = (props: TextFieldProps) => {
       placeholder={props.placeholder}
       name={props.name}
       onChange={props.onChange}
+      onKeyDown={(event) => {
+        if (event.key === 'Enter') {
+          props.onEnter();
+        }
+      }}
       autoCorrect='off'
       autoCapitalize='off'
       spellCheck={false}

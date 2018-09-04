@@ -29,6 +29,7 @@ export const submitLoginRequest = () => async (dispatch: Dispatch, getState: () 
   });
   const { username, password } = getState().authReducer;
   const response = await loginUser(username, password);
+
   if (response.ok) {
     dispatch({ type: SUBMIT_LOGIN_SUCCESS });
     dispatch(push('/'));
