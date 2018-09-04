@@ -1,11 +1,38 @@
-import { action, createAsyncAction } from 'typesafe-actions';
-import { SET_USERNAME, SET_PASSWORD, SUBMIT_LOGIN_REQUEST, SUBMIT_LOGIN_SUCCESS, SUBMIT_LOGIN_FAILURE } from './constants';
-
-export const setUsername = (username: string) => action(SET_USERNAME, username);
-export const setPassword = (password: string) => action(SET_PASSWORD, password);
-
-export const submitLogin = createAsyncAction(
+import {
+  SET_USERNAME,
+  SET_PASSWORD,
   SUBMIT_LOGIN_REQUEST,
   SUBMIT_LOGIN_SUCCESS,
   SUBMIT_LOGIN_FAILURE
-)<void, { id: number }, Error>();
+} from './constants';
+import { Dispatch, Action } from 'redux';
+import { RootState } from '../../reducer';
+import { loginUser } from './services';
+import { push } from 'connected-react-router';
+
+export interface AuthAction extends Action {
+  payload: string;
+}
+
+export const setUsername = (username: string) => ({
+  type: SET_USERNAME,
+  payload: username
+});
+export const setPassword = (password: string) => ({
+  type: SET_PASSWORD,
+  payload: password
+});
+
+export const submitLoginRequest = () => async (dispatch: Dispatch, getState: () => RootState) => {
+  dispatch({
+    type: SUBMIT_LOGIN_REQUEST
+  });
+  const { username, password } = getState().authReducer;
+  const isAuthenticated = await loginUser(username, password);
+  if (isAuthenticated) {
+    dispatch({ type: SUBMIT_LOGIN_SUCCESS });
+    dispatch(push('/'));
+  } else {
+    dispatch({ type: SUBMIT_LOGIN_FAILURE });
+  }
+};

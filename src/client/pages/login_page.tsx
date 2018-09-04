@@ -27,8 +27,8 @@ export const LoginPage = (props: Props) => (
         <TextField
           value={props.password}
           placeholder='Password'
-          type='password'
           name='password'
+          type='password'
           onChange={event => props.onChangePassword(event.target.value)}
         />
       </div>

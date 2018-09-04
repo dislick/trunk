@@ -1,12 +1,13 @@
 import { combineReducers } from 'redux';
 import { StateType } from 'typesafe-actions';
-import { authReducer, AuthActions } from './features/auth';
+import { authReducer } from './features/auth';
+import { postsReducer } from './features/posts';
 
 const rootReducer = combineReducers({
   authReducer,
+  postsReducer,
 });
 
 export type RootState = StateType<typeof rootReducer>;
-export type RootAction = AuthActions;
 
 export default rootReducer;

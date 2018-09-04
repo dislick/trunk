@@ -1,12 +1,10 @@
 import { createBrowserHistory } from 'history'
 import { applyMiddleware, compose, createStore } from 'redux'
-import { connectRouter, routerMiddleware, ConnectedRouter } from 'connected-react-router'
+import { connectRouter, routerMiddleware } from 'connected-react-router'
 import rootReducer from './reducer';
-import { createEpicMiddleware } from 'redux-observable';
-import { rootEpic } from './epic';
+import thunk from 'redux-thunk';
 
 export const history = createBrowserHistory()
-const epicMiddleware = createEpicMiddleware();
 
 export const store = createStore(
   connectRouter(history)(rootReducer),
@@ -14,9 +12,7 @@ export const store = createStore(
   compose(
     applyMiddleware(
       routerMiddleware(history),
-      epicMiddleware, 
+      thunk,
     ),
   ),
 );
-
-epicMiddleware.run(rootEpic);

@@ -19,10 +19,12 @@
 
   &:hover {
     background-color: lighten($main-color, 3%);
+    border-color: lighten($main-color, 3%);
   }
 
   &:active {
     background-color: $highlight-color;
+    border-color: $highlight-color;
   }
   
   p {

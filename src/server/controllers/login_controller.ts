@@ -15,15 +15,24 @@ export interface JWTPayload {
  */
 export const loginUser = async (request: Request, response: Response) => {
   let { username, password } = request.body;
+  console.log(request.body);
 
-  if (!isString(username) || !isString(password)) {
-    return response.status(400).send();
+  if (!isString(username) ||  !isString(password)) {
+    return response.status(400).send({ auth: false });
   }
 
-  let { isPasswordCorrect, userId } = await validateUser(username, password);
+  try {
+    var { isPasswordCorrect, userId } = await validateUser(username, password);
+  } catch (error) {
+    return response.status(401).send({
+      auth: false,
+      message: 'Incorrect credentials'
+    });
+  }
 
   if (isPasswordCorrect) {
     let token = generateJWT(userId);
+    response.cookie('trunk-jwt', token);
     response.send({
       auth: true,
       token: token,
@@ -47,7 +56,7 @@ export const registerUser = async (request: Request, response: Response) => {
   if (!isString(username) || username.length < 3 || username.length > 64) {
     return response.status(400).send();
   }
-  if (!isString(email) || email.length < 3 || email.length > 128 || email.indexOf('@') === -1) {
+  if (!isString(email) || email.length < 3 || email.length > 128 ||  email.indexOf('@') === -1) {
     return response.status(400).send();
   }
   if (!isString(password) || password.length < 8 || password.length > 72) {

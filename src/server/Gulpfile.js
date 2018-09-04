@@ -46,10 +46,9 @@ gulp.task('express', gulp.series('typescript', () => {
   server.start();
 
   // watch for changes -> compile -> restart server
-  return gulp.watch([config.server.src], gulp.series(['typescript', () => {
+  return gulp.watch([config.server.src], gulp.parallel([() => {
     server.stop();
-    server.start();
-  }]));
+  }, 'express']));
 }));
 
 

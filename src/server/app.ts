@@ -2,6 +2,8 @@ import * as express from 'express';
 import * as path from 'path';
 import { config } from './config';
 import * as bodyParser from 'body-parser';
+import * as cookieParser from 'cookie-parser';
+import * as cors from 'cors';
 
 /** 
  * Controllers
@@ -17,6 +19,11 @@ const app = express();
  * Middlewares
  */
 app.use(bodyParser.json());
+app.use(cookieParser(config.cookieSecret));
+app.use(cors({
+  origin: 'http://localhost:8080',
+  credentials: true,
+}));
 
 
 /**

@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start:client": "webpack-dev-server --config src/client/webpack.development.config.js --host 0.0.0.0",
+    "start:client": "webpack-dev-server --config src/client/webpack.development.config.js --host 0.0.0.0 --history-api-fallback",
     "start:server": "gulp --gulpfile src/server/Gulpfile.js express",
     "build:client": "webpack --config src/client/webpack.development.config.js",
     "build:server": "gulp --gulpfile src/server/Gulpfile.js build"
@@ -19,6 +19,8 @@
     "bcrypt": "^3.0.0",
     "body-parser": "^1.18.3",
     "connected-react-router": "^4.4.1",
+    "cookie-parser": "^1.4.3",
+    "cors": "^2.8.4",
     "express": "^4.16.3",
     "jsonwebtoken": "^8.3.0",
     "lodash": "^4.17.10",
@@ -28,9 +30,8 @@
     "react-redux": "^5.0.7",
     "react-router": "^4.3.1",
     "redux": "^4.0.0",
-    "redux-observable": "^1.0.0",
+    "redux-thunk": "^2.3.0",
     "reset-css": "^4.0.1",
-    "rxjs": "^6.2.2",
     "typesafe-actions": "^2.0.4"
   },
   "devDependencies": {
