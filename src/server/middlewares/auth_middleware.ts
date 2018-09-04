@@ -13,7 +13,7 @@ import { JWTPayload } from '../controllers/login_controller';
  * @param next 
  */
 export const authMiddleware = (request: Request, response: Response, next: NextFunction) => {
-  let token = request.headers['x-access-token'] || request.cookies['trunk-jwt'];
+  let token = request.headers['x-access-token'] || request.cookies[config.jwtCookieName];
 
   if (!token || !isString(token)) {
     return response.status(401).send({ auth: false, message: 'No token provided, set header x-access-token' });

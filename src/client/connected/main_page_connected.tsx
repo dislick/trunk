@@ -8,5 +8,6 @@ const mapStateToProps = (state: RootState) => ({
 });
 
 export const MainPageConnected = connect(mapStateToProps, {
-  fetchPosts: postsActions.fetchPosts,
+  onFetchPosts: postsActions.fetchPosts,
+  onLogout: postsActions.logout,
 })(MainPage);

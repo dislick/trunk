@@ -5,6 +5,7 @@ import { Dispatch, Action } from 'redux';
 import { RootState } from '../../reducer';
 import { fetchPostsFromServer } from './services';
 import { push } from 'connected-react-router';
+import { authServices } from '../auth';
 
 export interface PostsAction extends Action {
   payload: string;
@@ -21,4 +22,9 @@ export const fetchPosts = () => async (dispatch: Dispatch, getState: () => RootS
     dispatch({ type: FETCH_POSTS_FAILURE });
     dispatch(push('/login'));
   }
+};
+
+export const logout = () => async (dispatch: Dispatch, getState: () => RootState) => {
+  await authServices.logoutUser();
+  dispatch(push('/login'));
 };

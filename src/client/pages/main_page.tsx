@@ -3,18 +3,20 @@ import { TextField } from '../components/textfield';
 import { Button } from '../components/button';
 
 interface Props {
-  fetchPosts: () => void;
+  onFetchPosts: () => void;
+  onLogout: () => void;
 }
 
 export class MainPage extends React.Component<Props> {
   componentDidMount() {
-    this.props.fetchPosts();
+    this.props.onFetchPosts();
   }
 
   render() {
     return (
       <div className='main-page-wrapper'>
-        main page :D
+        <p>main page :D</p>
+        <Button onClick={this.props.onLogout}>Logout</Button>
       </div>
     );
   }

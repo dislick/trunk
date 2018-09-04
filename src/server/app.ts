@@ -34,10 +34,11 @@ app.use('/', express.static(path.join(__dirname, '../build-client')));
 /**
  * API Endpoints
  */
-app.post('/login', LoginController.loginUser);
-app.post('/register/:inviteCode', LoginController.registerUser);
+app.post('/api/login', LoginController.loginUser);
+app.get('/api/logout', LoginController.logoutUser);
+app.post('/api/register/:inviteCode', LoginController.registerUser);
 
-app.get('/posts', authMiddleware, PostController.getPosts);
+app.get('/api/posts', authMiddleware, PostController.getPosts);
 
 
 app.listen(config.port, () => console.log(`trunk API listening on port ${config.port}`));

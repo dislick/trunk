@@ -15,7 +15,6 @@ export interface JWTPayload {
  */
 export const loginUser = async (request: Request, response: Response) => {
   let { username, password } = request.body;
-  console.log(request.body);
 
   if (!isString(username) ||  !isString(password)) {
     return response.status(400).send({ auth: false });
@@ -32,7 +31,10 @@ export const loginUser = async (request: Request, response: Response) => {
 
   if (isPasswordCorrect) {
     let token = generateJWT(userId);
-    response.cookie('trunk-jwt', token);
+    response.cookie(config.jwtCookieName, token, {
+      httpOnly: true,
+      maxAge: 86400000,
+    });
     response.send({
       auth: true,
       token: token,
@@ -43,6 +45,11 @@ export const loginUser = async (request: Request, response: Response) => {
       message: 'Incorrect credentials'
     });
   }
+};
+
+export const logoutUser = async (request: Request, response: Response) => {
+  response.clearCookie(config.jwtCookieName);
+  response.send({ auth: false });
 };
 
 /**
