@@ -6,6 +6,8 @@ import { authActions } from '../features/auth';
 const mapStateToProps = (state: RootState) => ({
   username: state.authReducer.username,
   password: state.authReducer.password,
+  providedInvalidCredentials: state.authReducer.invalidCredentials,
+  isFetching: state.authReducer.isFetching
 });
 
 export const LoginPageConnected = connect(mapStateToProps, {

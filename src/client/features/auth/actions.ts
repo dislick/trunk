@@ -28,8 +28,8 @@ export const submitLoginRequest = () => async (dispatch: Dispatch, getState: () 
     type: SUBMIT_LOGIN_REQUEST
   });
   const { username, password } = getState().authReducer;
-  const isAuthenticated = await loginUser(username, password);
-  if (isAuthenticated) {
+  const response = await loginUser(username, password);
+  if (response.ok) {
     dispatch({ type: SUBMIT_LOGIN_SUCCESS });
     dispatch(push('/'));
   } else {

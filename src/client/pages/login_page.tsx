@@ -7,6 +7,8 @@ import './login_page.scss';
 interface Props {
   username: string;
   password: string;
+  isFetching: boolean;
+  providedInvalidCredentials: boolean;
   onChangeUsername: (username: string) => any;
   onChangePassword: (password: string) => any;
   onSubmit: () => any;
@@ -33,6 +35,8 @@ export const LoginPage = (props: Props) => (
         />
       </div>
 
+      {props.isFetching && <p>isFetching</p>}
+      {props.providedInvalidCredentials && <p>Invalid credentials</p>}
       <Button onClick={props.onSubmit}>Login</Button>
     </div>
   </div>

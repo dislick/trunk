@@ -28,7 +28,7 @@ export default (state: AuthState = defaultState, action: AuthAction): AuthState 
     case SUBMIT_LOGIN_FAILURE:
       return { ...state, isAuthenticated: false, invalidCredentials: true, isFetching: false };
     case SUBMIT_LOGIN_SUCCESS:
-      return { ...state, isAuthenticated: true, invalidCredentials: false, isFetching: false };
+      return { ...state, isAuthenticated: true, invalidCredentials: false, isFetching: false, password: '' };
   }
 
   return state;
