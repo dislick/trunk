@@ -15,16 +15,15 @@ interface AnnounceParams {
   addr: string;
   httpReq: Request;
   httpRes: Response;
-  [key: string]: any;
 }
 
 export default () => {
   const server = new Server({
-    udp: true,
+    udp: false,
     http: true,
     ws: false,
     stats: false,
-    filter: async (infoHash, params: AnnounceParams, cb) => {
+    filter: async (infoHash: string, params: AnnounceParams, cb: (error: Error) => void) => {
       try {
         const user = await findUserByTorrentKey(params.httpRes.locals.torrentKey);
         updateStatistics(user.id, infoHash, params.uploaded, params.downloaded, params.peer_id);
@@ -40,7 +39,6 @@ export default () => {
   server.on('listening', () => {
     // fired when all requested servers are listening
     console.log('listening on http port:' + server.http.address().port)
-    console.log('listening on udp port:' + server.udp.address().port)
   });
 
   // start tracker server listening! Use 0 to listen on a random free port.
