@@ -12,6 +12,9 @@ export interface UserModel {
   password_hash: string;
   torrent_auth_key: string;
   level: number;
+  ratio: number,
+  total_uploaded: number;
+  total_downloaded: number;
 }
 
 /**
@@ -54,6 +57,9 @@ export const registerUserInDatabase = async (username: string, email: string, pa
       password_hash: hash,
       torrent_auth_key: torrentAuthKey,
       level: UserLevel.NORMAL,
+      ratio: null,
+      total_downloaded: null,
+      total_uploaded: null,
     };
   } catch (ex) {
     throw new DuplicateEntryError('Username or email already exists');

@@ -51,6 +51,8 @@ app.listen(config.port, () => console.log(`trunk API listening on port ${config.
  * Start bittorrent tracking server
  */
 const trackingServer = server();
+
+// Custom endpoint to handle torrent authentication
 app.get('/:torrentKey/announce', async (request: Request, response: Response) => {
   const torrentKey = request.params.torrentKey;
 

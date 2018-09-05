@@ -1,3 +1,4 @@
+-- we don't know how to generate schema public (class Schema) :(
 create table "user"
 (
 	id serial not null
@@ -8,7 +9,9 @@ create table "user"
 	torrent_auth_key varchar(128) not null,
 	level integer not null,
 	email varchar(128) not null,
-	ratio numeric(8,2) default 0 not null
+	ratio numeric(8,2) default 0 not null,
+	total_uploaded bigint default 0 not null,
+	total_downloaded bigint default 0 not null
 )
 ;
 
@@ -63,16 +66,20 @@ create table stats
 create function calculate_ratio() returns trigger
 	language plpgsql
 as $$
+DECLARE
+  total_upload BIGINT;
+  total_download BIGINT;
 BEGIN
+  SELECT INTO total_upload SUM(uploaded) from stats WHERE user_id = new.user_id;
+  SELECT INTO total_download SUM(downloaded) from stats WHERE user_id = new.user_id;
+
   UPDATE "user"
-  SET ratio = (
-    select total_upload / total_download as ratio
-    from (select
-            SUM(uploaded)   as total_upload,
-            SUM(downloaded) as total_download
-          from stats
-          where user_id = new.user_id) as total)
+    SET
+      ratio = cast(total_upload as decimal) / cast(total_download as decimal),
+      total_uploaded = total_upload,
+      total_downloaded = total_download
   WHERE id = new.user_id;
+
   return new;
 END;
 $$

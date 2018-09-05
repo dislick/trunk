@@ -16,12 +16,15 @@ export const updateStatistics = async (
   downloaded: number,
   peerId: string
 ) => {
-  // Ignore announce message if there was no data transferred yet. It would not
-  // have an impact on the users ratio and unnecessarily clogs the database.
+  // Ignore announce message if there hasn't been any data transferred yet. It
+  // would not have an impact on the users ratio and just unnecessarily clogs
+  // the database.
   if (uploaded === 0 && downloaded === 0) {
     return;
   }
 
+  // This query triggers a postges trigger which updates the columns `ratio`,
+  // `total_uploaded` and `total_downloaded` in the user table.
   const query = `
     INSERT INTO stats (user_id, hash, uploaded, downloaded, peer_id)
     VALUES ($1, $2, $3, $4, $5)
