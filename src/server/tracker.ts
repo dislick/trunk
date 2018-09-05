@@ -2,6 +2,7 @@ import { Server } from 'bittorrent-tracker';
 import { findUserByTorrentKey } from './models/user_model';
 import { updateStatistics } from './models/stats_model';
 import { Request, Response } from 'express';
+import { config } from './config';
 
 interface AnnounceParams {
   info_hash: string;
@@ -36,20 +37,16 @@ export default () => {
 
   server.on('error', (error) => console.log('error', error));
   server.on('warning', (error) => console.log('warning', error));
-  server.on('listening', () => {
-    // fired when all requested servers are listening
-    console.log('listening on http port:' + server.http.address().port)
-  });
 
-  // start tracker server listening! Use 0 to listen on a random free port.
-  server.listen(32547);
+  server.listen(config.trackerPort);
 
-  server.on('start', function (addr) {
-    console.log('got start message from ' + addr)
-  });
-  server.on('complete', (addr) => console.log('complete', addr));
-  server.on('update', (addr) => console.log('update', addr));
-  server.on('stop', (addr) => console.log('stop', addr));
+  // These are probably useless
+  // server.on('start', function (addr) {
+  //   console.log('start', addr);
+  // });
+  // server.on('complete', (addr) => console.log('complete', addr));
+  // server.on('update', (addr) => console.log('update', addr));
+  // server.on('stop', (addr) => console.log('stop', addr));
 
   return server;
 }

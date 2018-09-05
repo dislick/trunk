@@ -13,7 +13,6 @@ import { Request, Response } from 'express';
 import * as LoginController from './controllers/login_controller';
 import * as PostController from './controllers/post_controller';
 import { authMiddleware } from './middlewares/auth_middleware';
-import { findUserByTorrentKey } from './models/user_model';
 
 const app = express();
 
@@ -57,7 +56,13 @@ app.get('/:torrentKey/announce', async (request: Request, response: Response) =>
   const torrentKey = request.params.torrentKey;
 
   try {
+    // Remove the torrent_auth_key from the request url.
+    // Before: /123456/announce=params=...
+    // After:  /announce?params=...
     request.url = request.url.replace(/\/[a-z0-9]+?\/announce/, '/announce');
+
+    // Attach torrent key to response for later use in the `filter` method of
+    // the tracker.
     response.locals.torrentKey = torrentKey;
 
     // Forward request to tracking server
