@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { TextField } from '../components/textfield';
 import { Button } from '../components/button';
+import { Spinner } from '../components/spinner';
 
 import './login_page.scss';
-import { Spinner } from '../components/spinner';
 
 interface Props {
   username: string;

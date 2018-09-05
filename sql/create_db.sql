@@ -7,7 +7,8 @@ create table "user"
 	password_hash varchar(60) not null,
 	torrent_auth_key varchar(128) not null,
 	level integer not null,
-	email varchar(128) not null
+	email varchar(128) not null,
+	ratio numeric(8,2) default 0 not null
 )
 ;
 
@@ -39,5 +40,48 @@ create table invite
 			references "user"
 				on update cascade on delete cascade
 )
+;
+
+create table stats
+(
+	id serial not null
+		constraint stats_pkey
+			primary key,
+	user_id integer not null
+		constraint stats_user_id_fk
+			references "user"
+				on update cascade on delete cascade,
+	hash varchar(40) not null,
+	uploaded bigint not null,
+	downloaded bigint not null,
+	peer_id varchar(40) not null,
+	constraint stats_user_hash_peer_id_key
+		unique (user_id, hash, peer_id)
+)
+;
+
+create function calculate_ratio() returns trigger
+	language plpgsql
+as $$
+BEGIN
+  UPDATE "user"
+  SET ratio = (
+    select total_upload / total_download as ratio
+    from (select
+            SUM(uploaded)   as total_upload,
+            SUM(downloaded) as total_download
+          from stats
+          where user_id = new.user_id) as total)
+  WHERE id = new.user_id;
+  return new;
+END;
+$$
+;
+
+create trigger calc_ratio
+	after insert or update
+	on stats
+	for each row
+	execute procedure calculate_ratio()
 ;
 

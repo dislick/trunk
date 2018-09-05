@@ -4,6 +4,8 @@ import { config } from './config';
 import * as bodyParser from 'body-parser';
 import * as cookieParser from 'cookie-parser';
 import * as cors from 'cors';
+import server from './tracker';
+import { Request, Response } from 'express';
 
 /** 
  * Controllers
@@ -11,6 +13,7 @@ import * as cors from 'cors';
 import * as LoginController from './controllers/login_controller';
 import * as PostController from './controllers/post_controller';
 import { authMiddleware } from './middlewares/auth_middleware';
+import { findUserByTorrentKey } from './models/user_model';
 
 const app = express();
 
@@ -31,6 +34,7 @@ app.use(cors({
  */
 app.use('/', express.static(path.join(__dirname, '../build-client')));
 
+
 /**
  * API Endpoints
  */
@@ -42,3 +46,21 @@ app.get('/api/posts', authMiddleware, PostController.getPosts);
 
 
 app.listen(config.port, () => console.log(`trunk API listening on port ${config.port}`));
+
+/**
+ * Start bittorrent tracking server
+ */
+const trackingServer = server();
+app.get('/:torrentKey/announce', async (request: Request, response: Response) => {
+  const torrentKey = request.params.torrentKey;
+
+  try {
+    request.url = request.url.replace(/\/[a-z0-9]+?\/announce/, '/announce');
+    response.locals.torrentKey = torrentKey;
+
+    // Forward request to tracking server
+    trackingServer.onHttpRequest(request, response);
+  } catch (error) {
+    response.end();
+  }
+});

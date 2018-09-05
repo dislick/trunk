@@ -77,6 +77,23 @@ export const findUser = async (userId: number): Promise<UserModel> => {
   return result.rows[0];
 };
 
+/**
+ * Find a user in the database using his torrent key.
+ * @param userId 
+ */
+export const findUserByTorrentKey = async (torrentKey: string): Promise<UserModel> => {
+  const query = `
+    SELECT * from "user" WHERE torrent_auth_key = $1`;
+
+  let result = await pool.query(query, [torrentKey]);
+
+  if (result.rows.length <= 0) {
+    throw new NotFoundError('User not found');
+  }
+
+  return result.rows[0];
+};
+
 export const validateUser = async (username: string, password: string): Promise<{ isPasswordCorrect: boolean, userId: number}> => {
   const query = `
     SELECT * from "user" WHERE username = $1`;
