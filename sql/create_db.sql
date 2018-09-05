@@ -61,6 +61,22 @@ create table stats
 )
 ;
 
+create table torrents
+(
+	hash varchar(40) not null
+		constraint torrents_pkey
+			primary key,
+	title varchar(100) not null,
+	size bigint not null,
+	uploaded_at timestamp not null,
+	user_id integer not null
+		constraint torrents_user_id_fk
+			references "user"
+				on update cascade on delete cascade,
+	torrent_file bytea not null
+)
+;
+
 create function calculate_ratio() returns trigger
 	language plpgsql
 as $$

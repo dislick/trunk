@@ -6,12 +6,13 @@ import * as cookieParser from 'cookie-parser';
 import * as cors from 'cors';
 import server from './tracker';
 import { Request, Response } from 'express';
+import * as multer from 'multer';
 
 /** 
  * Controllers
  */
 import * as LoginController from './controllers/login_controller';
-import * as PostController from './controllers/post_controller';
+import * as TorrentController from './controllers/torrent_controller';
 import { authMiddleware } from './middlewares/auth_middleware';
 
 const app = express();
@@ -26,6 +27,7 @@ app.use(cors({
   origin: 'http://localhost:8080',
   credentials: true,
 }));
+const upload = multer({ storage: multer.memoryStorage() });
 
 
 /**
@@ -41,8 +43,11 @@ app.post('/api/login', LoginController.loginUser);
 app.get('/api/logout', LoginController.logoutUser);
 app.post('/api/register/:inviteCode', LoginController.registerUser);
 
-app.get('/api/posts', authMiddleware, PostController.getPosts);
-
+app.get('/api/torrent', authMiddleware, TorrentController.getTorrents);
+app.put('/api/torrent', authMiddleware, upload.fields([
+  { name: 'torrent_file', maxCount: 1 },
+  { name: 'title', maxCount: 1 }
+]), TorrentController.uploadTorrent);
 
 app.listen(config.port, () => console.log(`trunk API listening on port ${config.port}`));
 
