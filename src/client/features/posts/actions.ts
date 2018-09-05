@@ -20,7 +20,6 @@ export const fetchPosts = () => async (dispatch: Dispatch, getState: () => RootS
     dispatch({ type: FETCH_POSTS_SUCCESS });
   } catch (ex) {
     dispatch({ type: FETCH_POSTS_FAILURE });
-    dispatch(push('/login'));
   }
 };
 
