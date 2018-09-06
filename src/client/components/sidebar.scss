@@ -1,12 +1,25 @@
+$sidebar-width: 350px;
+$sidebar-inner-padding: 32px;
+
 section.sidebar {
   display: flex;
   justify-content: flex-end;
 
   .sidebar-inner {
-    flex: 0 1 300px;
+    flex: 0 1 $sidebar-width;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 
     .logo {
-      margin: 50px;
+      max-width: $sidebar-width - 150px;
+      flex: 0 0 auto;
+      align-self: center;
+      margin: 70px 0;
+    }
+
+    .logout {
+      margin: $sidebar-inner-padding;
     }
   }
 }

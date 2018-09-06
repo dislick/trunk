@@ -7,7 +7,7 @@ import { createTorrentPost, getTorrentPosts } from '../models/torrent_model';
 export const getTorrents = async (request: Request, response: Response) => {
   let { dateOffset, limit } = request.body;
 
-  // Try to parse it to da Date
+  // Try to parse it to a Date
   dateOffset = new Date(dateOffset);
   if (!(dateOffset instanceof Date) || isNaN(dateOffset.valueOf())) {
     // If its invalid we are just going to use the current time

@@ -1,9 +1,7 @@
 import * as React from 'react';
-import { TextField } from '../components/textfield';
-import { Button } from '../components/button';
-import { Sidebar } from '../components/sidebar';
-import { TorrentList } from '../components/torrent_list';
+import { TorrentList } from '../components/torrent_list/torrent_list';
 import { TorrentDetail } from '../components/torrent_detail';
+import { SidebarConnected } from '../connected/sidebar_connected';
 
 import './main_page_layout.scss';
 
@@ -20,7 +18,7 @@ export class MainPage extends React.Component<Props> {
   render() {
     return (
       <div className='main-page-wrapper'>
-        <Sidebar />
+        <SidebarConnected />
         <TorrentList />
         <TorrentDetail />
       </div>

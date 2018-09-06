@@ -1,0 +1,18 @@
+.tag {
+  padding: 9px 18px;
+  background-color: #444242;
+  display: inline-block;
+  border-radius: 3px;
+  margin-right: 5px;
+  cursor: default;
+
+  &:last-child {
+    margin-right: 0;
+  }
+  
+  p {
+    color: white;
+    font-family: 'Inconsolata', monospace;
+    font-size: 14px;
+  }
+}

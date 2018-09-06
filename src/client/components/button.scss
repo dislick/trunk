@@ -7,10 +7,13 @@
   padding: 12px 0;
   border-radius: 45px;
   cursor: pointer;
-  width: 100%;
   border: none;
   -webkit-appearance: none;
   border: 2px solid $main-color;
+
+  &.full-width {
+    width: 100%;
+  }
 
   &:focus {
     border-color: $highlight-color;

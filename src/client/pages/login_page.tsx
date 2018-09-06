@@ -44,7 +44,7 @@ export const LoginPage = (props: Props) => (
         ?
         <Spinner />
         :
-        <Button onClick={props.onSubmit}>Login</Button>
+        <Button onClick={props.onSubmit} fullWidth>Login</Button>
       }
     </div>
   </div>

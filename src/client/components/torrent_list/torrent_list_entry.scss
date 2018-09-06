@@ -1,0 +1,32 @@
+@import '../../styles/colors.scss';
+
+$torrent-list-entry-color: #272626;
+
+.torrent-list-entry {
+  background-color: $torrent-list-entry-color;
+  padding: 26px;
+  border-radius: 6px;
+  margin-bottom: 60px;
+  transition-duration: 0.3s;
+
+  &:hover {
+    background-color: lighten($torrent-list-entry-color, 3%);
+    transition-duration: 0s;
+  }
+
+  h1 {
+    font-size: 20px;
+    font-weight: 700;
+    color: white;
+  }
+
+  .upload-info {
+    color: rgba(255, 255, 255, 0.3);
+    margin-top: 32px;
+    font-size: 14px;
+  }
+
+  .tag-list {
+    margin: 16px 0;
+  }
+}
