@@ -77,6 +77,69 @@ create table torrents
 )
 ;
 
+create table tags
+(
+	id serial not null
+		constraint tags_pkey
+			primary key,
+	label varchar(40) not null
+)
+;
+
+create unique index tags_label_uindex
+	on tags (label)
+;
+
+create table tag_torrent_link
+(
+	id serial not null
+		constraint table_name_pkey
+			primary key,
+	tag_id integer not null
+		constraint table_name_tags_id_fk
+			references tags
+				on update cascade on delete cascade,
+	torrent varchar(40) not null
+		constraint table_name_torrents_hash_fk
+			references torrents
+				on update cascade on delete cascade,
+	constraint prevent_duplicate_tags
+		unique (tag_id, torrent)
+)
+;
+
+create table comments
+(
+	id serial not null
+		constraint comments_pkey
+			primary key,
+	torrent varchar(40) not null
+		constraint comments_torrents_hash_fk
+			references torrents
+				on update cascade on delete cascade,
+	user_id integer not null
+		constraint comments_user_id_fk
+			references "user"
+				on update cascade on delete cascade,
+	comment_content varchar(512) not null,
+	commented_at timestamp not null
+)
+;
+
+create table ratings
+(
+	id serial not null
+		constraint ratings_pkey
+			primary key,
+	torrent varchar(40) not null,
+	user_id integer not null,
+	rating smallint not null
+		constraint rating_check
+			check ((rating > 0) AND (rating < 6)),
+	rated_at timestamp not null
+)
+;
+
 create function calculate_ratio() returns trigger
 	language plpgsql
 as $$

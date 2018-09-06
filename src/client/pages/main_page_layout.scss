@@ -1,0 +1,19 @@
+@import '../styles/colors.scss';
+
+.main-page-wrapper {
+  width: 100%;
+  display: flex;
+
+  section.sidebar {
+    flex: 1 1 20%;
+    background-color: $black-color;
+  }
+  section.torrent-list {
+    flex: 0 1 768px;
+    background-color: $lighter-black-color;
+  }
+  section.torrent-detail {
+    flex: 1 0 768px;
+    background-color: $main-color;
+  }
+}

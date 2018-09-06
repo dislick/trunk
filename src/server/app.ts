@@ -43,7 +43,7 @@ app.post('/api/login', LoginController.loginUser);
 app.get('/api/logout', LoginController.logoutUser);
 app.post('/api/register/:inviteCode', LoginController.registerUser);
 
-app.get('/api/torrent', authMiddleware, TorrentController.getTorrents);
+app.post('/api/torrent', authMiddleware, TorrentController.getTorrents);
 app.put('/api/torrent', authMiddleware, upload.fields([
   { name: 'torrent_file', maxCount: 1 },
   { name: 'title', maxCount: 1 }

@@ -1,0 +1,12 @@
+section.sidebar {
+  display: flex;
+  justify-content: flex-end;
+
+  .sidebar-inner {
+    flex: 0 1 300px;
+
+    .logo {
+      margin: 50px;
+    }
+  }
+}

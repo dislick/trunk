@@ -17,7 +17,7 @@ ReactDOM.render((
       <Switch>
         <Route exact path="/login" render={() => <LoginPageConnected />} />
         <Route exact path="/" render={() => <MainPageConnected />} />
-        <Route render={() => (<div>Miss</div>)} />
+        <Route render={() => (<div>404</div>)} />
       </Switch>
     </ConnectedRouter>
   </Provider>

@@ -1,6 +1,11 @@
 import * as React from 'react';
 import { TextField } from '../components/textfield';
 import { Button } from '../components/button';
+import { Sidebar } from '../components/sidebar';
+import { TorrentList } from '../components/torrent_list';
+import { TorrentDetail } from '../components/torrent_detail';
+
+import './main_page_layout.scss';
 
 interface Props {
   onFetchPosts: () => void;
@@ -15,8 +20,9 @@ export class MainPage extends React.Component<Props> {
   render() {
     return (
       <div className='main-page-wrapper'>
-        <p>main page :D</p>
-        <Button onClick={this.props.onLogout}>Logout</Button>
+        <Sidebar />
+        <TorrentList />
+        <TorrentDetail />
       </div>
     );
   }
