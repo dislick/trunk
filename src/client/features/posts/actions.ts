@@ -17,10 +17,10 @@ export const fetchPosts = () => async (dispatch: Dispatch, getState: () => RootS
   dispatch({
     type: FETCH_POSTS_REQUEST
   });
-  try {
-    const posts = await fetchPostsFromServer();
-    dispatch({ type: FETCH_POSTS_SUCCESS, posts });
-  } catch (ex) {
+  const response = await fetchPostsFromServer();
+  if (response.ok) {
+    dispatch({ type: FETCH_POSTS_SUCCESS, posts: await response.json() });
+  } else {
     dispatch({ type: FETCH_POSTS_FAILURE });
   }
 };
