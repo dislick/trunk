@@ -1,15 +1,17 @@
 @import '../styles/colors.scss';
+@import '../styles/animation.scss';
 
 .trunk-button {
   $highlight-color: lighten($main-color, 25%);
 
   background-color: $main-color;
   padding: 12px 0;
-  border-radius: 45px;
+  border-radius: 6px;
   cursor: pointer;
   border: none;
   -webkit-appearance: none;
   border: 2px solid $main-color;
+  transition-duration: $hover-fade-duration;
 
   &.full-width {
     width: 100%;
@@ -21,8 +23,9 @@
   }
 
   &:hover {
-    background-color: lighten($main-color, 3%);
-    border-color: lighten($main-color, 3%);
+    background-color: lighten($main-color, 5%);
+    border-color: lighten($main-color, 5%);
+    transition-duration: 0s;
   }
 
   &:active {

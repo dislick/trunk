@@ -1,6 +1,19 @@
 import { Request, Response } from 'express';
 import { createTorrentPost, getTorrentPosts } from '../models/torrent_model';
 
+export interface TorrentResponseDTO {
+  hash: string;
+  title: string;
+  size: number;
+  uploaded_at: Date;
+  tags: string;
+  user: {
+    id: number;
+    username: string;
+    ratio: string;
+  };
+}
+
 /**
  * API Endpoint POST /torrent 
  */
@@ -20,8 +33,8 @@ export const getTorrents = async (request: Request, response: Response) => {
     return response.status(400).send({ message: 'Limit out of bounds (min: 1, max: 100)' });
   }
 
-  let posts = await getTorrentPosts(dateOffset, limit);
-  
+  let posts: TorrentResponseDTO[] = await getTorrentPosts(dateOffset, limit);
+
   response.send(posts);
 };
 

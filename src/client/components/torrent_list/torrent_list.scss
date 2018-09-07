@@ -1,3 +1,10 @@
-.torrent-list {
-  padding: 60px;
+@import '../../styles/spacing.scss';
+
+section.torrent-list {
+  padding: $large-page-spacing;
+}
+
+::-webkit-scrollbar {
+  width: 0px;
+  background: transparent;
 }

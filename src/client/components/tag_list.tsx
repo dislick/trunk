@@ -7,7 +7,7 @@ interface Props {
 
 export const TagList = (props: Props) => (
   <>
-    {props.list.split(',').map((tag, index) => (
+    {props.list && props.list.split(',').map((tag, index) => (
       <Tag key={index}>{tag}</Tag>
     ))}
   </>

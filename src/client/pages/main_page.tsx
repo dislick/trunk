@@ -1,9 +1,9 @@
 import * as React from 'react';
-import { TorrentList } from '../components/torrent_list/torrent_list';
 import { TorrentDetail } from '../components/torrent_detail';
 import { SidebarConnected } from '../connected/sidebar_connected';
 
 import './main_page_layout.scss';
+import { TorrentListConnected } from '../connected/torrent_list_connected';
 
 interface Props {
   onFetchPosts: () => void;
@@ -19,7 +19,7 @@ export class MainPage extends React.Component<Props> {
     return (
       <div className='main-page-wrapper'>
         <SidebarConnected />
-        <TorrentList />
+        <TorrentListConnected />
         <TorrentDetail />
       </div>
     );

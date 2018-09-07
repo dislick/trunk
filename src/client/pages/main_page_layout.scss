@@ -13,9 +13,10 @@
     flex: 0 1 650px;
     background-color: $lighter-black-color;
     box-sizing: border-box;
+    overflow-y: auto;
   }
   section.torrent-detail {
-    flex: 1 0 500px;
+    flex: 1 1 500px;
     background-color: $main-color;
   }
 }

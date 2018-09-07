@@ -1,4 +1,6 @@
 @import '../../styles/colors.scss';
+@import '../../styles/spacing.scss';
+@import '../../styles/animation.scss';
 
 $torrent-list-entry-color: #272626;
 
@@ -6,12 +8,21 @@ $torrent-list-entry-color: #272626;
   background-color: $torrent-list-entry-color;
   padding: 26px;
   border-radius: 6px;
-  margin-bottom: 60px;
-  transition-duration: 0.3s;
+  margin-bottom: $large-page-spacing;
+  transition-duration: $hover-fade-duration;
+  position: relative;
 
   &:hover {
     background-color: lighten($torrent-list-entry-color, 3%);
     transition-duration: 0s;
+  }
+
+  &.selected {
+    background-color: $main-color;
+  }
+
+  &:last-child {
+    margin-bottom: 0;
   }
 
   h1 {
@@ -21,12 +32,25 @@ $torrent-list-entry-color: #272626;
   }
 
   .upload-info {
-    color: rgba(255, 255, 255, 0.3);
+    color: rgba(255, 255, 255, 0.45);
     margin-top: 32px;
     font-size: 14px;
   }
 
   .tag-list {
     margin: 16px 0;
+  }
+
+  .triangle {
+    $triangle-size: 15px;
+
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: $triangle-size $triangle-size $triangle-size 0;
+    border-color: transparent $main-color transparent transparent;
+    right: -$large-page-spacing;
+    top: calc(50% - #{$triangle-size});
   }
 }
