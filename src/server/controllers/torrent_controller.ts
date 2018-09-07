@@ -12,12 +12,14 @@ export interface TorrentResponseDTO {
     username: string;
     ratio: string;
   };
+  seeders: number;
+  leechers: number;
 }
 
 /**
  * API Endpoint POST /torrent 
  */
-export const getTorrents = async (request: Request, response: Response) => {
+export const getTorrents = (trackingServer) => async (request: Request, response: Response) => {
   let { dateOffset, limit } = request.body;
 
   // Try to parse it to a Date
@@ -33,9 +35,18 @@ export const getTorrents = async (request: Request, response: Response) => {
     return response.status(400).send({ message: 'Limit out of bounds (min: 1, max: 100)' });
   }
 
-  let posts: TorrentResponseDTO[] = await getTorrentPosts(dateOffset, limit);
+  let posts = await getTorrentPosts(dateOffset, limit);
 
-  response.send(posts);
+  let responseDTOs: TorrentResponseDTO[] = posts.map(post => {
+    const { seeders, leechers } = getSwarmInfo(trackingServer, post.hash);
+    return {
+      ...post,
+      seeders: seeders,
+      leechers: leechers,
+    }
+  });
+
+  response.send(responseDTOs);
 };
 
 export const uploadTorrent = async (request: Request, response: Response) => {
@@ -55,4 +66,14 @@ export const uploadTorrent = async (request: Request, response: Response) => {
   response.send({
     hash: post.hash,
   });
+};
+
+const getSwarmInfo = (trackingServer, hash: string): { seeders: number, leechers: number } => {
+  const torrent = trackingServer.torrents[hash];
+
+  if (torrent) {
+    return { seeders: torrent.complete, leechers: torrent.incomplete };
+  } else {
+    return {  seeders: 0, leechers: 0 };
+  }
 };

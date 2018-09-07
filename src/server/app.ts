@@ -37,21 +37,6 @@ app.use('/', express.static(path.join(__dirname, '../build-client')));
 
 
 /**
- * API Endpoints
- */
-app.post('/api/login', LoginController.loginUser);
-app.get('/api/logout', LoginController.logoutUser);
-app.post('/api/register/:inviteCode', LoginController.registerUser);
-
-app.post('/api/torrent', authMiddleware, TorrentController.getTorrents);
-app.put('/api/torrent', authMiddleware, upload.fields([
-  { name: 'torrent_file', maxCount: 1 },
-  { name: 'title', maxCount: 1 }
-]), TorrentController.uploadTorrent);
-
-app.listen(config.port, () => console.log(`trunk API listening on port ${config.port}`));
-
-/**
  * Start bittorrent tracking server
  */
 const trackingServer = server();
@@ -76,3 +61,18 @@ app.get('/:torrentKey/announce', async (request: Request, response: Response) =>
     response.end();
   }
 });
+
+/**
+ * API Endpoints
+ */
+app.post('/api/login', LoginController.loginUser);
+app.get('/api/logout', LoginController.logoutUser);
+app.post('/api/register/:inviteCode', LoginController.registerUser);
+
+app.post('/api/torrent', authMiddleware, TorrentController.getTorrents(trackingServer));
+app.put('/api/torrent', authMiddleware, upload.fields([
+  { name: 'torrent_file', maxCount: 1 },
+  { name: 'title', maxCount: 1 }
+]), TorrentController.uploadTorrent);
+
+app.listen(config.port, () => console.log(`trunk API listening on port ${config.port}`));

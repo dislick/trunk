@@ -29,6 +29,8 @@ export const TorrentList = (props: Props) => {
           size={post.size}
           tags={post.tags}
           uploadedAt={post.uploaded_at}
+          seeders={post.seeders}
+          leechers={post.leechers}
           username={post.user.username}
           userratio={post.user.ratio}
           selected={post.hash === props.selectedPost}

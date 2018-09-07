@@ -7,6 +7,7 @@ $torrent-list-entry-color: #272626;
 .torrent-list-entry {
   background-color: $torrent-list-entry-color;
   padding: 26px;
+  padding-bottom: 22px;
   border-radius: 6px;
   margin-bottom: $large-page-spacing;
   transition-duration: $hover-fade-duration;
@@ -31,11 +32,33 @@ $torrent-list-entry-color: #272626;
     color: white;
   }
 
-  .upload-info {
-    color: rgba(255, 255, 255, 0.45);
-    margin-top: 32px;
-    font-size: 14px;
+  .bottom-text {
+    display: flex;
+    margin-top: 30px;
+    align-items: flex-end;
+    justify-content: space-between;
+
+    .upload-info {
+      color: rgba(255, 255, 255, 0.45);
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+
+    .seeders-leechers {
+      display: flex;
+      align-items: center;
+      font-size: 14px;
+
+      .seeders {
+        color: $green-color;
+        margin-right: 10px;
+      }
+      .leechers {
+        color: $red-color;
+      }
+    }
   }
+
 
   .tag-list {
     margin: 16px 0;

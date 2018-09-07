@@ -14,6 +14,8 @@ interface Props {
   size: number;
   uploadedAt: Date;
   tags: string | null;
+  seeders: number;
+  leechers: number;
   username: string;
   userratio: string;
   selected: boolean;
@@ -32,9 +34,15 @@ export const TorrentListEntry = (props: Props) => (
       <Tag systemTag>{bytes(props.size, { unitSeparator: ' ' })}</Tag>
       <TagList list={props.tags} />
     </div>
-    <p className="upload-info">
-      uploaded by <Username ratio={props.userratio}>{props.username}</Username> {moment(props.uploadedAt).fromNow()}
-    </p>
+    <div className="bottom-text">
+      <p className="upload-info">
+        uploaded by <Username ratio={props.userratio}>{props.username}</Username> {moment(props.uploadedAt).fromNow()}
+      </p>
+      <div className='seeders-leechers'>
+        <img src={require('../../assets/keyboard-arrow-up.svg')} /> <span className='seeders'>{props.seeders}</span>
+        <img src={require('../../assets/keyboard-arrow-down.svg')} /> <span className='leechers'>{props.leechers}</span>
+      </div>
+    </div>
 
     {props.selected && <div className='triangle' />}
   </div>
