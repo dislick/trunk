@@ -6,7 +6,7 @@
   display: flex;
 
   section.sidebar {
-    flex: 1 0 $sidebar-width;
+    flex: 0 0 $sidebar-width;
     background-color: $black-color;
   }
   section.torrent-list {

@@ -22,6 +22,18 @@ interface Props {
   onClick: () => void;
 }
 
+interface UploadInfoProps {
+  username: string;
+  userratio: string;
+  uploadedAt: Date;
+}
+
+export const UploadInfo = (props: UploadInfoProps) => (
+  <p className="upload-info">
+    uploaded by <Username ratio={props.userratio}>{props.username}</Username> {moment(props.uploadedAt).fromNow()}
+  </p>
+);
+
 export const TorrentListEntry = (props: Props) => (
   <div
     className={classnames('torrent-list-entry', {
@@ -35,9 +47,7 @@ export const TorrentListEntry = (props: Props) => (
       <TagList list={props.tags} />
     </div>
     <div className="bottom-text">
-      <p className="upload-info">
-        uploaded by <Username ratio={props.userratio}>{props.username}</Username> {moment(props.uploadedAt).fromNow()}
-      </p>
+      <UploadInfo {...props} />
       <div className='seeders-leechers'>
         <img src={require('../../assets/keyboard-arrow-up.svg')} /> <span className='seeders'>{props.seeders}</span>
         <img src={require('../../assets/keyboard-arrow-down.svg')} /> <span className='leechers'>{props.leechers}</span>
