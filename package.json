@@ -33,6 +33,7 @@
     "pg": "^7.4.3",
     "react": "^16.4.2",
     "react-dom": "^16.4.2",
+    "react-dropzone": "^5.0.2",
     "react-redux": "^5.0.7",
     "react-router": "^4.3.1",
     "redux": "^4.0.0",

@@ -5,6 +5,7 @@ import { UploadInfo } from './torrent_list/torrent_list_entry';
 import { Tag } from './tag';
 import { TagList } from './tag_list';
 import * as bytes from 'bytes';
+import { getBaseUrl } from '../api';
 
 import './torrent_detail.scss';
 
@@ -23,7 +24,9 @@ export const TorrentDetail = (props: Props) => {
           <>
             <div className="title-wrapper">
               <h1>{props.post.title}</h1>
-              <img src={require('../assets/download-icon.svg')} className='download-button' />
+              <a href={getBaseUrl() + '/api/torrent/' + props.post.hash}>
+                <img src={require('../assets/download-icon.svg')} className='download-button' />
+              </a>
             </div>
             <div className="tag-list">
               <Tag systemTag>{bytes(props.post.size, { unitSeparator: ' ' })}</Tag>

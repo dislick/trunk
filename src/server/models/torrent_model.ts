@@ -1,6 +1,7 @@
 import { pool } from "./database";
 import * as parseTorrent from 'parse-torrent';
 import { getFormattedRatio } from "../utils/ratio_calculator";
+import { NotFoundError } from "../utils/error";
 
 interface TorrentPost {
   hash: string;
@@ -82,6 +83,21 @@ export const createTorrentPost = async (title: string, userId: number, torrentFi
   ]);
 
   return { hash: torrentInfo.infoHash };
+};
+
+export const getTorrentFile = async (hash: string): Promise<{ file: Buffer, title: string }> => {
+  const query = `SELECT torrent_file, title FROM torrents WHERE hash = $1`;
+
+  let result = await pool.query(query, [hash]);
+
+  if (result.rows.length === 1) {
+    return {
+      file: result.rows[0].torrent_file,
+      title: result.rows[0].title
+    };
+  } else {
+    throw new NotFoundError();
+  }
 };
 
 function getHexString(buffer: Buffer) {

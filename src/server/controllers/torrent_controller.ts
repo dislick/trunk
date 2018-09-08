@@ -1,5 +1,10 @@
 import { Request, Response } from 'express';
-import { createTorrentPost, getTorrentPosts } from '../models/torrent_model';
+import { createTorrentPost, getTorrentPosts, getTorrentFile } from '../models/torrent_model';
+import * as parseTorrent from 'parse-torrent';
+import { NotFoundError } from '../utils/error';
+import { findUser } from '../models/user_model';
+import { config } from '../config';
+import { buildAnnounceUrl } from '../utils/build_announce_url';
 
 export interface TorrentResponseDTO {
   hash: string;
@@ -53,19 +58,59 @@ export const uploadTorrent = async (request: Request, response: Response) => {
   const fileUpload = (request as any).files['torrent_file'];
   const { title } = request.body;
 
-  if (fileUpload.length !== 1) {
-    return response.status(400).send();
+  if (!fileUpload || fileUpload.length !== 1) {
+    return response.status(400).send({ message: 'File in field torrent_file not found'});
   }
 
   if (title.length > 100) {
-    return response.status(400).send();
+    return response.status(400).send({ message: 'Title is over 100 characters' });
   }
 
-  const post = await createTorrentPost(title, response.locals.id, fileUpload[0].buffer);
+  try {
+    const post = await createTorrentPost(title, response.locals.id, fileUpload[0].buffer);
 
-  response.send({
-    hash: post.hash,
-  });
+    response.send({
+      hash: post.hash,
+    });
+  } catch (error) {
+    if (error.toString().indexOf('duplicate key') !== -1) {
+      return response.status(400).send({ message: 'Duplicate torrent' });
+    }
+    response.status(500).send();
+  }
+};
+
+export const downloadTorrent = async (request: Request, response: Response) => {
+  const { hash } = request.params;
+
+  try {
+    let [ torrent, user] = await Promise.all([
+      getTorrentFile(hash),
+      findUser(response.locals.id)
+    ]);
+
+    // Replace tracker with customized URL by parsing the file buffer, changing
+    // the `announce` field and encoding it again.
+    let parsed = parseTorrent(torrent.file);
+    parsed.announce = [
+      buildAnnounceUrl(user.torrent_auth_key)
+    ];
+    parsed.private = true; // Let's not enable peer discovery services, ok?
+    torrent.file = parseTorrent.toTorrentFile(parsed);
+
+    // These headers should be present for a proper file download
+    response.setHeader('Content-Type', 'application/x-bittorrent');
+    response.setHeader('Content-Disposition', `attachment; filename="${torrent.title}.torrent"`)
+    response.setHeader('Content-Length', torrent.file.length);
+    response.send(torrent.file);
+  } catch (error) {
+    console.log(error);
+    if (error instanceof NotFoundError) {
+      response.status(404).send({ message: 'File could not be found' });
+    } else {
+      response.status(500).send();
+    }
+  }
 };
 
 const getSwarmInfo = (trackingServer, hash: string): { seeders: number, leechers: number } => {

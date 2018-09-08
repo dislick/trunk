@@ -71,8 +71,8 @@ app.post('/api/register/:inviteCode', LoginController.registerUser);
 
 app.post('/api/torrent', authMiddleware, TorrentController.getTorrents(trackingServer));
 app.put('/api/torrent', authMiddleware, upload.fields([
-  { name: 'torrent_file', maxCount: 1 },
-  { name: 'title', maxCount: 1 }
+  { name: 'torrent_file', maxCount: 1 }
 ]), TorrentController.uploadTorrent);
+app.get('/api/torrent/:hash', authMiddleware, TorrentController.downloadTorrent);
 
 app.listen(config.port, () => console.log(`trunk API listening on port ${config.port}`));
