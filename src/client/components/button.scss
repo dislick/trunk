@@ -3,9 +3,10 @@
 
 .trunk-button {
   $highlight-color: lighten($main-color, 25%);
+  $danger-highlight-color: lighten($red-color, 15%);
 
   background-color: $main-color;
-  padding: 12px 0;
+  padding: 12px 24px;
   border-radius: 6px;
   cursor: pointer;
   border: none;
@@ -15,6 +16,22 @@
 
   &.full-width {
     width: 100%;
+  }
+
+  &.danger {
+    background-color: $darker-red-color;
+    border-color: $darker-red-color;
+    &:focus {
+      border-color: $danger-highlight-color;
+    }
+    &:hover {
+      background-color: lighten($darker-red-color, 5%);
+      border-color: lighten($darker-red-color, 5%);
+    }
+    &:active {
+      background-color: $danger-highlight-color;
+      border-color: $danger-highlight-color;
+    }
   }
 
   &:focus {

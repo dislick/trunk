@@ -7,6 +7,7 @@ export interface ButtonProps {
   children: React.ReactNode;
   className?: string;
   fullWidth?: boolean;
+  danger?: boolean;
   onClick?: (event: React.MouseEvent<HTMLButtonElement>) => any;
 }
 
@@ -15,6 +16,7 @@ export const Button = (props: ButtonProps) => {
     <button
       className={classnames('trunk-button', props.className, {
         'full-width': props.fullWidth,
+        'danger': props.danger,
       })}
       onClick={props.onClick}
     >
