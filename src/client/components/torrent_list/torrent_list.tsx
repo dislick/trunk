@@ -1,19 +1,14 @@
 import * as React from 'react';
 import { TorrentListEntry } from './torrent_list_entry';
+import { TorrentResponseDTO } from '../../../server/controllers/torrent_controller';
+import { TorrentUploadAreaConnected } from '../../connected/torrent_upload_area_connected';
 
 import './torrent_list.scss';
-import { TorrentResponseDTO } from '../../../server/controllers/torrent_controller';
-import { TorrentUploadArea } from './torrent_upload_area';
-import { FileToUpload } from '../../features/upload/reducer';
 
 interface Props {
   posts: TorrentResponseDTO[];
   selectedPost: string;
-  files: FileToUpload[];
   onSelectPost: (hash: string) => void;
-  onFileSelect: (file: File, title: string) => void;
-  onUploadFile: (index: number) => void;
-  onDiscardFile: (index: number) => void;
 }
 
 export const TorrentList = (props: Props) => {
@@ -27,12 +22,7 @@ export const TorrentList = (props: Props) => {
 
   return (
     <section className='torrent-list'>
-      <TorrentUploadArea
-        files={props.files}
-        onFileSelect={props.onFileSelect}
-        onUploadFile={props.onUploadFile}
-        onDiscardFile={props.onDiscardFile}
-      />
+      <TorrentUploadAreaConnected />
 
       {props.posts.map((post, index) => (
         <TorrentListEntry

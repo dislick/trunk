@@ -5,6 +5,7 @@ import { NotFoundError } from '../utils/error';
 import { findUser } from '../models/user_model';
 import { config } from '../config';
 import { buildAnnounceUrl } from '../utils/build_announce_url';
+import { createAndLinkTags } from '../models/tag_model';
 
 export interface TorrentResponseDTO {
   hash: string;
@@ -35,10 +36,12 @@ export const getTorrents = (trackingServer) => async (request: Request, response
   }
 
   // Check if requested limit is not off-limits (he-he)
-  limit = parseInt(limit);
+  limit = parseInt(limit) || 20;
   if (limit < 1 || limit > 101) {
     return response.status(400).send({ message: 'Limit out of bounds (min: 1, max: 100)' });
   }
+
+  console.log(request.body, dateOffset, limit);
 
   let posts = await getTorrentPosts(dateOffset, limit);
 
@@ -56,7 +59,7 @@ export const getTorrents = (trackingServer) => async (request: Request, response
 
 export const uploadTorrent = async (request: Request, response: Response) => {
   const fileUpload = (request as any).files['torrent_file'];
-  const { title } = request.body;
+  const { title, tags } = request.body;
 
   if (!fileUpload || fileUpload.length !== 1) {
     return response.status(400).send({ message: 'File in field torrent_file not found'});
@@ -68,6 +71,7 @@ export const uploadTorrent = async (request: Request, response: Response) => {
 
   try {
     const post = await createTorrentPost(title, response.locals.id, fileUpload[0].buffer);
+    await createAndLinkTags(tags, post.hash);
 
     response.send({
       hash: post.hash,
@@ -76,6 +80,7 @@ export const uploadTorrent = async (request: Request, response: Response) => {
     if (error.toString().indexOf('duplicate key') !== -1) {
       return response.status(400).send({ message: 'Duplicate torrent' });
     }
+    console.log(error);
     response.status(500).send();
   }
 };

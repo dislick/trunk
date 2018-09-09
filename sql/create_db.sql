@@ -140,6 +140,10 @@ create table ratings
 )
 ;
 
+create unique index only_one_rating
+	on ratings (torrent, user_id)
+;
+
 create function calculate_ratio() returns trigger
 	language plpgsql
 as $$

@@ -11,14 +11,14 @@ interface Props {
   onFileSelect: (file: File, title: string) => void;
   onUploadFile: (index: number) => void;
   onDiscardFile: (index: number) => void;
+  onEditTitle: (index: number, title: string) => void;
+  onEditTags: (index: number, tags: string) => void;
 }
 
 export const TorrentUploadArea = (props: Props) => {
   const onDrop = (files) => {
-    console.log(files);
     files.forEach((file) => {
       let name = file.name.replace(/\.torrent$/, '');
-
       props.onFileSelect(file, name);
     });
   }
@@ -41,13 +41,13 @@ export const TorrentUploadArea = (props: Props) => {
           <TextField
             value={file.title}
             placeholder='Title'
-            onChange={() => { }}
+            onChange={(event) => props.onEditTitle(index, event.target.value)}
             className='title'
           />
           <TextField
             value={file.tags}
             placeholder='Comma-separated tags'
-            onChange={() => { }}
+            onChange={(event) => props.onEditTags(index, event.target.value)}
             className='tags'
           />
           <Button className='publish' onClick={() => props.onUploadFile(index)}>Publish Torrent</Button>

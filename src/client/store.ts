@@ -9,10 +9,8 @@ export const history = createBrowserHistory()
 export const store = createStore(
   connectRouter(history)(rootReducer),
   (window as any).__REDUX_DEVTOOLS_EXTENSION__ && (window as any).__REDUX_DEVTOOLS_EXTENSION__(),
-  compose(
-    applyMiddleware(
-      routerMiddleware(history),
-      thunk,
-    ),
+  applyMiddleware(
+    routerMiddleware(history),
+    thunk,
   ),
 );
