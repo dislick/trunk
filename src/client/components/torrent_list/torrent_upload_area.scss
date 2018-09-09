@@ -52,5 +52,12 @@
     .publish {
       margin-right: 8px;
     }
+
+    .error-message {
+      color: $red-color;
+      font-size: 14px;
+      margin-top: 24px;
+      font-family: 'Inconsolata', monospace;
+    }
   }
 }

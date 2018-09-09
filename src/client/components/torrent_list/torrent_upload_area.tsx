@@ -52,6 +52,9 @@ export const TorrentUploadArea = (props: Props) => {
           />
           <Button className='publish' onClick={() => props.onUploadFile(index)}>Publish Torrent</Button>
           <Button danger onClick={() => props.onDiscardFile(index)}>Discard</Button>
+          {file.errorMessage &&
+            <p className='error-message'>{file.errorMessage}</p>
+          }
         </div>
       ))}
     </div>

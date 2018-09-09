@@ -13,6 +13,7 @@ export interface UploadAction extends Action {
   title: string;
   tags: string;
   index: number;
+  message: string;
 }
 
 export const addFileForUpload = (file: File, title: string) => ({
@@ -25,22 +26,25 @@ export const uploadFile = (index: number) => async (dispatch: Dispatch, getState
   dispatch({ type: UPLOAD_FILE_REQUEST, index });
 
   let fileToUpload = getState().uploadReducer.files[index];
-  
+
   let formData = new FormData();
   formData.append('torrent_file', fileToUpload.file);
   formData.append('title', fileToUpload.title);
   formData.append('tags', fileToUpload.tags);
 
   let response = await uploadTorrentFile(formData);
+  let body = await response.json();
 
   if (response.ok) {
-    const hash = (await response.json()).hash;
-
     dispatch({ type: UPLOAD_FILE_SUCCESS, index });
     dispatch(postsActions.fetchPosts() as any);
-    dispatch(selectPost(hash));
+    dispatch(selectPost(body.hash));
   } else {
-    dispatch({ type: UPLOAD_FILE_FAILURE, index });
+    dispatch({
+      type: UPLOAD_FILE_FAILURE,
+      index,
+      message: `HTTP ${response.status} (${response.statusText}): ${body.message}`,
+    });
   }
 };
 

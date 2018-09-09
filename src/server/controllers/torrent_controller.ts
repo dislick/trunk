@@ -65,6 +65,10 @@ export const uploadTorrent = async (request: Request, response: Response) => {
     return response.status(400).send({ message: 'File in field torrent_file not found'});
   }
 
+  if (title.length < 3) {
+    return response.status(400).send({ message: 'Title has to be at least 3 characters' });
+  }
+
   if (title.length > 100) {
     return response.status(400).send({ message: 'Title is over 100 characters' });
   }
