@@ -6,7 +6,9 @@ import { find } from 'lodash';
 
 const mapStateToProps = (state: RootState) => ({
   visible: !!state.postsReducer.selectedPostHash,
-  post: find(state.postsReducer.posts, p => p.hash === state.postsReducer.selectedPostHash)
+  post: find(state.postsReducer.posts, p => p.hash === state.postsReducer.selectedPostHash),
+  detail: state.postsReducer.detail,
+  isDetailFetching: state.postsReducer.isDetailFetching,
 });
 
 export const TorrentDetailConnected = connect(mapStateToProps, {

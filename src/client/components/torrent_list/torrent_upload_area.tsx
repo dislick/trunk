@@ -2,9 +2,9 @@ import * as React from 'react';
 import Dropzone from 'react-dropzone'
 import { FileToUpload } from '../../features/upload/reducer';
 import { TextField } from '../textfield';
+import { Button } from '../button';
 
 import './torrent_upload_area.scss';
-import { Button } from '../button';
 
 interface Props {
   files: FileToUpload[];

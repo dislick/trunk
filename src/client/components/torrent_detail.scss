@@ -37,4 +37,13 @@
   &.hide-detail {
     background-color: $lighter-black-color !important;
   }
+
+  .spinner-wrapper {
+    margin-top: 60px;
+    display: inline-block;
+  }
+
+  .detail-rating-bar {
+    margin: 24px 0;
+  }
 }

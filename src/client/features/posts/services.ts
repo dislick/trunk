@@ -1,5 +1,4 @@
 import API from '../../api';
-import { TorrentResponseDTO } from '../../../server/controllers/torrent_controller';
 
 export const fetchPostsFromServer = async () => {
   return API.fetch('/api/torrent', {
@@ -9,4 +8,8 @@ export const fetchPostsFromServer = async () => {
       limit: 30,
     }
   });
-}
+};
+
+export const fetchDetailFromServer = async (hash: string) => {
+  return API.fetch('/api/torrent/detail/' + hash);
+};

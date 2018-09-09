@@ -38,7 +38,7 @@ export const uploadFile = (index: number) => async (dispatch: Dispatch, getState
   if (response.ok) {
     dispatch({ type: UPLOAD_FILE_SUCCESS, index });
     dispatch(postsActions.fetchPosts() as any);
-    dispatch(selectPost(body.hash));
+    dispatch(selectPost(body.hash) as any);
   } else {
     dispatch({
       type: UPLOAD_FILE_FAILURE,

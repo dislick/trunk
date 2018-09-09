@@ -41,8 +41,6 @@ export const getTorrents = (trackingServer) => async (request: Request, response
     return response.status(400).send({ message: 'Limit out of bounds (min: 1, max: 100)' });
   }
 
-  console.log(request.body, dateOffset, limit);
-
   let posts = await getTorrentPosts(dateOffset, limit);
 
   let responseDTOs: TorrentResponseDTO[] = posts.map(post => {
@@ -93,7 +91,7 @@ export const downloadTorrent = async (request: Request, response: Response) => {
   const { hash } = request.params;
 
   try {
-    let [ torrent, user] = await Promise.all([
+    let [torrent, user] = await Promise.all([
       getTorrentFile(hash),
       findUser(response.locals.id)
     ]);

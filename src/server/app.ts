@@ -13,6 +13,7 @@ import * as multer from 'multer';
  */
 import * as LoginController from './controllers/login_controller';
 import * as TorrentController from './controllers/torrent_controller';
+import * as TorrentDetailController from './controllers/torrent_detail_controller';
 import { authMiddleware } from './middlewares/auth_middleware';
 
 const app = express();
@@ -74,5 +75,6 @@ app.put('/api/torrent', authMiddleware, upload.fields([
   { name: 'torrent_file', maxCount: 1 }
 ]), TorrentController.uploadTorrent);
 app.get('/api/torrent/:hash', authMiddleware, TorrentController.downloadTorrent);
+app.get('/api/torrent/detail/:hash', authMiddleware, TorrentDetailController.getPostDetail);
 
 app.listen(config.port, () => console.log(`trunk API listening on port ${config.port}`));
