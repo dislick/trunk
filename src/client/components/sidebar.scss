@@ -1,7 +1,7 @@
 @import '../styles/spacing.scss';
 
-$sidebar-width: 300px;
-$sidebar-inner-padding: 32px;
+$sidebar-width: 400px;
+$sidebar-inner-padding: $large-page-spacing;
 
 section.sidebar {
   display: flex;
@@ -14,7 +14,7 @@ section.sidebar {
     justify-content: space-between;
 
     .logo {
-      max-width: 180px;
+      max-width: 155px;
       flex: 0 0 auto;
       align-self: center;
       margin: $large-page-spacing 0;

@@ -1,0 +1,51 @@
+.stars {
+  $large-star-size: 24px;
+  $small-star-size: 15px;
+
+  display: flex;
+  flex: 0 0 80px;
+
+  &.large {
+    .star {
+      width: $large-star-size;
+      height: $large-star-size;
+      background-size: $large-star-size $large-star-size;
+      padding-right: 8px;
+    }
+  }
+  &.small {
+    .star {
+      width: $small-star-size;
+      height: $small-star-size;
+      background-size: $small-star-size $small-star-size;
+      padding-right: 6px;
+    }
+  }
+
+  .inner {
+    display: flex;
+    align-items: flex-end;
+    flex-direction: row-reverse;
+  }
+
+  .star {
+    background-repeat: no-repeat;
+    cursor: default;
+
+    &.selectable {
+      cursor: pointer;
+
+      &:hover, &:hover ~ .star {
+        background-image: url('../../assets/star_filled_hover.svg');
+      }
+    }
+  }
+  
+
+  .filled {
+    background-image: url('../../assets/star_filled.svg');
+  }
+  .outlined {
+    background-image: url('../../assets/star_outline.svg');
+  }
+}

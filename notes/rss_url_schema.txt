@@ -1,0 +1,19 @@
+Latest posts from all users
+https://my-trunk-instance.com/rss/:auth-key/
+or
+https://my-trunk-instance.com/rss/:auth-key/*
+
+Latest posts from user "john"
+https://my-trunk-instance.com/rss/:auth-key/john
+
+Latest posts from user "john" and "pewdiepie"
+https://my-trunk-instance.com/rss/:auth-key/john+pewdiepie
+
+Latest posts with tag "movie"
+https://my-trunk-instance.com/rss/:auth-key/*/movie
+
+Latest posts from user "john" with tag "mac-os"
+https://my-trunk-instance.com/rss/:auth-key/john/mac-os
+
+Latest posts with tag "mac-os" and "utility"
+https://my-trunk-instance.com/rss/:auth-key/*/mac-os+utility

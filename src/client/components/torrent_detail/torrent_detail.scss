@@ -1,11 +1,15 @@
-@import '../styles/colors.scss';
-@import '../styles/spacing.scss';
+@import '../../styles/colors.scss';
+@import '../../styles/spacing.scss';
 
 .torrent-detail {
   padding: $large-page-spacing;
+  display: flex;
 
   .torrent-detail-inner {
     max-width: 600px;
+    flex: 1 1 100%;
+    display: flex;
+    flex-direction: column;
   }
 
   .title-wrapper {
@@ -45,5 +49,10 @@
 
   .detail-rating-bar {
     margin: 24px 0;
+  }
+
+  .user-engagement-wrapper {
+    flex: 1 1 auto;
+    overflow-y: auto;
   }
 }

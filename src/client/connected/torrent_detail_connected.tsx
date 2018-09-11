@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { RootState } from '../reducer';
 import { postsActions } from '../features/posts';
-import { TorrentDetail } from '../components/torrent_detail';
+import { TorrentDetail } from '../components/torrent_detail/torrent_detail';
 import { find } from 'lodash';
 
 const mapStateToProps = (state: RootState) => ({
