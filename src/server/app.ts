@@ -28,7 +28,14 @@ app.use(cors({
   origin: 'http://localhost:8080',
   credentials: true,
 }));
-const upload = multer({ storage: multer.memoryStorage() });
+const upload = multer({ 
+  storage: multer.memoryStorage(),
+  limits: {
+    fileSize: 10000000, // 10 MB
+    files: 1, // Amount of files
+    fields: 10,
+  }
+});
 
 
 /**

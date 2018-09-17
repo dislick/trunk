@@ -1,12 +1,13 @@
-.comment {
+.rating {
   margin: 24px 0;
-
+  display: flex;
+  
   p {
     color: white;
     font-size: 14px;
+  }
 
-    .content {
-      margin-left: 8px;
-    }
+  .stars {
+    margin-left: 8px;
   }
 }

@@ -11,6 +11,9 @@ interface Props {
 
 export const Comment = (props: Props) => (
   <div className="comment">
-    <p><Username ratio={props.userratio}>{props.username}</Username> {props.comment}</p>
+    <p>
+      <Username ratio={props.userratio}>{props.username}</Username>
+      <span className='content'>{props.comment}</span>
+    </p>
   </div>
 );
