@@ -3,7 +3,7 @@ export const config = {
   trackerPort: process.env.TRACKER_PORT || 6969,
 
   // Please do not include a / at the end of the URL
-  announceUrlBase: process.env.ANNOUNCE_URL || 'http://192.168.178.21:3000',
+  announceUrlBase: process.env.ANNOUNCE_URL || 'http://192.168.18.62:3000',
 
   // Authentification
   bcryptRounds: parseInt(process.env.BCRYPT_ROUNDS) || 12,

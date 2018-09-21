@@ -50,6 +50,7 @@
     "@types/node": "^10.9.3",
     "@types/pg": "^7.4.10",
     "@types/react": "^16.4.12",
+    "@types/react-router": "^4.0.31",
     "clean-webpack-plugin": "^0.1.19",
     "css-loader": "^1.0.0",
     "file-loader": "^2.0.0",

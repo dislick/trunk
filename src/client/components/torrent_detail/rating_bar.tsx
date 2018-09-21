@@ -17,11 +17,11 @@ export const RatingBar = (props: Props) => (
         width: (props.rating / props.maxRating * 100).toString() + '%'
       }}></div>
     </div>
-    <p className='rating-text'>
-      {
-        isNull(props.rating) ? '-' : props.rating.toFixed(1)
-      }
-      <span>/{props.maxRating}</span>
-    </p>
+    {!isNull(props.rating) &&
+      <p className='rating-text'>
+        {props.rating.toFixed(1)}
+        <span>/{props.maxRating}</span>
+      </p>
+    }
   </div>
 );

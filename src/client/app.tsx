@@ -6,6 +6,7 @@ import { ConnectedRouter } from 'connected-react-router'
 import { store, history } from './store';
 import { LoginPageConnected } from './connected/login_page_connected';
 import { MainPageConnected } from './connected/main_page_connected';
+import { RegisterPageConnected } from './connected/register_page_connected';
 
 import 'reset-css';
 import './styles/main.scss';
@@ -16,6 +17,7 @@ ReactDOM.render((
     <ConnectedRouter history={history}>
       <Switch>
         <Route exact path="/login" render={() => <LoginPageConnected />} />
+        <Route path="/invite/:code" render={() => <RegisterPageConnected />} />
         <Route exact path="/" render={() => <MainPageConnected />} />
         <Route render={() => (<div>404</div>)} />
       </Switch>
