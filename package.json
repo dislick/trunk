@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start:client": "webpack-dev-server --config src/client/webpack.development.config.js --host 0.0.0.0 --history-api-fallback",
     "start:server": "gulp --gulpfile src/server/Gulpfile.js express",
-    "build:client": "webpack --config src/client/webpack.development.config.js",
+    "build:client": "webpack --config src/client/webpack.production.config.js",
     "build:server": "gulp --gulpfile src/server/Gulpfile.js build"
   },
   "keywords": [
