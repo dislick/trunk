@@ -6,25 +6,24 @@ import { Tag } from '../tag';
 import { TagList } from '../tag_list';
 import * as bytes from 'bytes';
 import { getBaseUrl } from '../../api';
-import { TorrentDetailDTO, CommentDTO, RatingDTO } from '../../../server/controllers/torrent_detail_controller';
-import { Spinner } from '../spinner';
+import { CommentDTO, RatingDTO } from '../../../server/controllers/torrent_detail_controller';
 import { RatingBar } from './rating_bar';
 import { Comment } from './comment';
 import { TextField } from '../textfield';
 import { Stars } from './stars';
 import { isNumber } from 'lodash';
+import { Rating } from './rating';
+import { PostDetailState } from '../../features/posts/reducer';
 
 import './torrent_detail.scss';
-import { Rating } from './rating';
 
 interface Props {
   visible: boolean;
   post: TorrentResponseDTO;
-  detail: {
-    averageRating: number;
-    interactions: Array<CommentDTO | RatingDTO>;
-  };
+  detail: PostDetailState;
   isDetailFetching: boolean;
+  onSetComment: (comment: string) => void;
+  onPostComment: () => void;
 }
 
 export const TorrentDetail = (props: Props) => {
@@ -51,12 +50,6 @@ export const TorrentDetail = (props: Props) => {
               userratio={props.post.user.ratio}
               uploadedAt={props.post.uploaded_at}
             />
-
-            {/* <div className="spinner-wrapper">
-              {props.isDetailFetching &&
-                <Spinner />
-              }
-            </div> */}
 
             <RatingBar rating={props.detail.averageRating} maxRating={5} className='detail-rating-bar' />
 
@@ -88,8 +81,9 @@ export const TorrentDetail = (props: Props) => {
 
             <TextField
               placeholder='Type something and press enter'
-              value=''
-              onChange={() => { }}
+              value={props.detail.commentInput}
+              onChange={(event) => props.onSetComment(event.target.value)}
+              onEnter={props.onPostComment}
             />
             <Stars
               max={5}

@@ -9,6 +9,7 @@ import { Dispatch, Action } from 'redux';
 import { RootState } from '../../reducer';
 import { loginUser } from './services';
 import { push } from 'connected-react-router';
+import { authServices } from '../auth';
 
 export interface AuthAction extends Action {
   payload: string;
@@ -36,4 +37,9 @@ export const submitLoginRequest = () => async (dispatch: Dispatch, getState: () 
   } else {
     dispatch({ type: SUBMIT_LOGIN_FAILURE });
   }
+};
+
+export const logout = () => async (dispatch: Dispatch, getState: () => RootState) => {
+  await authServices.logoutUser();
+  dispatch(push('/login'));
 };

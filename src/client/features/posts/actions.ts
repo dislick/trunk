@@ -1,19 +1,27 @@
 import {
-  FETCH_POSTS_REQUEST, FETCH_POSTS_SUCCESS, FETCH_POSTS_FAILURE, SELECT_POST, FETCH_DETAIL_REQUEST, FETCH_DETAIL_SUCCESS, FETCH_DETAIL_FAILURE
+  FETCH_POSTS_REQUEST,
+  FETCH_POSTS_SUCCESS,
+  FETCH_POSTS_FAILURE,
+  SELECT_POST,
+  FETCH_DETAIL_REQUEST,
+  FETCH_DETAIL_SUCCESS,
+  FETCH_DETAIL_FAILURE,
+  SET_COMMENT,
+  POST_COMMENT_REQUEST,
+  POST_COMMENT_SUCCESS,
+  POST_COMMENT_FAILURE
 } from './constants';
 import { Dispatch, Action } from 'redux';
 import { RootState } from '../../reducer';
-import { fetchPostsFromServer, fetchDetailFromServer } from './services';
-import { push } from 'connected-react-router';
-import { authServices } from '../auth';
+import { fetchPostsFromServer, fetchDetailFromServer, addCommentOnServer } from './services';
 import { TorrentResponseDTO } from '../../../server/controllers/torrent_controller';
 import { TorrentDetailDTO } from '../../../server/controllers/torrent_detail_controller';
 
 export interface PostsAction extends Action {
-  payload: string;
-  posts: TorrentResponseDTO[];
-  detail: TorrentDetailDTO;
-  replacePosts: boolean;
+  payload?: string;
+  posts?: TorrentResponseDTO[];
+  detail?: TorrentDetailDTO;
+  replacePosts?: boolean;
 }
 
 export const fetchPosts = (refresh: boolean = false) => async (dispatch: Dispatch, getState: () => RootState) => {
@@ -52,15 +60,31 @@ export const fetchDetail = (hash: string) => async (dispatch: Dispatch, getState
   }
 };
 
-export const logout = () => async (dispatch: Dispatch, getState: () => RootState) => {
-  await authServices.logoutUser();
-  dispatch(push('/login'));
-};
-
 export const selectPost = (hash: string) => async (dispatch: Dispatch, getState: () => RootState) => {
   dispatch({
     type: SELECT_POST,
     payload: hash
   });
   dispatch(fetchDetail(hash) as any);
+};
+
+export const setComment = (comment: string): PostsAction => ({
+  type: SET_COMMENT,
+  payload: comment,
+});
+
+export const postComment = () => async (dispatch: Dispatch, getState: () => RootState) => {
+  dispatch({
+    type: POST_COMMENT_REQUEST
+  });
+
+  const postState = getState().postsReducer;
+  const response = await addCommentOnServer(postState.selectedPostHash, postState.detail.commentInput);
+
+  if (response.ok) {
+    dispatch({ type: POST_COMMENT_SUCCESS });
+    dispatch(fetchDetail(postState.selectedPostHash) as any);
+  } else {
+    dispatch({ type: POST_COMMENT_FAILURE });
+  }
 };

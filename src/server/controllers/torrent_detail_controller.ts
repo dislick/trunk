@@ -1,7 +1,8 @@
 import { Request, Response } from 'express';
-import { getCommentsForTorrent } from '../models/comments_model';
+import { getCommentsForTorrent, addCommentForTorrent } from '../models/comments_model';
 import { getRatingsForTorrent, getAverageRating } from '../models/ratings_model';
 import { getFormattedRatio } from '../utils/ratio_calculator';
+import { isString } from 'lodash';
 
 export interface CommentDTO {
   content: string;
@@ -59,4 +60,22 @@ export const getPostDetail = async (request: Request, response: Response) => {
     })),
     averageRating
   });
+};
+
+export const postComment = async (request: Request, response: Response) => {
+  const { comment, hash } = request.body;
+
+  if (!isString(comment)) {
+    return response.status(400).send({ message: 'Comment must be a string' });
+  }
+  if (comment.length === 0) {
+    return response.status(400).send({ message: 'Comment cannot be empty' });
+  }
+  if (comment.length > 512) {
+    return response.status(400).send({ message: 'Comment cannot be over 512 chars' });
+  }
+
+  await addCommentForTorrent(hash, response.locals.id, comment);
+
+  response.send({ message: 'Comment posted' });
 };

@@ -12,5 +12,6 @@ const mapStateToProps = (state: RootState) => ({
 });
 
 export const TorrentDetailConnected = connect(mapStateToProps, {
-  
+  onSetComment: postsActions.setComment,
+  onPostComment: postsActions.postComment,
 })(TorrentDetail);

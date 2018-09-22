@@ -1,5 +1,6 @@
 import * as React from 'react';
 import * as classnames from 'classnames';
+import { isFunction } from 'lodash';
 
 import './textfield.scss';
 
@@ -23,7 +24,7 @@ export const TextField = (props: TextFieldProps) => {
       name={props.name}
       onChange={props.onChange}
       onKeyDown={(event) => {
-        if (event.key === 'Enter') {
+        if (event.key === 'Enter' && isFunction(props.onEnter)) {
           props.onEnter();
         }
       }}

@@ -1,5 +1,5 @@
 import { PostsAction } from './actions';
-import { FETCH_POSTS_SUCCESS, SELECT_POST, FETCH_DETAIL_SUCCESS, FETCH_DETAIL_REQUEST, FETCH_DETAIL_FAILURE } from './constants';
+import { FETCH_POSTS_SUCCESS, SELECT_POST, FETCH_DETAIL_SUCCESS, FETCH_DETAIL_REQUEST, FETCH_DETAIL_FAILURE, SET_COMMENT, POST_COMMENT_SUCCESS } from './constants';
 import { TorrentResponseDTO } from '../../../server/controllers/torrent_controller';
 import { TorrentDetailDTO, CommentDTO, RatingDTO } from '../../../server/controllers/torrent_detail_controller';
 import { concat, sortBy } from 'lodash';
@@ -7,12 +7,15 @@ import { concat, sortBy } from 'lodash';
 export interface PostsState {
   readonly posts: TorrentResponseDTO[];
   readonly selectedPostHash: string;
-  readonly detail: {
-    averageRating: number;
-    interactions: Array<CommentDTO | RatingDTO>;
-  };
+  readonly detail: PostDetailState;
   readonly isDetailFetching: boolean;
   readonly reachedEndOfPosts: boolean;
+}
+
+export interface PostDetailState {
+  averageRating: number;
+  interactions: Array<CommentDTO | RatingDTO>;
+  commentInput: string;
 }
 
 const defaultState: PostsState = {
@@ -21,6 +24,7 @@ const defaultState: PostsState = {
   detail: {
     interactions: [],
     averageRating: null,
+    commentInput: '',
   },
   isDetailFetching: false,
   reachedEndOfPosts: false,
@@ -49,11 +53,16 @@ export default (state: PostsState = defaultState, action: PostsAction): PostsSta
         detail: {
           averageRating: action.detail.averageRating,
           interactions: interactions,
+          commentInput: '',
         },
         isDetailFetching: false
       };
     case FETCH_DETAIL_FAILURE:
       return { ...state, isDetailFetching: false };
+    case SET_COMMENT:
+      return { ...state, detail: { ...state.detail, commentInput: action.payload } };
+    case POST_COMMENT_SUCCESS:
+      return { ...state, detail: { ...state.detail, commentInput: '' } };
   }
 
   return state;

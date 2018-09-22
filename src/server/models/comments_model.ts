@@ -26,3 +26,16 @@ export const getCommentsForTorrent = async (hash: string): Promise<CommentModel[
   let result = await pool.query(query, [hash]);
   return result.rows;
 };
+
+export const addCommentForTorrent = async (hash: string, userId: number, comment: string) => {
+  const query = `
+    INSERT INTO comments (
+      torrent,
+      user_id,
+      comment_content,
+      commented_at
+    )
+    VALUES ($1, $2, $3, NOW())`;
+
+  return pool.query(query, [hash, userId, comment]);
+};

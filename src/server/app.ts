@@ -55,7 +55,7 @@ app.get('/:torrentKey/announce', async (request: Request, response: Response) =>
 
   try {
     // Remove the torrent_auth_key from the request url.
-    // Before: /123456/announce=params=...
+    // Before: /123456/announce?params=...
     // After:  /announce?params=...
     request.url = request.url.replace(/\/[a-z0-9]+?\/announce/, '/announce');
 
@@ -66,7 +66,7 @@ app.get('/:torrentKey/announce', async (request: Request, response: Response) =>
     // Forward request to tracking server
     trackingServer.onHttpRequest(request, response);
   } catch (error) {
-    response.end();
+    response.status(401).end();
   }
 });
 
@@ -83,6 +83,8 @@ app.put('/api/torrent', authMiddleware, upload.fields([
   { name: 'torrent_file', maxCount: 1 }
 ]), TorrentController.uploadTorrent);
 app.get('/api/torrent/:hash', authMiddleware, TorrentController.downloadTorrent);
+
 app.get('/api/torrent/detail/:hash', authMiddleware, TorrentDetailController.getPostDetail);
+app.post('/api/torrent/detail/comment', authMiddleware, TorrentDetailController.postComment);
 
 app.listen(config.port, () => console.log(`trunk API listening on port ${config.port}`));

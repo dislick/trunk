@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { RootState } from '../reducer';
-import { postsActions } from '../features/posts';
+import { authActions } from '../features/auth';
 import { Sidebar } from '../components/sidebar';
 
 const mapStateToProps = (state: RootState) => ({
@@ -8,5 +8,5 @@ const mapStateToProps = (state: RootState) => ({
 });
 
 export const SidebarConnected = connect(mapStateToProps, {
-  onLogout: postsActions.logout,
+  onLogout: authActions.logout,
 })(Sidebar);

@@ -13,3 +13,13 @@ export const fetchPostsFromServer = async (offset?: Date) => {
 export const fetchDetailFromServer = async (hash: string) => {
   return API.fetch('/api/torrent/detail/' + hash);
 };
+
+export const addCommentOnServer = async (hash: string, comment: string) => {
+  return API.fetch('/api/torrent/detail/comment', {
+    method: 'POST',
+    body: {
+      hash: hash,
+      comment: comment,
+    }
+  });
+};
