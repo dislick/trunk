@@ -1,3 +1,5 @@
+const { protocol, hostname } = window.location;
+
 export const trunkConfig = {
-  apiBaseUrl: 'http://localhost:3000',
+  apiBaseUrl: `${protocol}//${hostname}`,
 };
