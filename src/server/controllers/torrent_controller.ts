@@ -51,7 +51,7 @@ export const getTorrents = (trackingServer) => async (request: Request, response
       leechers: leechers,
     }
   });
-
+  
   response.send(responseDTOs);
 };
 

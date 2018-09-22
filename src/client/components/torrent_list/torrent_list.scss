@@ -2,6 +2,12 @@
 
 section.torrent-list {
   padding: $large-page-spacing;
+
+  .empty {
+    color: white;
+    font-size: 14px;
+    text-align: center;
+  }
 }
 
 ::-webkit-scrollbar {

@@ -16,14 +16,6 @@ interface Props {
 }
 
 export const TorrentList = (props: Props) => {
-  if (!props.posts || props.posts.length <= 0) {
-    return (
-      <section className='torrent-list'>
-        Nothing found
-      </section>
-    );
-  }
-
   return (
     <section className='torrent-list'>
       <InfiniteScroll
@@ -35,7 +27,11 @@ export const TorrentList = (props: Props) => {
       >
         <TorrentUploadAreaConnected />
 
-        {props.posts.map((post) => (
+        {!props.posts || props.posts.length <= 0 && 
+          <p className='empty'>There doesn't seem to be anything here</p>
+        }
+
+        {props.posts && props.posts.map((post) => (
           <TorrentListEntry
             key={post.hash}
             hash={post.hash}
