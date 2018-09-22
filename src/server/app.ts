@@ -77,6 +77,7 @@ app.post('/api/login', LoginController.loginUser);
 app.get('/api/logout', LoginController.logoutUser);
 app.post('/api/register/:inviteCode', LoginController.registerUser);
 app.get('/api/invite/:inviteCode', LoginController.validateCode);
+app.get('/api/me', authMiddleware, LoginController.getPersonalInfo);
 
 app.post('/api/torrent', authMiddleware, TorrentController.getTorrents(trackingServer));
 app.put('/api/torrent', authMiddleware, upload.fields([

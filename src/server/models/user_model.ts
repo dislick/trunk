@@ -12,8 +12,8 @@ export interface UserModel {
   password_hash: string;
   torrent_auth_key: string;
   level: number;
-  total_uploaded: number;
-  total_downloaded: number;
+  total_uploaded: string;
+  total_downloaded: string;
 }
 
 /**

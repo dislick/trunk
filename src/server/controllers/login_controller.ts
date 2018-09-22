@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { registerUserInDatabase, validateUser } from '../models/user_model';
+import { registerUserInDatabase, validateUser, findUser } from '../models/user_model';
 import { isString } from 'lodash';
 import { DuplicateEntryError } from '../utils/error';
 import * as jwt from 'jsonwebtoken';
@@ -13,6 +13,12 @@ export interface JWTPayload {
 export interface ValidationResponseDTO {
   isValid: boolean;
   username?: string;
+}
+
+export interface PersonalInfoDTO {
+  username: string;
+  total_uploaded: number;
+  total_downloaded: number;
 }
 
 /**
@@ -111,6 +117,22 @@ export const validateCode = async (request: Request, response: Response) => {
   setTimeout(() => {
     response.send(validationResponse);
   }, 1000);
+};
+
+export const getPersonalInfo = async (request: Request, response: Response) => {
+  try {
+    let user = await findUser(response.locals.id);
+
+    let dto: PersonalInfoDTO = {
+      username: user.username,
+      total_uploaded: parseInt(user.total_uploaded),
+      total_downloaded: parseInt(user.total_downloaded),
+    };
+  
+    response.send(dto);
+  } catch (error) {
+    response.status(500).send();
+  }  
 };
 
 /**

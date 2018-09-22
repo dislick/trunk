@@ -8,11 +8,13 @@ import './main_page_layout.scss';
 interface Props {
   onFetchPosts: () => void;
   onLogout: () => void;
+  onFetchPersonalInfo: () => void;
 }
 
 export class MainPage extends React.Component<Props> {
   componentDidMount() {
     this.props.onFetchPosts();
+    this.props.onFetchPersonalInfo();
   }
 
   render() {

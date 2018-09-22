@@ -13,3 +13,7 @@ export const loginUser = (user: string, password: string) => {
 export const logoutUser = async () => {
   let response = await API.fetch('/api/logout');
 };
+
+export const getPersonalInfo = async () => {
+  return API.fetch('/api/me');
+};

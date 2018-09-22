@@ -1,4 +1,5 @@
 @import '../styles/spacing.scss';
+@import '../styles/colors.scss';
 
 $sidebar-width: 400px;
 $sidebar-inner-padding: $large-page-spacing;
@@ -20,8 +21,45 @@ section.sidebar {
       margin: $large-page-spacing 0;
     }
 
-    .logout {
+    .personal-area {
       margin: $sidebar-inner-padding;
+      display: flex;
+      flex-direction: column;
+
+      .logout {
+        margin-bottom: 32px;
+      }
+
+      .about-me {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .stats {
+          p {
+            color: white;
+          }
+          td:nth-child(1) {
+            padding-right: 16px;
+            line-height: 24px;
+          }
+          td:nth-child(2) p {
+            font-family: Inconsolata, monospace;
+            color: $trunk-color;
+            font-size: 15px;
+            text-align: right;
+          }
+        }
+
+        p {
+          color: white;
+          font-size: 14px;
+
+          &.user {
+            font-weight: 700;
+          }
+        }
+      }
     }
   }
 }

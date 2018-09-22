@@ -1,5 +1,6 @@
 import { AuthAction } from './actions';
-import { SET_USERNAME, SET_PASSWORD, SUBMIT_LOGIN_SUCCESS, SUBMIT_LOGIN_REQUEST, SUBMIT_LOGIN_FAILURE } from './constants';
+import { SET_USERNAME, SET_PASSWORD, SUBMIT_LOGIN_SUCCESS, SUBMIT_LOGIN_REQUEST, SUBMIT_LOGIN_FAILURE, FETCH_PERSONAL_INFO_SUCCESS } from './constants';
+import { PersonalInfoDTO } from '../../../server/controllers/login_controller';
 
 export interface AuthState {
   readonly username: string;
@@ -7,6 +8,7 @@ export interface AuthState {
   readonly isAuthenticated: boolean;
   readonly invalidCredentials: boolean;
   readonly isFetching: boolean;
+  readonly personalInfo: PersonalInfoDTO;
 }
 
 const defaultState: AuthState = {
@@ -15,6 +17,7 @@ const defaultState: AuthState = {
   isAuthenticated: false,
   invalidCredentials: false,
   isFetching: false,
+  personalInfo: null,
 }
 
 export default (state: AuthState = defaultState, action: AuthAction): AuthState => {
@@ -29,6 +32,8 @@ export default (state: AuthState = defaultState, action: AuthAction): AuthState 
       return { ...state, isAuthenticated: false, invalidCredentials: true, isFetching: false };
     case SUBMIT_LOGIN_SUCCESS:
       return { ...state, isAuthenticated: true, invalidCredentials: false, isFetching: false, password: '' };
+    case FETCH_PERSONAL_INFO_SUCCESS:
+      return { ...state, personalInfo: action.personalInfo };
   }
 
   return state;
