@@ -1,8 +1,8 @@
 import { PostsAction } from './actions';
 import { FETCH_POSTS_SUCCESS, SELECT_POST, FETCH_DETAIL_SUCCESS, FETCH_DETAIL_REQUEST, FETCH_DETAIL_FAILURE, SET_COMMENT, POST_COMMENT_SUCCESS } from './constants';
 import { TorrentResponseDTO } from '../../../server/controllers/torrent_controller';
-import { TorrentDetailDTO, CommentDTO, RatingDTO } from '../../../server/controllers/torrent_detail_controller';
-import { concat, sortBy } from 'lodash';
+import { CommentDTO, RatingDTO } from '../../../server/controllers/torrent_detail_controller';
+import { sortBy } from 'lodash';
 
 export interface PostsState {
   readonly posts: TorrentResponseDTO[];
@@ -14,6 +14,7 @@ export interface PostsState {
 
 export interface PostDetailState {
   averageRating: number;
+  myRating: number;
   interactions: Array<CommentDTO | RatingDTO>;
   commentInput: string;
 }
@@ -24,6 +25,7 @@ const defaultState: PostsState = {
   detail: {
     interactions: [],
     averageRating: null,
+    myRating: null,
     commentInput: '',
   },
   isDetailFetching: false,
@@ -47,11 +49,15 @@ export default (state: PostsState = defaultState, action: PostsAction): PostsSta
     case FETCH_DETAIL_REQUEST:
       return { ...state, isDetailFetching: true };
     case FETCH_DETAIL_SUCCESS:
-      let interactions = sortBy([...action.detail.comments, ...action.detail.ratings], i => i.timestamp);
+      let interactions = sortBy([...action.detail.comments, ...action.detail.ratings], i => {
+        let date = new Date(i.timestamp);
+        return date.getTime();
+      });
       return {
         ...state,
         detail: {
           averageRating: action.detail.averageRating,
+          myRating: action.detail.myRating,
           interactions: interactions,
           commentInput: '',
         },

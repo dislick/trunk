@@ -23,3 +23,13 @@ export const addCommentOnServer = async (hash: string, comment: string) => {
     }
   });
 };
+
+export const updateRatingOnServer = async (hash: string, rating: number) => {
+  return API.fetch('/api/torrent/detail/rating', {
+    method: 'POST',
+    body: {
+      hash: hash,
+      rating: rating,
+    }
+  });
+};

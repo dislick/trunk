@@ -35,11 +35,11 @@ export const updateStatistics = async (
           downloaded = excluded.downloaded;
     `;
   
-    await pool.query(query, [
-      userId,
-      hash,
-      uploaded,
-      downloaded,
-      peerId
-    ]);
+  await pool.query(query, [
+    userId,
+    hash,
+    uploaded,
+    downloaded,
+    peerId
+  ]);
 };

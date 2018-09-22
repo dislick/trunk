@@ -24,6 +24,7 @@ interface Props {
   isDetailFetching: boolean;
   onSetComment: (comment: string) => void;
   onPostComment: () => void;
+  onUpdateRating: (rating: number) => void;
 }
 
 export const TorrentDetail = (props: Props) => {
@@ -88,7 +89,8 @@ export const TorrentDetail = (props: Props) => {
             <Stars
               max={5}
               size='large'
-              onSelectRating={(rating) => console.log(rating)}
+              filled={props.detail.myRating}
+              onSelectRating={props.onUpdateRating}
             />
           </>
         }

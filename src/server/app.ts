@@ -86,5 +86,6 @@ app.get('/api/torrent/:hash', authMiddleware, TorrentController.downloadTorrent)
 
 app.get('/api/torrent/detail/:hash', authMiddleware, TorrentDetailController.getPostDetail);
 app.post('/api/torrent/detail/comment', authMiddleware, TorrentDetailController.postComment);
+app.post('/api/torrent/detail/rating', authMiddleware, TorrentDetailController.postRating);
 
 app.listen(config.port, () => console.log(`trunk API listening on port ${config.port}`));

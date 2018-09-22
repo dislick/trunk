@@ -36,4 +36,35 @@ export const getAverageRating = async (hash: string): Promise<number> => {
   
   let result = await pool.query(query, [hash]);
   return parseFloat(result.rows[0].average_rating);
-}
+};
+
+export const upsertRating = async (hash: string, userId: number, rating: number) => {
+  const query = `
+    INSERT INTO ratings (torrent, user_id, rating, rated_at)
+    VALUES ($1, $2, $3, NOW())
+    ON CONFLICT (torrent, user_id)
+      DO UPDATE
+        SET 
+          rating = excluded.rating,
+          rated_at = NOW()
+  `;
+
+  return pool.query(query, [hash, userId, rating])
+};
+
+export const getRatingForUser = async (hash: string, userId: number): Promise<number> => {
+  const query = `
+    SELECT 
+      rating 
+    FROM ratings 
+    WHERE torrent = $1 AND user_id = $2
+  `;
+
+  let result = await pool.query(query, [hash, userId]);
+
+  if (result.rows.length > 0) {
+    return result.rows[0].rating;
+  } else {
+    return null;
+  }
+};

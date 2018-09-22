@@ -13,7 +13,7 @@ import {
 } from './constants';
 import { Dispatch, Action } from 'redux';
 import { RootState } from '../../reducer';
-import { fetchPostsFromServer, fetchDetailFromServer, addCommentOnServer } from './services';
+import { fetchPostsFromServer, fetchDetailFromServer, addCommentOnServer, updateRatingOnServer } from './services';
 import { TorrentResponseDTO } from '../../../server/controllers/torrent_controller';
 import { TorrentDetailDTO } from '../../../server/controllers/torrent_detail_controller';
 
@@ -86,5 +86,18 @@ export const postComment = () => async (dispatch: Dispatch, getState: () => Root
     dispatch(fetchDetail(postState.selectedPostHash) as any);
   } else {
     dispatch({ type: POST_COMMENT_FAILURE });
+  }
+};
+
+export const postRating = (rating: number) => async (dispatch: Dispatch, getState: () => RootState) => {
+  const postState = getState().postsReducer;
+
+  const response = await updateRatingOnServer(postState.selectedPostHash, rating);
+
+  if (response.ok) {
+    //dispatch({ type: POST_COMMENT_SUCCESS });
+    dispatch(fetchDetail(postState.selectedPostHash) as any);
+  } else {
+    //dispatch({ type: POST_COMMENT_FAILURE });
   }
 };

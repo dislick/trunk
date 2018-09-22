@@ -1,8 +1,9 @@
 import { Request, Response } from 'express';
 import { getCommentsForTorrent, addCommentForTorrent } from '../models/comments_model';
-import { getRatingsForTorrent, getAverageRating } from '../models/ratings_model';
+import { getRatingsForTorrent, getAverageRating, getRatingForUser } from '../models/ratings_model';
 import { getFormattedRatio } from '../utils/ratio_calculator';
-import { isString } from 'lodash';
+import { isString, isNumber } from 'lodash';
+import { upsertRating } from '../../build-server/models/ratings_model';
 
 export interface CommentDTO {
   content: string;
@@ -28,18 +29,20 @@ export interface TorrentDetailDTO {
   comments: CommentDTO[];
   ratings: RatingDTO[];
   averageRating: number;
+  myRating: number;
 }
 
 export const getPostDetail = async (request: Request, response: Response) => {
   const { hash } = request.params;
 
-  let [comments, ratings, averageRating] = await Promise.all([
+  let [comments, ratings, averageRating, myRating] = await Promise.all([
     getCommentsForTorrent(hash),
     getRatingsForTorrent(hash),
     getAverageRating(hash),
+    getRatingForUser(hash, response.locals.id),
   ]);
 
-  response.send({
+  let dto: TorrentDetailDTO = {
     comments: comments.map(comment => ({
       content: comment.comment_content,
       timestamp: comment.commented_at,
@@ -58,12 +61,18 @@ export const getPostDetail = async (request: Request, response: Response) => {
         ratio: getFormattedRatio(parseInt(rating.total_uploaded), parseInt(rating.total_downloaded))
       }
     })),
-    averageRating
-  });
+    averageRating,
+    myRating,
+  };
+
+  response.send(dto);
 };
 
+/**
+ * API Endpoint /api/torrent/detail/comment 
+ */
 export const postComment = async (request: Request, response: Response) => {
-  const { comment, hash } = request.body;
+  const { hash, comment } = request.body;
 
   if (!isString(comment)) {
     return response.status(400).send({ message: 'Comment must be a string' });
@@ -75,7 +84,37 @@ export const postComment = async (request: Request, response: Response) => {
     return response.status(400).send({ message: 'Comment cannot be over 512 chars' });
   }
 
-  await addCommentForTorrent(hash, response.locals.id, comment);
+  try {
+    await addCommentForTorrent(hash, response.locals.id, comment);
+  } catch (error) {
+    response.status(500).send();
+  }
 
   response.send({ message: 'Comment posted' });
+};
+
+/**
+ * API Endpoint /api/torrent/detail/rating 
+ */
+export const postRating = async (request: Request, response: Response) => {
+  let { hash, rating } = request.body;
+  
+  if (!isNumber(rating)) {
+    return response.status(400).send({ message: 'Rating must be a number' });
+  }
+
+  // Make sure that the user can only post integrs
+  rating = Math.floor(rating);
+
+  if (rating < 1 || rating > 5) {
+    return response.status(400).send({ message: 'Rating must be between 1 and 5' });
+  }
+
+  try {
+    await upsertRating(hash, response.locals.id, rating);
+  } catch (error) {
+    response.status(500).send();
+  }
+
+  response.send({ message: 'Rating posted' });
 };
