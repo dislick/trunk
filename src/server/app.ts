@@ -40,14 +40,6 @@ const upload = multer({
 
 
 /**
- * Serve client app
- */
-const root = `${__dirname}/../build-client`;
-app.use(express.static(root));
-app.use(fallback('index.html', { root }));
-
-
-/**
  * Start bittorrent tracking server
  */
 const trackingServer = server();
@@ -91,5 +83,12 @@ app.get('/api/torrent/:hash', authMiddleware, TorrentController.downloadTorrent)
 app.get('/api/torrent/detail/:hash', authMiddleware, TorrentDetailController.getPostDetail);
 app.post('/api/torrent/detail/comment', authMiddleware, TorrentDetailController.postComment);
 app.post('/api/torrent/detail/rating', authMiddleware, TorrentDetailController.postRating);
+
+/**
+ * Serve client app
+ */
+const root = `${__dirname}/../build-client`;
+app.use(express.static(root));
+app.use(fallback('index.html', { root }));
 
 app.listen(config.port, () => console.log(`trunk API listening on port ${config.port}`));

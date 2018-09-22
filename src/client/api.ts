@@ -2,12 +2,10 @@
 import { merge, isObject } from 'lodash';
 import { store } from './store';
 import { push } from 'connected-react-router';
-
-const { protocol, hostname } = window.location;
-let url = `${protocol}//${hostname}:3000`;
+import { trunkConfig } from './config';
 
 const apiConfig = {
-  baseUrl: url,
+  baseUrl: trunkConfig.apiBaseUrl,
   headers: {
     'Content-Type': 'application/json',
   },
