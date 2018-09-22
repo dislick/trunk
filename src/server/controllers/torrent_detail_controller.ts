@@ -3,7 +3,7 @@ import { getCommentsForTorrent, addCommentForTorrent } from '../models/comments_
 import { getRatingsForTorrent, getAverageRating, getRatingForUser } from '../models/ratings_model';
 import { getFormattedRatio } from '../utils/ratio_calculator';
 import { isString, isNumber } from 'lodash';
-import { upsertRating } from '../../build-server/models/ratings_model';
+import { upsertRating } from '../models/ratings_model';
 
 export interface CommentDTO {
   content: string;
