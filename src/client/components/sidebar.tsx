@@ -19,7 +19,7 @@ export const Sidebar = (props: Props) => {
         <img src={require('../assets/trunk_logo.svg')} className='logo' />
 
         <div className="personal-area">
-          <Button onClick={props.onLogout} className='logout'>Logout</Button>
+        <Button onClick={props.onLogout} className='logout'>Logout</Button>
           {props.aboutMe &&
             <div className="about-me">
               <p className="user">{props.aboutMe.username}</p>
@@ -36,12 +36,6 @@ export const Sidebar = (props: Props) => {
                   </tr>
                 </tbody>
               </table>
-{/*
-              <div className='stats'>
-                <p className="uploaded">up: <span>{formatBytes(props.aboutMe.total_uploaded)}</span></p>
-                <p className="downloaded">down: <span>{formatBytes(props.aboutMe.total_downloaded)}</span></p>
-              </div>
-*/}
             </div>
           }
         </div>
