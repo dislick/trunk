@@ -4,6 +4,7 @@ import { PersonalInfoDTO } from '../../server/controllers/login_controller';
 import * as bytes from 'bytes';
 
 import './sidebar.scss';
+import { getFormattedRatio } from '../../server/utils/ratio_calculator';
 
 interface Props {
   aboutMe: PersonalInfoDTO;
@@ -33,6 +34,10 @@ export const Sidebar = (props: Props) => {
                   <tr>
                     <td><p>down</p></td>
                     <td><p>{formatBytes(props.aboutMe.total_downloaded)}</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>ratio</p></td>
+                    <td><p>{getFormattedRatio(props.aboutMe.total_uploaded, props.aboutMe.total_downloaded)}</p></td>
                   </tr>
                 </tbody>
               </table>

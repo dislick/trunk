@@ -1,5 +1,7 @@
+@import '../styles/colors.scss';
+
 .username {
-  //color: white;
+  color: $trunk-color;
   font-weight: 700;
 
   span {

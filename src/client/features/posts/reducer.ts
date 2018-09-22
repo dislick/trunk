@@ -47,7 +47,7 @@ export default (state: PostsState = defaultState, action: PostsAction): PostsSta
     case SELECT_POST:
       return { ...state, selectedPostHash: action.payload };
     case FETCH_DETAIL_REQUEST:
-      return { ...state, isDetailFetching: true };
+      return { ...state, isDetailFetching: true, /*detail: { ...defaultState.detail }*/ };
     case FETCH_DETAIL_SUCCESS:
       let interactions = sortBy([...action.detail.comments, ...action.detail.ratings], i => {
         let date = new Date(i.timestamp);

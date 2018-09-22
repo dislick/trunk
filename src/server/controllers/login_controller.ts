@@ -69,10 +69,14 @@ export const logoutUser = async (request: Request, response: Response) => {
 export const registerUser = async (request: Request, response: Response) => {
   const { username, email, password } = request.body;
   const { inviteCode } = request.params;
+  const userValidation = /^[a-zA-Z0-9-]+$/;
 
   // Basic validation
   if (!isString(username) || username.length < 3 || username.length > 64) {
     return response.status(400).send({ message: 'Username must be between 3 and 64 chars' });
+  }
+  if (!userValidation.test(username)) {
+    return response.status(400).send({ message: 'Username can only contain A-Z, 0-9 and -' });
   }
   if (!isString(email) || email.length < 3 || email.length > 128 || email.indexOf('@') === -1) {
     return response.status(400).send({ message: 'Email must be between 3 and 128 chars and contain a @-character' });
