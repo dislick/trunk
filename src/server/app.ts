@@ -7,6 +7,7 @@ import * as cors from 'cors';
 import server from './tracker';
 import { Request, Response } from 'express';
 import * as multer from 'multer';
+import * as fallback from 'express-history-api-fallback';
 
 /** 
  * Controllers
@@ -25,7 +26,7 @@ const app = express();
 app.use(bodyParser.json());
 app.use(cookieParser(config.cookieSecret));
 app.use(cors({
-  origin: 'http://localhost:8080',
+  origin: config.corsUrl,
   credentials: true,
 }));
 const upload = multer({ 
@@ -41,7 +42,9 @@ const upload = multer({
 /**
  * Serve client app
  */
-app.use('/', express.static(path.join(__dirname, '../build-client')));
+const root = `${__dirname}/../build-client`;
+app.use(express.static(root));
+app.use(fallback('index.html', { root }));
 
 
 /**
