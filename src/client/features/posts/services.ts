@@ -1,11 +1,11 @@
 import API from '../../api';
 
-export const fetchPostsFromServer = async () => {
+export const fetchPostsFromServer = async (offset?: Date) => {
   return API.fetch('/api/torrent', {
     method: 'POST',
     body: {
-      dateOffset: '',
-      limit: 30,
+      dateOffset: offset || '',
+      limit: 20,
     }
   });
 };

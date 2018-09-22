@@ -110,7 +110,7 @@ export const validateCode = async (request: Request, response: Response) => {
   // Artificial delay to stop attackers from bruteforcing invites
   setTimeout(() => {
     response.send(validationResponse);
-  }, 5000);
+  }, 1000);
 };
 
 /**

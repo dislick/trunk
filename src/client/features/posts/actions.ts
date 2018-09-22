@@ -13,15 +13,28 @@ export interface PostsAction extends Action {
   payload: string;
   posts: TorrentResponseDTO[];
   detail: TorrentDetailDTO;
+  replacePosts: boolean;
 }
 
-export const fetchPosts = () => async (dispatch: Dispatch, getState: () => RootState) => {
+export const fetchPosts = (refresh: boolean = false) => async (dispatch: Dispatch, getState: () => RootState) => {
   dispatch({
     type: FETCH_POSTS_REQUEST
   });
-  const response = await fetchPostsFromServer();
+
+  let posts = getState().postsReducer.posts;
+  let offset;
+  if (posts.length > 0 && !refresh) {
+    offset = posts[posts.length - 1].uploaded_at;
+  }
+
+  const response = await fetchPostsFromServer(offset);
+
   if (response.ok) {
-    dispatch({ type: FETCH_POSTS_SUCCESS, posts: await response.json() });
+    dispatch({
+      type: FETCH_POSTS_SUCCESS,
+      posts: await response.json(),
+      replacePosts: refresh
+    });
   } else {
     dispatch({ type: FETCH_POSTS_FAILURE });
   }

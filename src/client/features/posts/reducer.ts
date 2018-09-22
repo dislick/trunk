@@ -12,6 +12,7 @@ export interface PostsState {
     interactions: Array<CommentDTO | RatingDTO>;
   };
   readonly isDetailFetching: boolean;
+  readonly reachedEndOfPosts: boolean;
 }
 
 const defaultState: PostsState = {
@@ -22,12 +23,21 @@ const defaultState: PostsState = {
     averageRating: null,
   },
   isDetailFetching: false,
+  reachedEndOfPosts: false,
 }
 
 export default (state: PostsState = defaultState, action: PostsAction): PostsState => {
   switch (action.type) {
     case FETCH_POSTS_SUCCESS:
-      return { ...state, posts: action.posts };
+      if (action.replacePosts) {
+        return { ...state, posts: action.posts };
+      }
+      let merged = mergeAndDedupePosts(state.posts, action.posts);
+      return {
+        ...state,
+        reachedEndOfPosts: merged.length === state.posts.length,
+        posts: merged,
+      };
     case SELECT_POST:
       return { ...state, selectedPostHash: action.payload };
     case FETCH_DETAIL_REQUEST:
@@ -47,4 +57,14 @@ export default (state: PostsState = defaultState, action: PostsAction): PostsSta
   }
 
   return state;
+};
+
+const mergeAndDedupePosts = (oldPosts: TorrentResponseDTO[], newPosts: TorrentResponseDTO[]) => {
+  let posts = [ ...oldPosts ];
+  for (let newPost of newPosts) {
+    if (!posts.some(p => p.hash === newPost.hash)) {
+      posts.push(newPost);
+    }
+  }
+  return posts;
 };
