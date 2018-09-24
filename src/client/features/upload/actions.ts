@@ -2,9 +2,15 @@ import { Action, Dispatch } from 'redux';
 import { RootState } from '../../reducer';
 import { postsActions } from '../posts';
 import { selectPost } from '../posts/actions';
-import { SELECT_POST } from '../posts/constants';
 import {
-  ADD_FILE_FOR_UPLOAD, DISCARD_FILE, EDIT_TORRENT_TAGS, EDIT_TORRENT_TITLE, UPLOAD_FILE_FAILURE, UPLOAD_FILE_REQUEST, UPLOAD_FILE_SUCCESS,
+  ADD_FILE_FOR_UPLOAD,
+  DISCARD_FILE,
+  EDIT_TORRENT_TAGS,
+  EDIT_TORRENT_TITLE,
+  UPLOAD_FILE_FAILURE,
+  UPLOAD_FILE_REQUEST,
+  UPLOAD_FILE_SUCCESS,
+
 } from './constants';
 import { uploadTorrentFile } from './services';
 

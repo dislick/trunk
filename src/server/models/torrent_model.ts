@@ -56,18 +56,22 @@ export const getTorrentPosts = async (dateOffset: Date, limit: number = 20) => {
   return rows.map((row) => ({
     hash: row.hash,
     title: row.title,
-    size: parseInt(row.size),
+    size: parseInt(row.size, 10),
     uploaded_at: row.uploaded_at,
     tags: row.tags,
     user: {
       id: row.user_id,
       username: row.username,
-      ratio: getFormattedRatio(parseInt(row.total_uploaded), parseInt(row.total_downloaded)),
+      ratio: getFormattedRatio(parseInt(row.total_uploaded, 10), parseInt(row.total_downloaded, 10)),
     },
   }));
 };
 
-export const createTorrentPost = async (title: string, userId: number, torrentFile: Buffer): Promise<{ hash: string }> => {
+export const createTorrentPost = async (
+  title: string,
+  userId: number,
+  torrentFile: Buffer,
+): Promise<{ hash: string }> => {
   let torrentInfo = parseTorrent(torrentFile);
 
   const query = `

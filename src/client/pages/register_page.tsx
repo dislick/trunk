@@ -37,8 +37,10 @@ export class RegisterPage extends React.Component<Props & RouteComponentProps> {
     return (
       <>
         <p className='message'>
-          You have been invited by <span>dislick</span> to join <span>trunk</span>, the modern, private BitTorrent network. Please fill out the form below to create an account.
-          </p>
+          You have been invited by <span>dislick</span> to join <span>trunk</span>,
+          the modern, private BitTorrent network.
+          Please fill out the form below to create an account.
+        </p>
 
         <div className='textbox-wrapper'>
           <TextField

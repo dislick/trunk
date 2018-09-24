@@ -49,7 +49,7 @@ export const getPostDetail = async (request: Request, response: Response) => {
       user: {
         user_id: comment.user_id,
         username: comment.username,
-        ratio: getFormattedRatio(parseInt(comment.total_uploaded), parseInt(comment.total_downloaded)),
+        ratio: getFormattedRatio(parseInt(comment.total_uploaded, 10), parseInt(comment.total_downloaded, 10)),
       },
     })),
     ratings: ratings.map((rating) => ({
@@ -58,7 +58,7 @@ export const getPostDetail = async (request: Request, response: Response) => {
       user: {
         user_id: rating.user_id,
         username: rating.username,
-        ratio: getFormattedRatio(parseInt(rating.total_uploaded), parseInt(rating.total_downloaded)),
+        ratio: getFormattedRatio(parseInt(rating.total_uploaded, 10), parseInt(rating.total_downloaded, 10)),
       },
     })),
     averageRating,

@@ -1,7 +1,13 @@
 import update from 'immutability-helper';
-import { TorrentResponseDTO } from '../../../server/controllers/torrent_controller';
 import { UploadAction } from './actions';
-import { ADD_FILE_FOR_UPLOAD, DISCARD_FILE, EDIT_TORRENT_TAGS, EDIT_TORRENT_TITLE, UPLOAD_FILE_FAILURE, UPLOAD_FILE_SUCCESS } from './constants';
+import {
+  ADD_FILE_FOR_UPLOAD,
+  DISCARD_FILE,
+  EDIT_TORRENT_TAGS,
+  EDIT_TORRENT_TITLE,
+  UPLOAD_FILE_FAILURE,
+  UPLOAD_FILE_SUCCESS,
+} from './constants';
 
 export interface FileToUpload {
   file: File;
@@ -62,16 +68,16 @@ export default (state: UploadState = defaultState, action: UploadAction): Upload
         },
       });
     case UPLOAD_FILE_FAILURE:
-    return update(state, {
-      files: {
-        $apply: (file) => file.map((item: FileToUpload, index) => {
-          if (index === action.index) {
-            return { ...item, errorMessage: action.message };
-          }
-          return item;
-        }),
-      },
-    });
+      return update(state, {
+        files: {
+          $apply: (file) => file.map((item: FileToUpload, index) => {
+            if (index === action.index) {
+              return { ...item, errorMessage: action.message };
+            }
+            return item;
+          }),
+        },
+      });
   }
 
   return state;

@@ -98,7 +98,10 @@ export const findUserByTorrentKey = async (torrentKey: string): Promise<UserMode
   return result.rows[0];
 };
 
-export const validateUser = async (username: string, password: string): Promise<{ isPasswordCorrect: boolean, userId: number}> => {
+export const validateUser = async (
+  username: string,
+  password: string,
+): Promise<{ isPasswordCorrect: boolean, userId: number }> => {
   const query = `
     SELECT * from "user" WHERE username = $1`;
 

@@ -129,8 +129,8 @@ export const getPersonalInfo = async (request: Request, response: Response) => {
 
     let dto: PersonalInfoDTO = {
       username: user.username,
-      total_uploaded: parseInt(user.total_uploaded),
-      total_downloaded: parseInt(user.total_downloaded),
+      total_uploaded: parseInt(user.total_uploaded, 10),
+      total_downloaded: parseInt(user.total_downloaded, 10),
     };
 
     response.send(dto);

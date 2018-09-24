@@ -97,7 +97,9 @@
             "check-type",
             "check-type-operator",
             "check-preblock"
-        ]
+        ],
+        "no-console": false,
+        "max-classes-per-file": false
     },
     "rulesDirectory": []
 }

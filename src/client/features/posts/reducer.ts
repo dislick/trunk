@@ -2,7 +2,15 @@ import { sortBy } from 'lodash';
 import { TorrentResponseDTO } from '../../../server/controllers/torrent_controller';
 import { CommentDTO, RatingDTO } from '../../../server/controllers/torrent_detail_controller';
 import { PostsAction } from './actions';
-import { FETCH_DETAIL_FAILURE, FETCH_DETAIL_REQUEST, FETCH_DETAIL_SUCCESS, FETCH_POSTS_SUCCESS, POST_COMMENT_SUCCESS, SELECT_POST, SET_COMMENT } from './constants';
+import {
+  FETCH_DETAIL_FAILURE,
+  FETCH_DETAIL_REQUEST,
+  FETCH_DETAIL_SUCCESS,
+  FETCH_POSTS_SUCCESS,
+  POST_COMMENT_SUCCESS,
+  SELECT_POST,
+  SET_COMMENT,
+} from './constants';
 
 export interface PostsState {
   readonly posts: TorrentResponseDTO[];
@@ -75,7 +83,7 @@ export default (state: PostsState = defaultState, action: PostsAction): PostsSta
 };
 
 const mergeAndDedupePosts = (oldPosts: TorrentResponseDTO[], newPosts: TorrentResponseDTO[]) => {
-  let posts = [ ...oldPosts ];
+  let posts = [...oldPosts];
   for (let newPost of newPosts) {
     if (!posts.some((p) => p.hash === newPost.hash)) {
       posts.push(newPost);

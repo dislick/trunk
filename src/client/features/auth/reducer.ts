@@ -1,6 +1,13 @@
 import { PersonalInfoDTO } from '../../../server/controllers/login_controller';
 import { AuthAction } from './actions';
-import { FETCH_PERSONAL_INFO_SUCCESS, SET_PASSWORD, SET_USERNAME, SUBMIT_LOGIN_FAILURE, SUBMIT_LOGIN_REQUEST, SUBMIT_LOGIN_SUCCESS } from './constants';
+import {
+  FETCH_PERSONAL_INFO_SUCCESS,
+  SET_PASSWORD,
+  SET_USERNAME,
+  SUBMIT_LOGIN_FAILURE,
+  SUBMIT_LOGIN_REQUEST,
+  SUBMIT_LOGIN_SUCCESS,
+} from './constants';
 
 export interface AuthState {
   readonly username: string;

@@ -36,7 +36,7 @@ export const getTorrents = (trackingServer) => async (request: Request, response
   }
 
   // Check if requested limit is not off-limits (he-he)
-  limit = parseInt(limit) || 20;
+  limit = parseInt(limit, 10) || 20;
   if (limit < 1 || limit > 101) {
     return response.status(400).send({ message: 'Limit out of bounds (min: 1, max: 100)' });
   }

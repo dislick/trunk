@@ -20,7 +20,7 @@ interface FetchOptions {
   headers?: {
     [key: string]: string;
   };
-  body?: Object;
+  body?: object;
   isFormData?: boolean;
   signal?: any;
 }
