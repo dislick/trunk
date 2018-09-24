@@ -1,10 +1,10 @@
-import * as React from 'react';
-import { Button } from './button';
-import { PersonalInfoDTO } from '../../server/controllers/login_controller';
 import * as bytes from 'bytes';
+import * as React from 'react';
+import { PersonalInfoDTO } from '../../server/controllers/login_controller';
+import { Button } from './button';
 
-import './sidebar.scss';
 import { getFormattedRatio } from '../../server/utils/ratio_calculator';
+import './sidebar.scss';
 
 interface Props {
   aboutMe: PersonalInfoDTO;
@@ -16,16 +16,16 @@ export const Sidebar = (props: Props) => {
 
   return (
     <section className='sidebar'>
-      <div className="sidebar-inner">
+      <div className='sidebar-inner'>
         <img src={require('../assets/trunk_logo.svg')} className='logo' />
 
-        <div className="personal-area">
+        <div className='personal-area'>
         <Button onClick={props.onLogout} className='logout'>Logout</Button>
           {props.aboutMe &&
-            <div className="about-me">
-              <p className="user">{props.aboutMe.username}</p>
+            <div className='about-me'>
+              <p className='user'>{props.aboutMe.username}</p>
 
-              <table className="stats">
+              <table className='stats'>
                 <tbody>
                   <tr>
                     <td><p>up</p></td>
@@ -47,4 +47,4 @@ export const Sidebar = (props: Props) => {
       </div>
     </section>
   );
-}
+};

@@ -1,10 +1,10 @@
 import { Request, Response } from 'express';
-import { registerUserInDatabase, validateUser, findUser } from '../models/user_model';
-import { isString } from 'lodash';
-import { DuplicateEntryError } from '../utils/error';
 import * as jwt from 'jsonwebtoken';
+import { isString } from 'lodash';
 import { config } from '../config';
-import { isInviteValid, claimInviteCode } from '../models/invite_model';
+import { claimInviteCode, isInviteValid } from '../models/invite_model';
+import { findUser, registerUserInDatabase, validateUser } from '../models/user_model';
+import { DuplicateEntryError } from '../utils/error';
 
 export interface JWTPayload {
   id: number;
@@ -22,7 +22,7 @@ export interface PersonalInfoDTO {
 }
 
 /**
- * API Endpoint POST /login 
+ * API Endpoint POST /login
  */
 export const loginUser = async (request: Request, response: Response) => {
   let { username, password } = request.body;
@@ -32,28 +32,28 @@ export const loginUser = async (request: Request, response: Response) => {
   }
 
   try {
-    var { isPasswordCorrect, userId } = await validateUser(username, password);
+    let { isPasswordCorrect, userId } = await validateUser(username, password);
+
+    if (isPasswordCorrect) {
+      let token = generateJWT(userId);
+      response.cookie(config.jwtCookieName, token, {
+        httpOnly: true,
+        maxAge: 86400000,
+      });
+      response.send({
+        auth: true,
+        token,
+      });
+    } else {
+      response.status(401).send({
+        auth: false,
+        message: 'Incorrect credentials',
+      });
+    }
   } catch (error) {
     return response.status(401).send({
       auth: false,
-      message: 'Incorrect credentials'
-    });
-  }
-
-  if (isPasswordCorrect) {
-    let token = generateJWT(userId);
-    response.cookie(config.jwtCookieName, token, {
-      httpOnly: true,
-      maxAge: 86400000,
-    });
-    response.send({
-      auth: true,
-      token: token,
-    });
-  } else {
-    response.status(401).send({
-      auth: false,
-      message: 'Incorrect credentials'
+      message: 'Incorrect credentials',
     });
   }
 };
@@ -64,7 +64,7 @@ export const logoutUser = async (request: Request, response: Response) => {
 };
 
 /**
- * API Endpoint POST /register 
+ * API Endpoint POST /register
  */
 export const registerUser = async (request: Request, response: Response) => {
   const { username, email, password } = request.body;
@@ -102,7 +102,7 @@ export const registerUser = async (request: Request, response: Response) => {
     });
     response.status(200).send({
       auth: true,
-      token: token,
+      token,
     });
   } catch (error) {
     if (error instanceof DuplicateEntryError) {
@@ -129,14 +129,14 @@ export const getPersonalInfo = async (request: Request, response: Response) => {
 
     let dto: PersonalInfoDTO = {
       username: user.username,
-      total_uploaded: parseInt(user.total_uploaded),
-      total_downloaded: parseInt(user.total_downloaded),
+      total_uploaded: parseInt(user.total_uploaded, 10),
+      total_downloaded: parseInt(user.total_downloaded, 10),
     };
-  
+
     response.send(dto);
   } catch (error) {
     response.status(500).send();
-  }  
+  }
 };
 
 /**
@@ -146,6 +146,6 @@ export const getPersonalInfo = async (request: Request, response: Response) => {
 const generateJWT = (userId: number): string => {
   let payload: JWTPayload = { id: userId };
   return jwt.sign(payload, config.jwtSecret, {
-    expiresIn: 86400 // 24h in seconds
+    expiresIn: 86400, // 24h in seconds
   });
 };

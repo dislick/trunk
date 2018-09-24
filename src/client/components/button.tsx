@@ -1,5 +1,5 @@
-import * as React from 'react';
 import * as classnames from 'classnames';
+import * as React from 'react';
 
 import './button.scss';
 
@@ -22,5 +22,5 @@ export const Button = (props: ButtonProps) => {
     >
       <p>{props.children}</p>
     </button>
-  )
+  );
 };

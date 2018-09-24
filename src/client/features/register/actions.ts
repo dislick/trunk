@@ -1,19 +1,19 @@
+import { push } from 'connected-react-router';
+import { Action, Dispatch } from 'redux';
+import { ValidationResponseDTO } from '../../../server/controllers/login_controller';
+import { RootState } from '../../reducer';
 import {
-  SET_USERNAME,
+  SET_EMAIL,
   SET_PASSWORD,
-  SUBMIT_VALIDATION_REQUEST,
-  SUBMIT_VALIDATION_SUCCESS,
-  SUBMIT_VALIDATION_FAILURE,
+  SET_USERNAME,
+  SUBMIT_REGISTER_FAILURE,
   SUBMIT_REGISTER_REQUEST,
   SUBMIT_REGISTER_SUCCESS,
-  SUBMIT_REGISTER_FAILURE,
-  SET_EMAIL
+  SUBMIT_VALIDATION_FAILURE,
+  SUBMIT_VALIDATION_REQUEST,
+  SUBMIT_VALIDATION_SUCCESS,
 } from './constants';
-import { Dispatch, Action } from 'redux';
-import { RootState } from '../../reducer';
-import { push } from 'connected-react-router';
-import { validateCodeService, registerUserService } from './services';
-import { ValidationResponseDTO } from '../../../server/controllers/login_controller';
+import { registerUserService, validateCodeService } from './services';
 
 export interface RegisterAction extends Action {
   payload: string;
@@ -21,20 +21,20 @@ export interface RegisterAction extends Action {
 
 export const setEmail = (email: string) => ({
   type: SET_EMAIL,
-  payload: email
+  payload: email,
 });
 export const setUsername = (username: string) => ({
   type: SET_USERNAME,
-  payload: username
+  payload: username,
 });
 export const setPassword = (password: string) => ({
   type: SET_PASSWORD,
-  payload: password
+  payload: password,
 });
 
 export const validateInviteCode = (inviteCode: string) => async (dispatch: Dispatch, getState: () => RootState) => {
   dispatch({
-    type: SUBMIT_VALIDATION_REQUEST
+    type: SUBMIT_VALIDATION_REQUEST,
   });
   const response = await validateCodeService(inviteCode);
 
@@ -53,7 +53,7 @@ export const validateInviteCode = (inviteCode: string) => async (dispatch: Dispa
 
 export const registerUser = (inviteCode: string) => async (dispatch: Dispatch, getState: () => RootState) => {
   dispatch({
-    type: SUBMIT_REGISTER_REQUEST
+    type: SUBMIT_REGISTER_REQUEST,
   });
   const { email, username, password } = getState().registerReducer;
   const response = await registerUserService(email, username, password, inviteCode);
@@ -63,7 +63,7 @@ export const registerUser = (inviteCode: string) => async (dispatch: Dispatch, g
     dispatch(push('/'));
   } else {
     let body = await response.json();
-  
+
     dispatch({ type: SUBMIT_REGISTER_FAILURE, payload: body.message });
   }
 };

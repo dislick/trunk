@@ -1,8 +1,8 @@
 import { connect } from 'react-redux';
-import { RootState } from '../reducer';
-import { postsActions } from '../features/posts';
 import { TorrentList } from '../components/torrent_list/torrent_list';
+import { postsActions } from '../features/posts';
 import { uploadActions } from '../features/upload';
+import { RootState } from '../reducer';
 
 const mapStateToProps = (state: RootState) => ({
   posts: state.postsReducer.posts,

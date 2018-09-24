@@ -1,7 +1,7 @@
-import * as registerConstants from './constants';
 import * as registerActions from './actions';
-import * as registerServices from './services';
+import * as registerConstants from './constants';
 import registerReducer, { RegisterState } from './reducer';
+import * as registerServices from './services';
 
 export {
   registerConstants,

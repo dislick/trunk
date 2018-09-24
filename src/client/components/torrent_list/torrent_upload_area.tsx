@@ -1,8 +1,8 @@
 import * as React from 'react';
-import Dropzone from 'react-dropzone'
+import Dropzone from 'react-dropzone';
 import { FileToUpload } from '../../features/upload/reducer';
-import { TextField } from '../textfield';
 import { Button } from '../button';
+import { TextField } from '../textfield';
 
 import './torrent_upload_area.scss';
 
@@ -21,10 +21,10 @@ export const TorrentUploadArea = (props: Props) => {
       let name = file.name.replace(/\.torrent$/, '');
       props.onFileSelect(file, name);
     });
-  }
+  };
 
   return (
-    <div className="upload-area-wrapper">
+    <div className='upload-area-wrapper'>
       {props.files.length <= 0 &&
         <Dropzone
           onDrop={onDrop}
@@ -59,4 +59,4 @@ export const TorrentUploadArea = (props: Props) => {
       ))}
     </div>
   );
-}
+};

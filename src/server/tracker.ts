@@ -1,14 +1,14 @@
 import { Server } from 'bittorrent-tracker';
-import { findUserByTorrentKey } from './models/user_model';
-import { updateStatistics } from './models/stats_model';
 import { Request, Response } from 'express';
 import { config } from './config';
+import { updateStatistics } from './models/stats_model';
+import { findUserByTorrentKey } from './models/user_model';
 
 interface AnnounceParams {
   info_hash: string;
   peer_id: string;
   port: number;
-  uploaded: number,
+  uploaded: number;
   downloaded: number;
   left: number;
   corrupt: number;
@@ -32,7 +32,7 @@ export default () => {
       } catch (error) {
         cb(new Error('Invalid auth key'));
       }
-    }
+    },
   });
 
   server.on('error', (error) => console.log('error', error));
@@ -49,4 +49,4 @@ export default () => {
   // server.on('stop', (addr) => console.log('stop', addr));
 
   return server;
-}
+};

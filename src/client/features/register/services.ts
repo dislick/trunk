@@ -8,9 +8,9 @@ export const registerUserService = (email: string, username: string, password: s
   return API.fetch('/api/register/' + inviteCode, {
     method: 'POST',
     body: {
-      email: email,
-      username: username,
-      password: password,
-    }
+      email,
+      username,
+      password,
+    },
   });
 };

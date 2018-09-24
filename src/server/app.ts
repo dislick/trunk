@@ -1,15 +1,15 @@
-import * as express from 'express';
-import * as path from 'path';
-import { config } from './config';
 import * as bodyParser from 'body-parser';
 import * as cookieParser from 'cookie-parser';
 import * as cors from 'cors';
-import server from './tracker';
+import * as express from 'express';
 import { Request, Response } from 'express';
-import * as multer from 'multer';
 import * as fallback from 'express-history-api-fallback';
+import * as multer from 'multer';
+import * as path from 'path';
+import { config } from './config';
+import server from './tracker';
 
-/** 
+/**
  * Controllers
  */
 import * as LoginController from './controllers/login_controller';
@@ -18,7 +18,7 @@ import * as TorrentDetailController from './controllers/torrent_detail_controlle
 import { authMiddleware } from './middlewares/auth_middleware';
 
 /**
- * Support for Phusion Passenger 
+ * Support for Phusion Passenger
  * https://www.phusionpassenger.com/library/
  *
  * We need to disable auto install because trunk creates multiple HTTP servers
@@ -30,9 +30,7 @@ if (isPhusionPassenger) {
   PhusionPassenger.configure({ autoInstall: false });
 }
 
-
 const app = express();
-
 
 /**
  * Middlewares
@@ -43,30 +41,19 @@ app.use(cors({
   origin: config.corsUrl,
   credentials: true,
 }));
-const upload = multer({ 
+const upload = multer({
   storage: multer.memoryStorage(),
   limits: {
     fileSize: 10000000, // 10 MB
     files: 1, // Amount of files
     fields: 10,
-  }
+  },
 });
-
 
 /**
  * Start bittorrent tracking server
  */
 const trackingServer = server();
-
-trackingServer.on('error', function (err) {
-  // fatal server error!
-  console.log(err.message);
-});
-
-trackingServer.on('warning', function (err) {
-  // client sent bad data. probably not a problem, just a buggy client.
-  console.log(err.message);
-});
 
 // Custom endpoint to handle torrent authentication
 app.get('/:torrentKey/announce', async (request: Request, response: Response) => {
@@ -100,7 +87,7 @@ app.get('/api/me', authMiddleware, LoginController.getPersonalInfo);
 
 app.post('/api/torrent', authMiddleware, TorrentController.getTorrents(trackingServer));
 app.put('/api/torrent', authMiddleware, upload.fields([
-  { name: 'torrent_file', maxCount: 1 }
+  { name: 'torrent_file', maxCount: 1 },
 ]), TorrentController.uploadTorrent);
 app.get('/api/torrent/:hash', authMiddleware, TorrentController.downloadTorrent);
 
@@ -115,7 +102,6 @@ const root = `${__dirname}/../build-client`;
 app.use(express.static(root));
 app.use(fallback('index.html', { root }));
 
-
 if (isPhusionPassenger) {
   app.listen('passenger', () => {
     console.log('Listening on a random port assigned by Passenger');
@@ -123,5 +109,5 @@ if (isPhusionPassenger) {
 } else {
   app.listen(config.port, () => {
     console.log(`Listening on port ${config.port}`);
-  })
+  });
 }

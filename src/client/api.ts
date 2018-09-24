@@ -1,8 +1,8 @@
 // import * as fetch from 'isomorphic-fetch';
-import { merge, isObject } from 'lodash';
-import { store } from './store';
 import { push } from 'connected-react-router';
+import { isObject, merge } from 'lodash';
 import { clientConfig } from './config';
+import { store } from './store';
 
 const apiConfig = {
   baseUrl: clientConfig.apiBaseUrl,
@@ -20,13 +20,13 @@ interface FetchOptions {
   headers?: {
     [key: string]: string;
   };
-  body?: Object;
+  body?: object;
   isFormData?: boolean;
   signal?: any;
 }
 
 export default class API {
-  static async fetch(url: string, options: FetchOptions = {}) {
+  public static async fetch(url: string, options: FetchOptions = {}) {
     let fetchOptions: any = options;
 
     // Merge headers

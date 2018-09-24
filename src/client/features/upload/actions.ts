@@ -1,12 +1,18 @@
-import {
-  ADD_FILE_FOR_UPLOAD, DISCARD_FILE, UPLOAD_FILE_REQUEST, UPLOAD_FILE_SUCCESS, UPLOAD_FILE_FAILURE, EDIT_TORRENT_TITLE, EDIT_TORRENT_TAGS
-} from './constants';
-import { Dispatch, Action } from 'redux';
+import { Action, Dispatch } from 'redux';
 import { RootState } from '../../reducer';
-import { uploadTorrentFile } from './services';
 import { postsActions } from '../posts';
-import { SELECT_POST } from '../posts/constants';
 import { selectPost } from '../posts/actions';
+import {
+  ADD_FILE_FOR_UPLOAD,
+  DISCARD_FILE,
+  EDIT_TORRENT_TAGS,
+  EDIT_TORRENT_TITLE,
+  UPLOAD_FILE_FAILURE,
+  UPLOAD_FILE_REQUEST,
+  UPLOAD_FILE_SUCCESS,
+
+} from './constants';
+import { uploadTorrentFile } from './services';
 
 export interface UploadAction extends Action {
   file: File;
@@ -19,7 +25,7 @@ export interface UploadAction extends Action {
 export const addFileForUpload = (file: File, title: string) => ({
   type: ADD_FILE_FOR_UPLOAD,
   file,
-  title
+  title,
 });
 
 export const uploadFile = (index: number) => async (dispatch: Dispatch, getState: () => RootState) => {
@@ -50,17 +56,17 @@ export const uploadFile = (index: number) => async (dispatch: Dispatch, getState
 
 export const discardFile = (index: number) => ({
   type: DISCARD_FILE,
-  index
+  index,
 });
 
 export const editTorrentTitle = (index: number, title: string) => ({
   type: EDIT_TORRENT_TITLE,
   index,
-  title
+  title,
 });
 
 export const editTorrentTags = (index: number, tags: string) => ({
   type: EDIT_TORRENT_TAGS,
   index,
-  tags
+  tags,
 });

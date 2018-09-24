@@ -1,10 +1,10 @@
-import * as React from 'react';
-import { TagList } from '../tag_list';
-import * as moment from 'moment';
-import { Username } from '../username';
-import * as classnames from 'classnames';
-import { Tag } from '../tag';
 import * as bytes from 'bytes';
+import * as classnames from 'classnames';
+import * as moment from 'moment';
+import * as React from 'react';
+import { Tag } from '../tag';
+import { TagList } from '../tag_list';
+import { Username } from '../username';
 
 import './torrent_list_entry.scss';
 
@@ -29,7 +29,7 @@ interface UploadInfoProps {
 }
 
 export const UploadInfo = (props: UploadInfoProps) => (
-  <p className="upload-info">
+  <p className='upload-info'>
     uploaded by <Username ratio={props.userratio}>{props.username}</Username> {moment(props.uploadedAt).fromNow()}
   </p>
 );
@@ -37,16 +37,16 @@ export const UploadInfo = (props: UploadInfoProps) => (
 export const TorrentListEntry = (props: Props) => (
   <div
     className={classnames('torrent-list-entry', {
-      'selected': props.selected,
+      selected: props.selected,
     })}
     onClick={props.onClick}
   >
     <h1>{props.title}</h1>
-    <div className="tag-list">
+    <div className='tag-list'>
       <Tag systemTag>{bytes(props.size, { unitSeparator: ' ' })}</Tag>
       <TagList list={props.tags} />
     </div>
-    <div className="bottom-text">
+    <div className='bottom-text'>
       <UploadInfo {...props} />
       <div className='seeders-leechers'>
         <img src={require('../../assets/keyboard-arrow-up.svg')} /> <span className='seeders'>{props.seeders}</span>

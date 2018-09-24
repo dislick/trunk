@@ -1,4 +1,4 @@
-import { pool } from "./database";
+import { pool } from './database';
 
 export interface StatsModel {
   id: number;
@@ -14,7 +14,7 @@ export const updateStatistics = async (
   hash: string,
   uploaded: number,
   downloaded: number,
-  peerId: string
+  peerId: string,
 ) => {
   // Ignore announce message if there hasn't been any data transferred yet. It
   // would not have an impact on the users ratio and just unnecessarily clogs
@@ -30,16 +30,16 @@ export const updateStatistics = async (
     VALUES ($1, $2, $3, $4, $5)
     ON CONFLICT (user_id, hash, peer_id)
       DO UPDATE
-        SET 
+        SET
           uploaded = excluded.uploaded,
           downloaded = excluded.downloaded;
     `;
-  
+
   await pool.query(query, [
     userId,
     hash,
     uploaded,
     downloaded,
-    peerId
+    peerId,
   ]);
 };

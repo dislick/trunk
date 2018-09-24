@@ -1,8 +1,8 @@
 import { connect } from 'react-redux';
-import { RootState } from '../reducer';
-import { RegisterPage } from '../pages/register_page';
-import { registerActions } from '../features/register';
 import { withRouter } from 'react-router';
+import { registerActions } from '../features/register';
+import { RegisterPage } from '../pages/register_page';
+import { RootState } from '../reducer';
 
 const mapStateToProps = (state: RootState) => ({
   email: state.registerReducer.email,
@@ -20,5 +20,5 @@ export const RegisterPageConnected = withRouter(connect(mapStateToProps, {
   onChangeUsername: registerActions.setUsername,
   onChangePassword: registerActions.setPassword,
   onValidateCode: registerActions.validateInviteCode,
-  onSubmit: registerActions.registerUser
+  onSubmit: registerActions.registerUser,
 })(RegisterPage));

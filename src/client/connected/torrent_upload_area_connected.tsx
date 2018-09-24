@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
-import { RootState } from '../reducer';
-import { uploadActions } from '../features/upload';
 import { TorrentUploadArea } from '../components/torrent_list/torrent_upload_area';
+import { uploadActions } from '../features/upload';
+import { RootState } from '../reducer';
 
 const mapStateToProps = (state: RootState) => ({
   files: state.uploadReducer.files,

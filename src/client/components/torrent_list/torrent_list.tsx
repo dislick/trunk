@@ -1,11 +1,11 @@
 import * as React from 'react';
-import { TorrentListEntry } from './torrent_list_entry';
+import * as InfiniteScroll from 'react-infinite-scroller';
 import { TorrentResponseDTO } from '../../../server/controllers/torrent_controller';
 import { TorrentUploadAreaConnected } from '../../connected/torrent_upload_area_connected';
-import * as InfiniteScroll from 'react-infinite-scroller';
+import { TorrentListEntry } from './torrent_list_entry';
 
-import './torrent_list.scss';
 import { Spinner } from '../spinner';
+import './torrent_list.scss';
 
 interface Props {
   posts: TorrentResponseDTO[];
@@ -27,7 +27,7 @@ export const TorrentList = (props: Props) => {
       >
         <TorrentUploadAreaConnected />
 
-        {!props.posts || props.posts.length <= 0 && 
+        {!props.posts || props.posts.length <= 0 &&
           <p className='empty'>There doesn't seem to be anything here</p>
         }
 
@@ -50,4 +50,4 @@ export const TorrentList = (props: Props) => {
       </InfiniteScroll>
     </section>
   );
-}
+};

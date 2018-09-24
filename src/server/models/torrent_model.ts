@@ -1,7 +1,7 @@
-import { pool } from "./database";
 import * as parseTorrent from 'parse-torrent';
-import { getFormattedRatio } from "../utils/ratio_calculator";
-import { NotFoundError } from "../utils/error";
+import { NotFoundError } from '../utils/error';
+import { getFormattedRatio } from '../utils/ratio_calculator';
+import { pool } from './database';
 
 interface TorrentPost {
   hash: string;
@@ -41,7 +41,7 @@ export const getTorrentPosts = async (dateOffset: Date, limit: number = 20) => {
 
   let result = await pool.query(query, [dateOffset, limit]);
 
-  let rows: {
+  let rows: Array<{
     hash: string;
     title: string;
     size: string; // BIGINT will return as string
@@ -51,23 +51,27 @@ export const getTorrentPosts = async (dateOffset: Date, limit: number = 20) => {
     username: string;
     total_uploaded: string; // BIGINT will return as string
     total_downloaded: string; // BIGINT will return as string
-  }[] = result.rows;
+  }> = result.rows;
 
-  return rows.map(row => ({
+  return rows.map((row) => ({
     hash: row.hash,
     title: row.title,
-    size: parseInt(row.size),
+    size: parseInt(row.size, 10),
     uploaded_at: row.uploaded_at,
     tags: row.tags,
     user: {
       id: row.user_id,
       username: row.username,
-      ratio: getFormattedRatio(parseInt(row.total_uploaded), parseInt(row.total_downloaded))
-    }
-  }))
-}
+      ratio: getFormattedRatio(parseInt(row.total_uploaded, 10), parseInt(row.total_downloaded, 10)),
+    },
+  }));
+};
 
-export const createTorrentPost = async (title: string, userId: number, torrentFile: Buffer): Promise<{ hash: string }> => {
+export const createTorrentPost = async (
+  title: string,
+  userId: number,
+  torrentFile: Buffer,
+): Promise<{ hash: string }> => {
   let torrentInfo = parseTorrent(torrentFile);
 
   const query = `
@@ -93,7 +97,7 @@ export const getTorrentFile = async (hash: string): Promise<{ file: Buffer, titl
   if (result.rows.length === 1) {
     return {
       file: result.rows[0].torrent_file,
-      title: result.rows[0].title
+      title: result.rows[0].title,
     };
   } else {
     throw new NotFoundError();

@@ -1,7 +1,7 @@
-import * as authConstants from './constants';
 import * as authActions from './actions';
-import * as authServices from './services';
+import * as authConstants from './constants';
 import authReducer, { AuthState } from './reducer';
+import * as authServices from './services';
 
 export {
   authConstants,

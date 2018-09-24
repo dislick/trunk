@@ -1,9 +1,9 @@
 import { Request, Response } from 'express';
-import { getCommentsForTorrent, addCommentForTorrent } from '../models/comments_model';
-import { getRatingsForTorrent, getAverageRating, getRatingForUser } from '../models/ratings_model';
-import { getFormattedRatio } from '../utils/ratio_calculator';
-import { isString, isNumber } from 'lodash';
+import { isNumber, isString } from 'lodash';
+import { addCommentForTorrent, getCommentsForTorrent } from '../models/comments_model';
+import { getAverageRating, getRatingForUser, getRatingsForTorrent } from '../models/ratings_model';
 import { upsertRating } from '../models/ratings_model';
+import { getFormattedRatio } from '../utils/ratio_calculator';
 
 export interface CommentDTO {
   content: string;
@@ -43,23 +43,23 @@ export const getPostDetail = async (request: Request, response: Response) => {
   ]);
 
   let dto: TorrentDetailDTO = {
-    comments: comments.map(comment => ({
+    comments: comments.map((comment) => ({
       content: comment.comment_content,
       timestamp: comment.commented_at,
       user: {
         user_id: comment.user_id,
         username: comment.username,
-        ratio: getFormattedRatio(parseInt(comment.total_uploaded), parseInt(comment.total_downloaded))
-      }
+        ratio: getFormattedRatio(parseInt(comment.total_uploaded, 10), parseInt(comment.total_downloaded, 10)),
+      },
     })),
-    ratings: ratings.map(rating => ({
+    ratings: ratings.map((rating) => ({
       rating: rating.rating,
       timestamp: rating.rated_at,
       user: {
         user_id: rating.user_id,
         username: rating.username,
-        ratio: getFormattedRatio(parseInt(rating.total_uploaded), parseInt(rating.total_downloaded))
-      }
+        ratio: getFormattedRatio(parseInt(rating.total_uploaded, 10), parseInt(rating.total_downloaded, 10)),
+      },
     })),
     averageRating,
     myRating,
@@ -69,7 +69,7 @@ export const getPostDetail = async (request: Request, response: Response) => {
 };
 
 /**
- * API Endpoint /api/torrent/detail/comment 
+ * API Endpoint /api/torrent/detail/comment
  */
 export const postComment = async (request: Request, response: Response) => {
   const { hash, comment } = request.body;
@@ -94,11 +94,11 @@ export const postComment = async (request: Request, response: Response) => {
 };
 
 /**
- * API Endpoint /api/torrent/detail/rating 
+ * API Endpoint /api/torrent/detail/rating
  */
 export const postRating = async (request: Request, response: Response) => {
   let { hash, rating } = request.body;
-  
+
   if (!isNumber(rating)) {
     return response.status(400).send({ message: 'Rating must be a number' });
   }

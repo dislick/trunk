@@ -7,7 +7,7 @@ export const config = {
   announceUrlBase: process.env.ANNOUNCE_URL || 'http://192.168.18.62:3000',
 
   // Authentification
-  bcryptRounds: parseInt(process.env.BCRYPT_ROUNDS) || 12,
+  bcryptRounds: parseInt(process.env.BCRYPT_ROUNDS, 10) || 12,
   jwtSecret: process.env.JWT_SECRET || 'insecurestringthatyoushouldabsolutelychange',
   jwtCookieName: 'trunk-jwt',
   cookieSecret: process.env.COOKIE_SECRET || 'insecurestringthatyoushouldabsolutelychange',

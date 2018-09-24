@@ -11,7 +11,7 @@ interface Props {
 }
 
 export const Rating = (props: Props) => (
-  <div className="rating">
+  <div className='rating'>
     <p><Username ratio={props.userratio}>{props.username}</Username></p>
     <Stars filled={props.rating} max={5} size='small' />
   </div>
