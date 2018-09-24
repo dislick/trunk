@@ -2,10 +2,10 @@
 import { merge, isObject } from 'lodash';
 import { store } from './store';
 import { push } from 'connected-react-router';
-import { trunkConfig } from './config';
+import { clientConfig } from './config';
 
 const apiConfig = {
-  baseUrl: trunkConfig.apiBaseUrl,
+  baseUrl: clientConfig.apiBaseUrl,
   headers: {
     'Content-Type': 'application/json',
   },
