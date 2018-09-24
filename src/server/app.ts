@@ -58,6 +58,16 @@ const upload = multer({
  */
 const trackingServer = server();
 
+trackingServer.on('error', function (err) {
+  // fatal server error!
+  console.log(err.message);
+});
+
+trackingServer.on('warning', function (err) {
+  // client sent bad data. probably not a problem, just a buggy client.
+  console.log(err.message);
+});
+
 // Custom endpoint to handle torrent authentication
 app.get('/:torrentKey/announce', async (request: Request, response: Response) => {
   const torrentKey = request.params.torrentKey;
