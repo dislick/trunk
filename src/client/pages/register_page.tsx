@@ -24,12 +24,12 @@ interface Props {
 
 export class RegisterPage extends React.Component<Props & RouteComponentProps> {
   public componentDidMount() {
-    let inviteCode = this.props.match.params.code;
+    let inviteCode = (this.props.match.params as any).code;
     this.props.onValidateCode(inviteCode);
   }
 
   public onRegister = () => {
-    let inviteCode = this.props.match.params.code;
+    let inviteCode = (this.props.match.params as any).code;
     this.props.onSubmit(inviteCode);
   }
 

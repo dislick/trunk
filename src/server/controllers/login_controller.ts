@@ -33,25 +33,25 @@ export const loginUser = async (request: Request, response: Response) => {
 
   try {
     let { isPasswordCorrect, userId } = await validateUser(username, password);
+
+    if (isPasswordCorrect) {
+      let token = generateJWT(userId);
+      response.cookie(config.jwtCookieName, token, {
+        httpOnly: true,
+        maxAge: 86400000,
+      });
+      response.send({
+        auth: true,
+        token,
+      });
+    } else {
+      response.status(401).send({
+        auth: false,
+        message: 'Incorrect credentials',
+      });
+    }
   } catch (error) {
     return response.status(401).send({
-      auth: false,
-      message: 'Incorrect credentials',
-    });
-  }
-
-  if (isPasswordCorrect) {
-    let token = generateJWT(userId);
-    response.cookie(config.jwtCookieName, token, {
-      httpOnly: true,
-      maxAge: 86400000,
-    });
-    response.send({
-      auth: true,
-      token,
-    });
-  } else {
-    response.status(401).send({
       auth: false,
       message: 'Incorrect credentials',
     });
