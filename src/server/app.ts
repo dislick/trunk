@@ -17,6 +17,20 @@ import * as TorrentController from './controllers/torrent_controller';
 import * as TorrentDetailController from './controllers/torrent_detail_controller';
 import { authMiddleware } from './middlewares/auth_middleware';
 
+/**
+ * Support for Phusion Passenger 
+ * https://www.phusionpassenger.com/library/
+ *
+ * We need to disable auto install because trunk creates multiple HTTP servers
+ * (the web server that serves the client and API, and the bittorrent tracker).
+ */
+declare var PhusionPassenger;
+const isPhusionPassenger = typeof(PhusionPassenger) !== 'undefined';
+if (isPhusionPassenger) {
+  PhusionPassenger.configure({ autoInstall: false });
+}
+
+
 const app = express();
 
 
@@ -85,10 +99,19 @@ app.post('/api/torrent/detail/comment', authMiddleware, TorrentDetailController.
 app.post('/api/torrent/detail/rating', authMiddleware, TorrentDetailController.postRating);
 
 /**
- * Serve client app
+ * Serve client app with history api fallback support
  */
 const root = `${__dirname}/../build-client`;
 app.use(express.static(root));
 app.use(fallback('index.html', { root }));
 
-app.listen(config.port, () => console.log(`trunk API listening on port ${config.port}`));
+
+if (isPhusionPassenger) {
+  app.listen('passenger', () => {
+    console.log('Listening on a random port assigned by Passenger');
+  });
+} else {
+  app.listen(config.port, () => {
+    console.log(`Listening on port ${config.port}`);
+  })
+}
