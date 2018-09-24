@@ -1,19 +1,19 @@
+import { push } from 'connected-react-router';
+import { Action, Dispatch } from 'redux';
+import { PersonalInfoDTO } from '../../../server/controllers/login_controller';
+import { RootState } from '../../reducer';
+import { authServices } from '../auth';
 import {
-  SET_USERNAME,
-  SET_PASSWORD,
-  SUBMIT_LOGIN_REQUEST,
-  SUBMIT_LOGIN_SUCCESS,
-  SUBMIT_LOGIN_FAILURE,
+  FETCH_PERSONAL_INFO_FAILURE,
   FETCH_PERSONAL_INFO_REQUEST,
   FETCH_PERSONAL_INFO_SUCCESS,
-  FETCH_PERSONAL_INFO_FAILURE
+  SET_PASSWORD,
+  SET_USERNAME,
+  SUBMIT_LOGIN_FAILURE,
+  SUBMIT_LOGIN_REQUEST,
+  SUBMIT_LOGIN_SUCCESS,
 } from './constants';
-import { Dispatch, Action } from 'redux';
-import { RootState } from '../../reducer';
-import { loginUser, getPersonalInfo } from './services';
-import { push } from 'connected-react-router';
-import { authServices } from '../auth';
-import { PersonalInfoDTO } from '../../../server/controllers/login_controller';
+import { getPersonalInfo, loginUser } from './services';
 
 export interface AuthAction extends Action {
   payload?: string;
@@ -22,11 +22,11 @@ export interface AuthAction extends Action {
 
 export const setUsername = (username: string) => ({
   type: SET_USERNAME,
-  payload: username
+  payload: username,
 });
 export const setPassword = (password: string) => ({
   type: SET_PASSWORD,
-  payload: password
+  payload: password,
 });
 
 export const submitLoginRequest = () => async (dispatch: Dispatch, getState: () => RootState) => {
@@ -50,7 +50,7 @@ export const logout = () => async (dispatch: Dispatch, getState: () => RootState
 
 export const fetchPersonalInfo = () => async (dispatch: Dispatch, getState: () => RootState) => {
   dispatch({ type: FETCH_PERSONAL_INFO_REQUEST });
-  
+
   const response = await getPersonalInfo();
 
   if (response.ok) {

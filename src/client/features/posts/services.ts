@@ -6,7 +6,7 @@ export const fetchPostsFromServer = async (offset?: Date) => {
     body: {
       dateOffset: offset || '',
       limit: 20,
-    }
+    },
   });
 };
 
@@ -18,9 +18,9 @@ export const addCommentOnServer = async (hash: string, comment: string) => {
   return API.fetch('/api/torrent/detail/comment', {
     method: 'POST',
     body: {
-      hash: hash,
-      comment: comment,
-    }
+      hash,
+      comment,
+    },
   });
 };
 
@@ -28,8 +28,8 @@ export const updateRatingOnServer = async (hash: string, rating: number) => {
   return API.fetch('/api/torrent/detail/rating', {
     method: 'POST',
     body: {
-      hash: hash,
-      rating: rating,
-    }
+      hash,
+      rating,
+    },
   });
 };

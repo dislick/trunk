@@ -1,5 +1,5 @@
-import { config } from "../config";
+import { config } from '../config';
 
 export const buildAnnounceUrl = (torrentAuthKey: string) => {
-  return config.announceUrlBase + '/' + torrentAuthKey + '/announce'
+  return config.announceUrlBase + '/' + torrentAuthKey + '/announce';
 };

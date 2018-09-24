@@ -1,11 +1,11 @@
 import { Request, Response } from 'express';
-import { createTorrentPost, getTorrentPosts, getTorrentFile } from '../models/torrent_model';
 import * as parseTorrent from 'parse-torrent';
-import { NotFoundError } from '../utils/error';
-import { findUser } from '../models/user_model';
 import { config } from '../config';
-import { buildAnnounceUrl } from '../utils/build_announce_url';
 import { createAndLinkTags } from '../models/tag_model';
+import { createTorrentPost, getTorrentFile, getTorrentPosts } from '../models/torrent_model';
+import { findUser } from '../models/user_model';
+import { buildAnnounceUrl } from '../utils/build_announce_url';
+import { NotFoundError } from '../utils/error';
 
 export interface TorrentResponseDTO {
   hash: string;
@@ -23,7 +23,7 @@ export interface TorrentResponseDTO {
 }
 
 /**
- * API Endpoint POST /torrent 
+ * API Endpoint POST /torrent
  */
 export const getTorrents = (trackingServer) => async (request: Request, response: Response) => {
   let { dateOffset, limit } = request.body;
@@ -43,20 +43,20 @@ export const getTorrents = (trackingServer) => async (request: Request, response
 
   let posts = await getTorrentPosts(dateOffset, limit);
 
-  let responseDTOs: TorrentResponseDTO[] = posts.map(post => {
+  let responseDTOs: TorrentResponseDTO[] = posts.map((post) => {
     const { seeders, leechers } = getSwarmInfo(trackingServer, post.hash);
     return {
       ...post,
-      seeders: seeders,
-      leechers: leechers,
-    }
+      seeders,
+      leechers,
+    };
   });
-  
+
   response.send(responseDTOs);
 };
 
 export const uploadTorrent = async (request: Request, response: Response) => {
-  const fileUpload = (request as any).files['torrent_file'];
+  const fileUpload = (request as any).files.torrent_file;
   const { title, tags } = request.body;
 
   if (!fileUpload || fileUpload.length !== 1) {
@@ -93,21 +93,21 @@ export const downloadTorrent = async (request: Request, response: Response) => {
   try {
     let [torrent, user] = await Promise.all([
       getTorrentFile(hash),
-      findUser(response.locals.id)
+      findUser(response.locals.id),
     ]);
 
     // Replace tracker with customized URL by parsing the file buffer, changing
     // the `announce` field and encoding it again.
     let parsed = parseTorrent(torrent.file);
     parsed.announce = [
-      buildAnnounceUrl(user.torrent_auth_key)
+      buildAnnounceUrl(user.torrent_auth_key),
     ];
     parsed.private = true; // Let's not enable peer discovery services, ok?
     torrent.file = parseTorrent.toTorrentFile(parsed);
 
     // These headers should be present for a proper file download
     response.setHeader('Content-Type', 'application/x-bittorrent');
-    response.setHeader('Content-Disposition', `attachment; filename="${torrent.title}.torrent"`)
+    response.setHeader('Content-Disposition', `attachment; filename="${torrent.title}.torrent"`);
     response.setHeader('Content-Length', torrent.file.length);
     response.send(torrent.file);
   } catch (error) {

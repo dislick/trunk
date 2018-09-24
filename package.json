@@ -8,7 +8,8 @@
     "start:client": "webpack-dev-server --config src/client/webpack.development.config.js --host 0.0.0.0 --history-api-fallback",
     "start:server": "gulp --gulpfile src/server/Gulpfile.js express",
     "build:client": "webpack --config src/client/webpack.production.config.js",
-    "build:server": "gulp --gulpfile src/server/Gulpfile.js build"
+    "build:server": "gulp --gulpfile src/server/Gulpfile.js build",
+    "tslint": "tslint 'src/**/*.tsx' 'src/**/*.ts' --exclude '**/*.spec.ts' --format stylish"
   },
   "keywords": [
     "bittorrent"
@@ -68,6 +69,7 @@
     "sass-loader": "^7.1.0",
     "style-loader": "^0.23.0",
     "ts-loader": "^4.5.0",
+    "tslint": "^5.11.0",
     "typescript": "^3.0.1",
     "webpack": "^4.17.1",
     "webpack-cli": "^3.1.0",

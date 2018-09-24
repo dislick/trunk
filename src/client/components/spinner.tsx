@@ -4,4 +4,4 @@ import './spinner.scss';
 
 export const Spinner = (props) => (
   <div className='loader' />
-)
+);

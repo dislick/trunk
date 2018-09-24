@@ -1,21 +1,21 @@
-import {
-  FETCH_POSTS_REQUEST,
-  FETCH_POSTS_SUCCESS,
-  FETCH_POSTS_FAILURE,
-  SELECT_POST,
-  FETCH_DETAIL_REQUEST,
-  FETCH_DETAIL_SUCCESS,
-  FETCH_DETAIL_FAILURE,
-  SET_COMMENT,
-  POST_COMMENT_REQUEST,
-  POST_COMMENT_SUCCESS,
-  POST_COMMENT_FAILURE
-} from './constants';
-import { Dispatch, Action } from 'redux';
-import { RootState } from '../../reducer';
-import { fetchPostsFromServer, fetchDetailFromServer, addCommentOnServer, updateRatingOnServer } from './services';
+import { Action, Dispatch } from 'redux';
 import { TorrentResponseDTO } from '../../../server/controllers/torrent_controller';
 import { TorrentDetailDTO } from '../../../server/controllers/torrent_detail_controller';
+import { RootState } from '../../reducer';
+import {
+  FETCH_DETAIL_FAILURE,
+  FETCH_DETAIL_REQUEST,
+  FETCH_DETAIL_SUCCESS,
+  FETCH_POSTS_FAILURE,
+  FETCH_POSTS_REQUEST,
+  FETCH_POSTS_SUCCESS,
+  POST_COMMENT_FAILURE,
+  POST_COMMENT_REQUEST,
+  POST_COMMENT_SUCCESS,
+  SELECT_POST,
+  SET_COMMENT,
+} from './constants';
+import { addCommentOnServer, fetchDetailFromServer, fetchPostsFromServer, updateRatingOnServer } from './services';
 
 export interface PostsAction extends Action {
   payload?: string;
@@ -26,7 +26,7 @@ export interface PostsAction extends Action {
 
 export const fetchPosts = (refresh: boolean = false) => async (dispatch: Dispatch, getState: () => RootState) => {
   dispatch({
-    type: FETCH_POSTS_REQUEST
+    type: FETCH_POSTS_REQUEST,
   });
 
   let posts = getState().postsReducer.posts;
@@ -41,7 +41,7 @@ export const fetchPosts = (refresh: boolean = false) => async (dispatch: Dispatc
     dispatch({
       type: FETCH_POSTS_SUCCESS,
       posts: await response.json(),
-      replacePosts: refresh
+      replacePosts: refresh,
     });
   } else {
     dispatch({ type: FETCH_POSTS_FAILURE });
@@ -50,7 +50,7 @@ export const fetchPosts = (refresh: boolean = false) => async (dispatch: Dispatc
 
 export const fetchDetail = (hash: string) => async (dispatch: Dispatch, getState: () => RootState) => {
   dispatch({
-    type: FETCH_DETAIL_REQUEST
+    type: FETCH_DETAIL_REQUEST,
   });
   const response = await fetchDetailFromServer(hash);
   if (response.ok) {
@@ -63,7 +63,7 @@ export const fetchDetail = (hash: string) => async (dispatch: Dispatch, getState
 export const selectPost = (hash: string) => async (dispatch: Dispatch, getState: () => RootState) => {
   dispatch({
     type: SELECT_POST,
-    payload: hash
+    payload: hash,
   });
   dispatch(fetchDetail(hash) as any);
 };
@@ -75,7 +75,7 @@ export const setComment = (comment: string): PostsAction => ({
 
 export const postComment = () => async (dispatch: Dispatch, getState: () => RootState) => {
   dispatch({
-    type: POST_COMMENT_REQUEST
+    type: POST_COMMENT_REQUEST,
   });
 
   const postState = getState().postsReducer;

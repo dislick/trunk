@@ -1,9 +1,9 @@
 import * as bcrypt from 'bcrypt';
-import { config } from '../config';
-import { pool } from './database';
 import * as crypto from 'crypto';
-import { DuplicateEntryError, NotFoundError } from '../utils/error';
+import { config } from '../config';
 import { UserLevel } from '../enums/level_enum';
+import { DuplicateEntryError, NotFoundError } from '../utils/error';
+import { pool } from './database';
 
 export interface UserModel {
   id: number;
@@ -31,7 +31,7 @@ export const registerUserInDatabase = async (username: string, email: string, pa
   // provided values with a random string and the current time.
   const shaHash = crypto.createHash('sha1');
   const torrentAuthKey: string = shaHash.update(
-    username + email + Math.random().toString() + Date.now().toString()
+    username + email + Math.random().toString() + Date.now().toString(),
   ).digest('hex');
 
   // Insert into database
@@ -66,7 +66,7 @@ export const registerUserInDatabase = async (username: string, email: string, pa
 
 /**
  * Find a user in the database using an ID.
- * @param userId 
+ * @param userId
  */
 export const findUser = async (userId: number): Promise<UserModel> => {
   const query = `
@@ -83,7 +83,7 @@ export const findUser = async (userId: number): Promise<UserModel> => {
 
 /**
  * Find a user in the database using his torrent key.
- * @param userId 
+ * @param userId
  */
 export const findUserByTorrentKey = async (torrentKey: string): Promise<UserModel> => {
   const query = `

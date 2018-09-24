@@ -1,6 +1,6 @@
-import * as React from 'react';
 import * as classnames from 'classnames';
 import { isFunction } from 'lodash';
+import * as React from 'react';
 
 import './textfield.scss';
 
@@ -32,5 +32,5 @@ export const TextField = (props: TextFieldProps) => {
       autoCapitalize='off'
       spellCheck={false}
     />
-  )
+  );
 };

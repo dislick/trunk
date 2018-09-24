@@ -1,4 +1,4 @@
-import { pool } from "./database";
+import { pool } from './database';
 
 interface RatingsModel {
   rating: number;
@@ -22,7 +22,7 @@ export const getRatingsForTorrent = async (hash: string): Promise<RatingsModel[]
     INNER JOIN "user" ON ratings.user_id = "user".id
     WHERE ratings.torrent = $1
     ORDER BY ratings.rated_at DESC`;
-  
+
   let result = await pool.query(query, [hash]);
   return result.rows;
 };
@@ -32,8 +32,8 @@ export const getAverageRating = async (hash: string): Promise<number> => {
     SELECT
       AVG(rating) as average_rating
     FROM ratings
-    WHERE torrent = $1`
-  
+    WHERE torrent = $1`;
+
   let result = await pool.query(query, [hash]);
   return parseFloat(result.rows[0].average_rating);
 };
@@ -44,19 +44,19 @@ export const upsertRating = async (hash: string, userId: number, rating: number)
     VALUES ($1, $2, $3, NOW())
     ON CONFLICT (torrent, user_id)
       DO UPDATE
-        SET 
+        SET
           rating = excluded.rating,
           rated_at = NOW()
   `;
 
-  return pool.query(query, [hash, userId, rating])
+  return pool.query(query, [hash, userId, rating]);
 };
 
 export const getRatingForUser = async (hash: string, userId: number): Promise<number> => {
   const query = `
-    SELECT 
-      rating 
-    FROM ratings 
+    SELECT
+      rating
+    FROM ratings
     WHERE torrent = $1 AND user_id = $2
   `;
 

@@ -1,8 +1,8 @@
-import { PostsAction } from './actions';
-import { FETCH_POSTS_SUCCESS, SELECT_POST, FETCH_DETAIL_SUCCESS, FETCH_DETAIL_REQUEST, FETCH_DETAIL_FAILURE, SET_COMMENT, POST_COMMENT_SUCCESS } from './constants';
+import { sortBy } from 'lodash';
 import { TorrentResponseDTO } from '../../../server/controllers/torrent_controller';
 import { CommentDTO, RatingDTO } from '../../../server/controllers/torrent_detail_controller';
-import { sortBy } from 'lodash';
+import { PostsAction } from './actions';
+import { FETCH_DETAIL_FAILURE, FETCH_DETAIL_REQUEST, FETCH_DETAIL_SUCCESS, FETCH_POSTS_SUCCESS, POST_COMMENT_SUCCESS, SELECT_POST, SET_COMMENT } from './constants';
 
 export interface PostsState {
   readonly posts: TorrentResponseDTO[];
@@ -30,7 +30,7 @@ const defaultState: PostsState = {
   },
   isDetailFetching: false,
   reachedEndOfPosts: false,
-}
+};
 
 export default (state: PostsState = defaultState, action: PostsAction): PostsState => {
   switch (action.type) {
@@ -47,9 +47,9 @@ export default (state: PostsState = defaultState, action: PostsAction): PostsSta
     case SELECT_POST:
       return { ...state, selectedPostHash: action.payload };
     case FETCH_DETAIL_REQUEST:
-      return { ...state, isDetailFetching: true, /*detail: { ...defaultState.detail }*/ };
+      return { ...state, isDetailFetching: true /*detail: { ...defaultState.detail }*/ };
     case FETCH_DETAIL_SUCCESS:
-      let interactions = sortBy([...action.detail.comments, ...action.detail.ratings], i => {
+      let interactions = sortBy([...action.detail.comments, ...action.detail.ratings], (i) => {
         let date = new Date(i.timestamp);
         return date.getTime();
       });
@@ -58,10 +58,10 @@ export default (state: PostsState = defaultState, action: PostsAction): PostsSta
         detail: {
           averageRating: action.detail.averageRating,
           myRating: action.detail.myRating,
-          interactions: interactions,
+          interactions,
           commentInput: '',
         },
-        isDetailFetching: false
+        isDetailFetching: false,
       };
     case FETCH_DETAIL_FAILURE:
       return { ...state, isDetailFetching: false };
@@ -77,7 +77,7 @@ export default (state: PostsState = defaultState, action: PostsAction): PostsSta
 const mergeAndDedupePosts = (oldPosts: TorrentResponseDTO[], newPosts: TorrentResponseDTO[]) => {
   let posts = [ ...oldPosts ];
   for (let newPost of newPosts) {
-    if (!posts.some(p => p.hash === newPost.hash)) {
+    if (!posts.some((p) => p.hash === newPost.hash)) {
       posts.push(newPost);
     }
   }

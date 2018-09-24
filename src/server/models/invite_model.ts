@@ -1,4 +1,4 @@
-import { pool } from "./database";
+import { pool } from './database';
 
 export interface InviteModel {
   invite_code: string;
@@ -25,19 +25,19 @@ export const isInviteValid = async (inviteCode: string): Promise<{ isValid: bool
 
   let inviteModel = result.rows[0];
   return {
-    isValid: !inviteModel.is_claimed, 
-    username: inviteModel.username
+    isValid: !inviteModel.is_claimed,
+    username: inviteModel.username,
   };
-}
+};
 
 export const claimInviteCode = async (inviteCode: string, claimedBy: number) => {
   const query = `
-    UPDATE "invite" 
-    SET 
-      is_claimed = true, 
-      claimed_at = now(), 
+    UPDATE "invite"
+    SET
+      is_claimed = true,
+      claimed_at = now(),
       claimed_by = $2
     WHERE invite_code = $1`;
 
-  await pool.query(query, [inviteCode, claimedBy])
+  await pool.query(query, [inviteCode, claimedBy]);
 };

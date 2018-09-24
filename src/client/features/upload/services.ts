@@ -1,5 +1,5 @@
-import API from '../../api';
 import { TorrentResponseDTO } from '../../../server/controllers/torrent_controller';
+import API from '../../api';
 
 export const uploadTorrentFile = async (formData: FormData) => {
   return API.fetch('/api/torrent', {
@@ -7,4 +7,4 @@ export const uploadTorrentFile = async (formData: FormData) => {
     body: formData,
     isFormData: true,
   });
-}
+};

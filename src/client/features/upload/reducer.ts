@@ -1,7 +1,7 @@
-import { UploadAction } from './actions';
-import { TorrentResponseDTO } from '../../../server/controllers/torrent_controller';
-import { ADD_FILE_FOR_UPLOAD, DISCARD_FILE, UPLOAD_FILE_SUCCESS, EDIT_TORRENT_TITLE, EDIT_TORRENT_TAGS, UPLOAD_FILE_FAILURE } from './constants';
 import update from 'immutability-helper';
+import { TorrentResponseDTO } from '../../../server/controllers/torrent_controller';
+import { UploadAction } from './actions';
+import { ADD_FILE_FOR_UPLOAD, DISCARD_FILE, EDIT_TORRENT_TAGS, EDIT_TORRENT_TITLE, UPLOAD_FILE_FAILURE, UPLOAD_FILE_SUCCESS } from './constants';
 
 export interface FileToUpload {
   file: File;
@@ -11,12 +11,12 @@ export interface FileToUpload {
 }
 
 export interface UploadState {
-  readonly files: FileToUpload[]
+  readonly files: FileToUpload[];
 }
 
 const defaultState: UploadState = {
   files: [],
-}
+};
 
 export default (state: UploadState = defaultState, action: UploadAction): UploadState => {
   switch (action.type) {
@@ -30,8 +30,8 @@ export default (state: UploadState = defaultState, action: UploadAction): Upload
             title: action.title,
             tags: '',
             errorMessage: '',
-          }
-        ]
+          },
+        ],
       };
     case DISCARD_FILE:
     case UPLOAD_FILE_SUCCESS:
@@ -42,7 +42,7 @@ export default (state: UploadState = defaultState, action: UploadAction): Upload
     case EDIT_TORRENT_TITLE:
       return update(state, {
         files: {
-          $apply: file => file.map((item: FileToUpload, index) => {
+          $apply: (file) => file.map((item: FileToUpload, index) => {
             if (index === action.index) {
               return { ...item, title: action.title, errorMessage: '' };
             }
@@ -53,7 +53,7 @@ export default (state: UploadState = defaultState, action: UploadAction): Upload
     case EDIT_TORRENT_TAGS:
       return update(state, {
         files: {
-          $apply: file => file.map((item: FileToUpload, index) => {
+          $apply: (file) => file.map((item: FileToUpload, index) => {
             if (index === action.index) {
               return { ...item, tags: action.tags, errorMessage: '' };
             }
@@ -64,7 +64,7 @@ export default (state: UploadState = defaultState, action: UploadAction): Upload
     case UPLOAD_FILE_FAILURE:
     return update(state, {
       files: {
-        $apply: file => file.map((item: FileToUpload, index) => {
+        $apply: (file) => file.map((item: FileToUpload, index) => {
           if (index === action.index) {
             return { ...item, errorMessage: action.message };
           }

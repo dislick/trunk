@@ -1,6 +1,6 @@
-import { AuthAction } from './actions';
-import { SET_USERNAME, SET_PASSWORD, SUBMIT_LOGIN_SUCCESS, SUBMIT_LOGIN_REQUEST, SUBMIT_LOGIN_FAILURE, FETCH_PERSONAL_INFO_SUCCESS } from './constants';
 import { PersonalInfoDTO } from '../../../server/controllers/login_controller';
+import { AuthAction } from './actions';
+import { FETCH_PERSONAL_INFO_SUCCESS, SET_PASSWORD, SET_USERNAME, SUBMIT_LOGIN_FAILURE, SUBMIT_LOGIN_REQUEST, SUBMIT_LOGIN_SUCCESS } from './constants';
 
 export interface AuthState {
   readonly username: string;
@@ -18,7 +18,7 @@ const defaultState: AuthState = {
   invalidCredentials: false,
   isFetching: false,
   personalInfo: null,
-}
+};
 
 export default (state: AuthState = defaultState, action: AuthAction): AuthState => {
   switch (action.type) {

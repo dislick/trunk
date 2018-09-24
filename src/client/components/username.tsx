@@ -8,7 +8,7 @@ interface Props {
 }
 
 export const Username = (props: Props) => (
-  <span className="username">
+  <span className='username'>
     {props.children}
     {/* <span>{props.ratio}</span> */}
   </span>

@@ -5,8 +5,8 @@ export const loginUser = (user: string, password: string) => {
     method: 'POST',
     body: {
       username: user,
-      password: password,
-    }
+      password,
+    },
   });
 };
 

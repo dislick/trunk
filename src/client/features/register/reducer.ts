@@ -1,5 +1,5 @@
 import { RegisterAction } from './actions';
-import { SET_USERNAME, SET_PASSWORD, SET_EMAIL, SUBMIT_VALIDATION_REQUEST, SUBMIT_VALIDATION_SUCCESS, SUBMIT_VALIDATION_FAILURE, SUBMIT_REGISTER_REQUEST, SUBMIT_REGISTER_SUCCESS, SUBMIT_REGISTER_FAILURE } from './constants';
+import { SET_EMAIL, SET_PASSWORD, SET_USERNAME, SUBMIT_REGISTER_FAILURE, SUBMIT_REGISTER_REQUEST, SUBMIT_REGISTER_SUCCESS, SUBMIT_VALIDATION_FAILURE, SUBMIT_VALIDATION_REQUEST, SUBMIT_VALIDATION_SUCCESS } from './constants';
 
 export interface RegisterState {
   readonly email: string;
@@ -21,7 +21,7 @@ const defaultState: RegisterState = {
   isFetchingValidation: false,
   isFetchingRegister: false,
   registerErrorMessage: '',
-}
+};
 
 export default (state: RegisterState = defaultState, action: RegisterAction): RegisterState => {
   switch (action.type) {

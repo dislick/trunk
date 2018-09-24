@@ -1,8 +1,8 @@
 import { connect } from 'react-redux';
-import { RootState } from '../reducer';
-import { MainPage } from '../pages/main_page';
-import { postsActions } from '../features/posts';
 import { authActions } from '../features/auth';
+import { postsActions } from '../features/posts';
+import { MainPage } from '../pages/main_page';
+import { RootState } from '../reducer';
 
 const mapStateToProps = (state: RootState) => ({
 
