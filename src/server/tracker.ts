@@ -24,7 +24,7 @@ export default () => {
     http: true,
     ws: false,
     stats: false,
-    trustProxy: true,
+    trustProxy: config.trustXForwardedFor,
     filter: async (infoHash: string, params: AnnounceParams, cb: (error: Error) => void) => {
       try {
         const user = await findUserByTorrentKey(params.httpRes.locals.torrentKey);
