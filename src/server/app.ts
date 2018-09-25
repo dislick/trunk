@@ -76,6 +76,10 @@ app.get('/:torrentKey/announce', async (request: Request, response: Response) =>
   }
 });
 
+app.get('/scrape', (request: Request, response: Response) => {
+  trackingServer.onHttpRequest(request, response);
+});
+
 /**
  * API Endpoints
  */
