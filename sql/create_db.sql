@@ -1,3 +1,16 @@
+create table tags
+(
+	id serial not null
+		constraint tags_pkey
+			primary key,
+	label varchar(40) not null
+)
+;
+
+create unique index tags_label_uindex
+	on tags (label)
+;
+
 create table "user"
 (
 	id serial not null
@@ -11,18 +24,6 @@ create table "user"
 	total_uploaded bigint default 0 not null,
 	total_downloaded bigint default 0 not null
 )
-;
-
-create unique index user_torrent_auth_key_uindex
-	on "user" (torrent_auth_key)
-;
-
-create unique index user_username_uindex
-	on "user" (username)
-;
-
-create unique index user_email_uindex
-	on "user" (email)
 ;
 
 create table invite
@@ -77,37 +78,6 @@ create table torrents
 )
 ;
 
-create table tags
-(
-	id serial not null
-		constraint tags_pkey
-			primary key,
-	label varchar(40) not null
-)
-;
-
-create unique index tags_label_uindex
-	on tags (label)
-;
-
-create table tag_torrent_link
-(
-	id serial not null
-		constraint table_name_pkey
-			primary key,
-	tag_id integer not null
-		constraint table_name_tags_id_fk
-			references tags
-				on update cascade on delete cascade,
-	torrent varchar(40) not null
-		constraint table_name_torrents_hash_fk
-			references torrents
-				on update cascade on delete cascade,
-	constraint prevent_duplicate_tags
-		unique (tag_id, torrent)
-)
-;
-
 create table comments
 (
 	id serial not null
@@ -131,7 +101,10 @@ create table ratings
 	id serial not null
 		constraint ratings_pkey
 			primary key,
-	torrent varchar(40) not null,
+	torrent varchar(40) not null
+		constraint ratings_torrents_hash_fk
+			references torrents
+				on update cascade on delete cascade,
 	user_id integer not null,
 	rating smallint not null
 		constraint rating_check
@@ -142,6 +115,36 @@ create table ratings
 
 create unique index only_one_rating
 	on ratings (torrent, user_id)
+;
+
+create table tag_torrent_link
+(
+	id serial not null
+		constraint table_name_pkey
+			primary key,
+	tag_id integer not null
+		constraint table_name_tags_id_fk
+			references tags
+				on update cascade on delete cascade,
+	torrent varchar(40) not null
+		constraint table_name_torrents_hash_fk
+			references torrents
+				on update cascade on delete cascade,
+	constraint prevent_duplicate_tags
+		unique (tag_id, torrent)
+)
+;
+
+create unique index user_email_uindex
+	on "user" (email)
+;
+
+create unique index user_torrent_auth_key_uindex
+	on "user" (torrent_auth_key)
+;
+
+create unique index user_username_uindex
+	on "user" (username)
 ;
 
 create function calculate_ratio() returns trigger
