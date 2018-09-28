@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import * as parseTorrent from 'parse-torrent';
-import { config } from '../config';
+import { CommentPreviewDTO, getCommentPreviewForPost } from '../models/comments_model';
 import { createAndLinkTags } from '../models/tag_model';
 import { createTorrentPost, getTorrentFile, getTorrentPosts } from '../models/torrent_model';
 import { findUser } from '../models/user_model';
@@ -20,6 +20,7 @@ export interface TorrentResponseDTO {
   };
   seeders: number;
   leechers: number;
+  comment_preview: CommentPreviewDTO;
 }
 
 /**
@@ -43,13 +44,21 @@ export const getTorrents = (trackingServer) => async (request: Request, response
 
   let posts = await getTorrentPosts(dateOffset, limit);
 
-  let responseDTOs: TorrentResponseDTO[] = posts.map((post) => {
+  let postsWithSwarmInfo = posts.map((post) => {
     const { seeders, leechers } = getSwarmInfo(trackingServer, post.hash);
     return {
       ...post,
       seeders,
       leechers,
     };
+  });
+
+  let postsWithCommentPreview = await Promise.all(posts.map((post) => {
+    return getCommentPreviewForPost(post.hash, 3);
+  }));
+
+  let responseDTOs: TorrentResponseDTO[] = postsWithSwarmInfo.map((post, index) => {
+    return { ...post, comment_preview: postsWithCommentPreview[index] };
   });
 
   response.send(responseDTOs);
@@ -60,7 +69,7 @@ export const uploadTorrent = async (request: Request, response: Response) => {
   const { title, tags } = request.body;
 
   if (!fileUpload || fileUpload.length !== 1) {
-    return response.status(400).send({ message: 'File in field torrent_file not found'});
+    return response.status(400).send({ message: 'File in field torrent_file not found' });
   }
 
   if (title.length < 3) {
@@ -126,6 +135,6 @@ const getSwarmInfo = (trackingServer, hash: string): { seeders: number, leechers
   if (torrent) {
     return { seeders: torrent.complete, leechers: torrent.incomplete };
   } else {
-    return {  seeders: 0, leechers: 0 };
+    return { seeders: 0, leechers: 0 };
   }
 };
