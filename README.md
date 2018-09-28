@@ -1,5 +1,5 @@
 <h1 align="center">
-  <img src=".github/trunk-logo-notext.png" alt="trunk" width="200">
+  <img src=".github/trunk-logo-notext.png" alt="trunk" width="270">
 </h1>
 
 <h4 align="center">A refreshing take on BitTorrent trackers.</h4>
