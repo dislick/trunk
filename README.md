@@ -1,5 +1,5 @@
 <h1 align="center">
-  <img src=".github/trunk-logo.jpg" alt="trunk" width="200">
+  <img src=".github/trunk-logo.png" alt="trunk" width="200">
 </h1>
 
 ## In heavy development
