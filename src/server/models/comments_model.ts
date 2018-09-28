@@ -12,7 +12,7 @@ interface CommentModel {
 export interface CommentPreviewDTO {
   comments: Array<{
     username: string;
-    comment_contet: string;
+    comment_content: string;
     commented_at: string;
   }>;
   hasMoreComments: boolean;

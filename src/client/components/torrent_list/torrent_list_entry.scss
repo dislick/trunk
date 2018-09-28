@@ -4,12 +4,36 @@
 
 $torrent-list-entry-color: #272626;
 
+.torrent-list-entry-wrapper {
+  margin-bottom: $large-page-spacing / 2;
+  
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  .comment-preview-wrapper {
+    margin-left: 26px;
+    margin-bottom: 50px;
+
+    .has-more {
+      color: rgba(255, 255, 255, 0.25);
+      margin-top: 27px;
+      text-transform: uppercase;
+      font-size: 12px;
+
+      &:hover {
+        color: rgba(255, 255, 255, 0.7);
+        cursor: pointer;
+      }
+    }
+  }
+}
+
 .torrent-list-entry {
   background-color: $torrent-list-entry-color;
   padding: 26px;
   padding-bottom: 22px;
   border-radius: 6px;
-  margin-bottom: $large-page-spacing / 2;
   transition-duration: $hover-fade-duration;
   position: relative;
 
@@ -22,9 +46,6 @@ $torrent-list-entry-color: #272626;
     background-color: $main-color;
   }
 
-  &:last-child {
-    margin-bottom: 0;
-  }
 
   h1 {
     font-size: 18px;
