@@ -44,6 +44,7 @@ export const TorrentList = (props: Props) => {
             username={post.user.username}
             userratio={post.user.ratio}
             selected={post.hash === props.selectedPost}
+            commentPreview={post.comment_preview}
             onClick={() => props.onSelectPost(post.hash)}
           />
         ))}

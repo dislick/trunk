@@ -73,7 +73,7 @@ export const TorrentDetail = (props: Props) => {
                       key={index}
                       username={interaction.user.username}
                       userratio={interaction.user.ratio}
-                      comment={comment.content}
+                      content={comment.content}
                     />
                   );
                 }
