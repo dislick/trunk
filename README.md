@@ -1,6 +1,12 @@
 <h1 align="center">
-  <img src=".github/trunk-logo.png" alt="trunk" width="200">
+  <img src=".github/trunk-logo-notext.png" alt="trunk" width="200">
 </h1>
+
+<h4 align="center">A refreshing take on BitTorrent trackers.</h4>
+
+<br />
+<br />
+<br />
 
 ## In heavy development
 
