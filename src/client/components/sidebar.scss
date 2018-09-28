@@ -27,7 +27,11 @@ section.sidebar {
       flex-direction: column;
 
       .logout {
-        margin-bottom: 32px;
+        margin-top: 16px;
+      }
+
+      .copy-announce-url {
+        margin-top: 32px;
       }
 
       .about-me {
