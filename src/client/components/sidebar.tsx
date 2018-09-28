@@ -11,6 +11,10 @@ interface Props {
   onLogout: () => void;
 }
 
+/**
+ * Copies a string to clipboard using the navigator.clipboard API.
+ * @param content
+ */
 const copyToClipboard = async (content: string) => {
   return (navigator as any).clipboard.writeText(content);
 };
@@ -24,7 +28,6 @@ export const Sidebar = (props: Props) => {
         <img src={require('../assets/trunk_logo.svg')} className='logo' />
 
         <div className='personal-area'>
-
           {props.aboutMe &&
             <div className='about-me'>
               <p className='user'>{props.aboutMe.username}</p>
