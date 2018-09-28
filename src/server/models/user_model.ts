@@ -98,14 +98,26 @@ export const findUserByTorrentKey = async (torrentKey: string): Promise<UserMode
   return result.rows[0];
 };
 
+/**
+ * Validates a user identification string (either username or email) against the
+ * database with a given password.
+ * @param userIdentification Username or Email
+ * @param password Password
+ */
 export const validateUser = async (
-  username: string,
+  userIdentification: string,
   password: string,
 ): Promise<{ isPasswordCorrect: boolean, userId: number }> => {
-  const query = `
-    SELECT * from "user" WHERE username = $1`;
+  let field = 'username';
 
-  let result = await pool.query(query, [username]);
+  // If there is a @ character present we switch the field to `email`
+  if (userIdentification.indexOf('@') !== -1) {
+    field = 'email';
+  }
+
+  const query = `SELECT * from "user" WHERE ${field} = $1`;
+
+  let result = await pool.query(query, [userIdentification]);
 
   if (result.rows.length <= 0) {
     throw new NotFoundError('User not found');
