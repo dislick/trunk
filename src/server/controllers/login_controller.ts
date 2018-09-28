@@ -4,6 +4,7 @@ import { isString } from 'lodash';
 import { config } from '../config';
 import { claimInviteCode, isInviteValid } from '../models/invite_model';
 import { findUser, registerUserInDatabase, validateUser } from '../models/user_model';
+import { buildAnnounceUrl } from '../utils/build_announce_url';
 import { DuplicateEntryError } from '../utils/error';
 
 export interface JWTPayload {
@@ -17,6 +18,7 @@ export interface ValidationResponseDTO {
 
 export interface PersonalInfoDTO {
   username: string;
+  announceUrl: string;
   total_uploaded: number;
   total_downloaded: number;
 }
@@ -129,6 +131,7 @@ export const getPersonalInfo = async (request: Request, response: Response) => {
 
     let dto: PersonalInfoDTO = {
       username: user.username,
+      announceUrl: buildAnnounceUrl(user.torrent_auth_key),
       total_uploaded: parseInt(user.total_uploaded, 10),
       total_downloaded: parseInt(user.total_downloaded, 10),
     };
