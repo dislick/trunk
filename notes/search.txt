@@ -1,0 +1,15 @@
+# Search Feature
+
+- Words and epxressions are separated by whitespace
+- Multiple expressions are AND-linked
+
+
+
+## Search for torrents with tag linux
+tag:linux
+
+## Search for torrents with tag linux from user john
+tag:linux user:john
+
+## Search for torrents with tag linux from user john that contain the word "ubuntu"
+tag:linux user:john ubuntu

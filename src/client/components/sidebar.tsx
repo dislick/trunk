@@ -1,9 +1,9 @@
 import * as bytes from 'bytes';
 import * as React from 'react';
 import { PersonalInfoDTO } from '../../server/controllers/login_controller';
+import { getFormattedRatio } from '../../server/utils/ratio_calculator';
 import { Button } from './button';
 
-import { getFormattedRatio } from '../../server/utils/ratio_calculator';
 import './sidebar.scss';
 
 interface Props {
