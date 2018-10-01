@@ -19,6 +19,27 @@ section.sidebar {
       flex: 0 0 auto;
       align-self: center;
       margin: $large-page-spacing 0;
+      cursor: pointer;
+    }
+
+    .search-area {
+      margin: 0 $sidebar-inner-padding;
+      flex: 1 1 auto;
+
+      .pro-tip {
+        color: rgba($grey-color, 0.55);
+        font-size: 13px;
+        margin-top: 16px;
+        line-height: 18px;
+
+        span.bold {
+          font-weight: 700;
+        }
+        span.query {
+          font-family: Inconsolata, monospace;
+          color: rgba($trunk-color, 0.55);
+        }
+      }
     }
 
     .personal-area {

@@ -3,6 +3,7 @@ import { TorrentResponseDTO } from '../../../server/controllers/torrent_controll
 import { CommentDTO, RatingDTO } from '../../../server/controllers/torrent_detail_controller';
 import { PostsAction } from './actions';
 import {
+  EXECUTE_SEARCH,
   FETCH_DETAIL_FAILURE,
   FETCH_DETAIL_REQUEST,
   FETCH_DETAIL_SUCCESS,
@@ -10,6 +11,7 @@ import {
   POST_COMMENT_SUCCESS,
   SELECT_POST,
   SET_COMMENT,
+  SET_SEARCH_QUERY,
 } from './constants';
 
 export interface PostsState {
@@ -18,6 +20,7 @@ export interface PostsState {
   readonly detail: PostDetailState;
   readonly isDetailFetching: boolean;
   readonly reachedEndOfPosts: boolean;
+  readonly searchQuery: string;
 }
 
 export interface PostDetailState {
@@ -38,6 +41,7 @@ const defaultState: PostsState = {
   },
   isDetailFetching: false,
   reachedEndOfPosts: false,
+  searchQuery: '',
 };
 
 export default (state: PostsState = defaultState, action: PostsAction): PostsState => {
@@ -77,6 +81,10 @@ export default (state: PostsState = defaultState, action: PostsAction): PostsSta
       return { ...state, detail: { ...state.detail, commentInput: action.payload } };
     case POST_COMMENT_SUCCESS:
       return { ...state, detail: { ...state.detail, commentInput: '' } };
+    case SET_SEARCH_QUERY:
+      return { ...state, searchQuery: action.payload };
+    case EXECUTE_SEARCH:
+      return { ...state, posts: [] };
   }
 
   return state;

@@ -9,3 +9,5 @@ export const SET_COMMENT = 'posts/SET_COMMENT';
 export const POST_COMMENT_REQUEST = 'posts/POST_COMMENT_REQUEST';
 export const POST_COMMENT_SUCCESS = 'posts/POST_COMMENT_SUCCESS';
 export const POST_COMMENT_FAILURE = 'posts/POST_COMMENT_FAILURE';
+export const SET_SEARCH_QUERY = 'posts/SET_SEARCH_QUERY';
+export const EXECUTE_SEARCH = 'posts/EXECUTE_SEARCH';
