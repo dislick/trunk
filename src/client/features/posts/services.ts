@@ -1,11 +1,12 @@
 import API from '../../api';
 
-export const fetchPostsFromServer = async (offset?: Date) => {
+export const fetchPostsFromServer = async (offset?: Date, searchQuery?: string) => {
   return API.fetch('/api/torrent', {
     method: 'POST',
     body: {
       dateOffset: offset || '',
       limit: 20,
+      queryString: searchQuery,
     },
   });
 };

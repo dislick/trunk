@@ -7,7 +7,6 @@
   border-radius: 3px;
   margin-right: 5px;
   margin-bottom: 5px;
-  cursor: pointer;
   transition-duration: $hover-fade-duration;
   box-sizing: border-box;
   max-width: 100%;
@@ -17,13 +16,17 @@
     cursor: default;
   }
 
-  &:last-child {
-    margin-right: 0;
+  &.clickable {
+    cursor: pointer;
+
+    &:hover {
+      background-color: rgba(255,255,255,0.3);
+      transition-duration: 0s;
+    }
   }
 
-  &:not(.system-tag):hover {
-    background-color: rgba(255,255,255,0.3);
-    transition-duration: 0s;
+  &:last-child {
+    margin-right: 0;
   }
   
   p {

@@ -3,6 +3,7 @@ import { TorrentResponseDTO } from '../../../server/controllers/torrent_controll
 import { TorrentDetailDTO } from '../../../server/controllers/torrent_detail_controller';
 import { RootState } from '../../reducer';
 import {
+  EXECUTE_SEARCH,
   FETCH_DETAIL_FAILURE,
   FETCH_DETAIL_REQUEST,
   FETCH_DETAIL_SUCCESS,
@@ -14,6 +15,7 @@ import {
   POST_COMMENT_SUCCESS,
   SELECT_POST,
   SET_COMMENT,
+  SET_SEARCH_QUERY,
 } from './constants';
 import { addCommentOnServer, fetchDetailFromServer, fetchPostsFromServer, updateRatingOnServer } from './services';
 
@@ -29,13 +31,13 @@ export const fetchPosts = (refresh: boolean = false) => async (dispatch: Dispatc
     type: FETCH_POSTS_REQUEST,
   });
 
-  let posts = getState().postsReducer.posts;
+  let { posts, searchQuery } = getState().postsReducer;
   let offset;
   if (posts.length > 0 && !refresh) {
     offset = posts[posts.length - 1].uploaded_at;
   }
 
-  const response = await fetchPostsFromServer(offset);
+  const response = await fetchPostsFromServer(offset, searchQuery);
 
   if (response.ok) {
     dispatch({
@@ -72,6 +74,16 @@ export const setComment = (comment: string): PostsAction => ({
   type: SET_COMMENT,
   payload: comment,
 });
+
+export const setSearchQuery = (query: string): PostsAction => ({
+  type: SET_SEARCH_QUERY,
+  payload: query,
+});
+
+export const executeSearch = () => async (dispatch: Dispatch, getState: () => RootState) => {
+  dispatch({ type: EXECUTE_SEARCH });
+  dispatch(fetchPosts() as any);
+};
 
 export const postComment = () => async (dispatch: Dispatch, getState: () => RootState) => {
   dispatch({

@@ -1,18 +1,28 @@
 import * as parseTorrent from 'parse-torrent';
+import * as squel from 'squel';
 import { NotFoundError } from '../utils/error';
 import { getFormattedRatio } from '../utils/ratio_calculator';
 import { pool } from './database';
 
-interface TorrentPost {
-  hash: string;
-  title: string;
-  size: string; // BIGINT will return as string
-  user_id: number;
-  uploaded_at: Date;
-  torrent_file: Buffer;
-}
+squel.useFlavour('postgres');
 
-export const getTorrentPosts = async (dateOffset: Date, limit: number = 20) => {
+export const getTorrentPosts = async (dateOffset: Date, queryString: string = '', limit: number = 20) => {
+  let expression = generateExpressionForQueryString(queryString);
+
+  // Add `upload_at` condition for pagination
+  expression.and('uploaded_at < ?', dateOffset);
+
+  let param = squel.select({
+    numberedParameters: true,
+    numberedParametersStartAt: 2, // start at 2 because we need $1 for the LIMIT
+  })
+  .where(expression)
+  .toParam();
+
+  // Remove the SELECT from the generated query because we only care about the
+  // WHERE clause
+  const whereClause = param.text.replace(/^SELECT/, '');
+
   const query = `
     SELECT
       torrents.hash,
@@ -35,11 +45,11 @@ export const getTorrentPosts = async (dateOffset: Date, limit: number = 20) => {
       ) concatedLables
       INNER JOIN torrents ON torrents.hash = concatedLables.hash
       INNER JOIN "user" ON torrents.user_id = "user".id
-    WHERE uploaded_at < $1
+    ${whereClause}
     ORDER BY uploaded_at DESC
-    LIMIT $2`;
+    LIMIT $1`;
 
-  let result = await pool.query(query, [dateOffset, limit]);
+  let result = await pool.query(query, [limit, ...param.values]);
 
   let rows: Array<{
     hash: string;
@@ -105,7 +115,50 @@ export const getTorrentFile = async (hash: string): Promise<{ file: Buffer, titl
 };
 
 function getHexString(buffer: Buffer) {
-  // Prepend \x to the hex string of the photo to tell postgres that the
+  // Prepend \x to the hex string of the buffer to tell postgres that the
   // `bytea` type uses hex format instead of the escape format.
   return '\\x' + buffer.toString('hex');
+}
+
+const tagMatcher = /^tag:([a-z0-9-]+?)$/i;
+const userMatcher = /^user:([a-z0-9-]+?)$/i;
+const hashMatcher = /^hash:([a-f0-9]{40})$/;
+
+function generateExpressionForQueryString(query: string) {
+  let keywords = query.trim().split(/\s+/).filter((k) => k.length > 0);
+
+  let expression = squel.expr();
+
+  if (keywords.length <= 0) {
+    return expression;
+  }
+
+  for (let keyword of keywords) {
+    if (tagMatcher.test(keyword)) {
+      let tag = keyword.match(tagMatcher)[1];
+
+      // We are using a regular expression here to match the concatenated
+      // labels. Take the following string for example:
+      //
+      // linux,ubuntu,distro
+      //
+      // With the regular expression /(^|,)ubu(,|$)/ we make sure that the
+      // queryString `tag:ubu` doesn't match the tag `ubuntu`.
+      expression.and(`concatedLables.labels ~ ?`, `(^|,)${tag}(,|$)`);
+      continue;
+    }
+    if (userMatcher.test(keyword)) {
+      let user = keyword.match(userMatcher)[1];
+      expression.and(`username = ?`, user);
+      continue;
+    }
+    if (hashMatcher.test(keyword)) {
+      let hash = keyword.match(hashMatcher)[1];
+      expression.and('torrents.hash = ?', hash);
+      continue;
+    }
+    expression.and(`title ILIKE ?`, `%${keyword}%`);
+  }
+
+  return expression;
 }

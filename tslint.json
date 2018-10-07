@@ -99,7 +99,8 @@
             "check-preblock"
         ],
         "no-console": false,
-        "max-classes-per-file": false
+        "max-classes-per-file": false,
+        "no-string-literal": false
     },
     "rulesDirectory": []
 }

@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { isString } from 'lodash';
 import * as parseTorrent from 'parse-torrent';
 import { CommentPreviewDTO, getCommentPreviewForPost } from '../models/comments_model';
 import { createAndLinkTags } from '../models/tag_model';
@@ -27,7 +28,7 @@ export interface TorrentResponseDTO {
  * API Endpoint POST /torrent
  */
 export const getTorrents = (trackingServer) => async (request: Request, response: Response) => {
-  let { dateOffset, limit } = request.body;
+  let { dateOffset, limit, queryString } = request.body;
 
   // Try to parse it to a Date
   dateOffset = new Date(dateOffset);
@@ -36,13 +37,17 @@ export const getTorrents = (trackingServer) => async (request: Request, response
     dateOffset = new Date();
   }
 
+  if (isString(queryString) && queryString.length > 200) {
+    return response.status(400).send({ message: 'Forbidden query string' });
+  }
+
   // Check if requested limit is not off-limits (he-he)
   limit = parseInt(limit, 10) || 20;
   if (limit < 1 || limit > 101) {
     return response.status(400).send({ message: 'Limit out of bounds (min: 1, max: 100)' });
   }
 
-  let posts = await getTorrentPosts(dateOffset, limit);
+  let posts = await getTorrentPosts(dateOffset, queryString, limit);
 
   let postsWithSwarmInfo = posts.map((post) => {
     const { seeders, leechers } = getSwarmInfo(trackingServer, post.hash);

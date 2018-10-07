@@ -19,7 +19,8 @@ ReactDOM.render((
         <Route exact path='/login' render={() => <LoginPageConnected />} />
         <Route path='/invite/:code' render={() => <RegisterPageConnected />} />
         <Route exact path='/' render={() => <MainPageConnected />} />
-        <Route render={() => (<div>404</div>)} />
+        <Route path='/search/:query' render={() => <MainPageConnected />} />
+        <Route render={() => (<div>Client 404</div>)} />
       </Switch>
     </ConnectedRouter>
   </Provider>

@@ -1,14 +1,19 @@
 import * as bytes from 'bytes';
 import * as React from 'react';
+import { RouteComponentProps } from 'react-router';
 import { PersonalInfoDTO } from '../../server/controllers/login_controller';
-import { Button } from './button';
-
 import { getFormattedRatio } from '../../server/utils/ratio_calculator';
+import { Button } from './button';
+import { TextField } from './textfield';
+
 import './sidebar.scss';
 
 interface Props {
   aboutMe: PersonalInfoDTO;
+  searchQuery: string;
   onLogout: () => void;
+  onSetSearchQuery: (query: string) => void;
+  onExecuteSearch: () => void;
 }
 
 interface State {
@@ -23,7 +28,7 @@ const copyToClipboard = (content: string) => {
   (navigator as any).clipboard.writeText(content);
 };
 
-export class Sidebar extends React.Component<Props, State> {
+export class Sidebar extends React.Component<Props & RouteComponentProps, State> {
   private timeout;
 
   public state: State = {
@@ -47,11 +52,40 @@ export class Sidebar extends React.Component<Props, State> {
     clearTimeout(this.timeout);
   }
 
+  public startSearch = () => {
+    if (this.props.searchQuery.length > 0) {
+      this.props.history.push('/search/' + this.props.searchQuery);
+    } else {
+      this.props.history.push('/');
+    }
+  }
+
+  public handleLogoClick = () => {
+    this.props.history.push('/');
+  }
+
   public render() {
     return (
       <section className='sidebar'>
         <div className='sidebar-inner'>
-          <img src={require('../assets/trunk_logo.svg')} className='logo' />
+          <img
+            src={require('../assets/trunk_logo.svg')}
+            className='logo'
+            onClick={this.handleLogoClick}
+          />
+
+          <div className='search-area'>
+            <TextField
+              value={this.props.searchQuery}
+              placeholder='Search torrents...'
+              onChange={(event) => this.props.onSetSearchQuery(event.target.value)}
+              onEnter={this.startSearch}
+            />
+            <p className='pro-tip'>
+              {/* tslint:disable-next-line:max-line-length */}
+              <span className='bold'>ProTip</span>: You can use expressions like <span className='query'>tag:movie</span> and <span className='query'>user:john</span> to search more specifically.
+            </p>
+          </div>
 
           <div className='personal-area'>
             {this.props.aboutMe &&

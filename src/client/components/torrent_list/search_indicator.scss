@@ -1,0 +1,21 @@
+@import '../../styles/spacing.scss';
+@import '../../styles/colors.scss';
+
+.search-indicator {
+  margin-bottom: $large-page-spacing;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 30px;
+
+  p {
+    color: $grey-color;
+    font-size: 13px;
+  }
+
+  p.query {
+    color: $trunk-color;
+    font-family: Inconsolata, monospace;
+    font-size: 25px;
+    margin-top: 16px;
+    word-break: break-word;
+  }
+}
