@@ -28,14 +28,8 @@ export class MainPage extends React.Component<MainPageProps> {
   }
 
   public handleSearch = (query: string) => {
-    console.log(query);
-    if (query) {
-      this.props.onSetSearchQuery(query);
-      this.props.onExecuteSearch();
-    } else {
-      this.props.onSetSearchQuery('');
-      this.props.onExecuteSearch();
-    }
+    this.props.onSetSearchQuery(query);
+    this.props.onExecuteSearch();
   }
 
   public render() {

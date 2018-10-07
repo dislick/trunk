@@ -2,6 +2,7 @@ import * as bytes from 'bytes';
 import * as classnames from 'classnames';
 import { isNumber } from 'lodash';
 import * as React from 'react';
+import { RouteComponentProps } from 'react-router';
 import { TorrentResponseDTO } from '../../../server/controllers/torrent_controller';
 import { CommentDTO, RatingDTO } from '../../../server/controllers/torrent_detail_controller';
 import { getBaseUrl } from '../../api';
@@ -27,7 +28,11 @@ interface Props {
   onUpdateRating: (rating: number) => void;
 }
 
-export const TorrentDetail = (props: Props) => {
+const buildSearchUrl = (query: string) => {
+  return `/search/${query}`;
+};
+
+export const TorrentDetail = (props: Props & RouteComponentProps) => {
   return (
     <section className={classnames('torrent-detail', {
       'hide-detail': !props.visible,
@@ -36,14 +41,27 @@ export const TorrentDetail = (props: Props) => {
         {props.post &&
           <>
             <div className='title-wrapper'>
-              <h1>{props.post.title}</h1>
+              <h1
+                onClick={(event) => {
+                  if (event.altKey) {
+                    props.history.push(buildSearchUrl('hash:' + props.post.hash));
+                  }
+                }}
+              >
+                {props.post.title}
+              </h1>
               <a href={getBaseUrl() + '/api/torrent/' + props.post.hash}>
                 <img src={require('../../assets/download-icon.svg')} className='download-button' />
               </a>
             </div>
             <div className='tag-list'>
               <Tag systemTag>{bytes(props.post.size, { unitSeparator: ' ' })}</Tag>
-              <TagList list={props.post.tags} />
+              <TagList
+                list={props.post.tags}
+                onClick={(tag) => {
+                  props.history.push(buildSearchUrl('tag:' + tag));
+                }}
+              />
             </div>
 
             <UploadInfo

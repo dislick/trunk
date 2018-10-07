@@ -59,7 +59,7 @@ export default (state: PostsState = defaultState, action: PostsAction): PostsSta
     case SELECT_POST:
       return { ...state, selectedPostHash: action.payload };
     case FETCH_DETAIL_REQUEST:
-      return { ...state, isDetailFetching: true /*detail: { ...defaultState.detail }*/ };
+      return { ...state, isDetailFetching: true };
     case FETCH_DETAIL_SUCCESS:
       let interactions = sortBy([...action.detail.comments, ...action.detail.ratings], (i) => {
         let date = new Date(i.timestamp);
@@ -82,7 +82,7 @@ export default (state: PostsState = defaultState, action: PostsAction): PostsSta
     case POST_COMMENT_SUCCESS:
       return { ...state, detail: { ...state.detail, commentInput: '' } };
     case SET_SEARCH_QUERY:
-      return { ...state, searchQuery: action.payload };
+      return { ...state, searchQuery: action.payload || '' };
     case EXECUTE_SEARCH:
       return { ...state, posts: [] };
   }
@@ -91,7 +91,9 @@ export default (state: PostsState = defaultState, action: PostsAction): PostsSta
 };
 
 const mergeAndDedupePosts = (oldPosts: TorrentResponseDTO[], newPosts: TorrentResponseDTO[]) => {
-  let posts = [...oldPosts];
+  // Clone `oldPosts` array so that we don't modify the original
+  let posts = oldPosts.slice();
+
   for (let newPost of newPosts) {
     if (!posts.some((p) => p.hash === newPost.hash)) {
       posts.push(newPost);

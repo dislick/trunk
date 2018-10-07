@@ -122,6 +122,7 @@ function getHexString(buffer: Buffer) {
 
 const tagMatcher = /^tag:([a-z0-9-]+?)$/i;
 const userMatcher = /^user:([a-z0-9-]+?)$/i;
+const hashMatcher = /^hash:([a-f0-9]{40})$/;
 
 function generateExpressionForQueryString(query: string) {
   let keywords = query.trim().split(/\s+/).filter((k) => k.length > 0);
@@ -149,6 +150,11 @@ function generateExpressionForQueryString(query: string) {
     if (userMatcher.test(keyword)) {
       let user = keyword.match(userMatcher)[1];
       expression.and(`username = ?`, user);
+      continue;
+    }
+    if (hashMatcher.test(keyword)) {
+      let hash = keyword.match(hashMatcher)[1];
+      expression.and('torrents.hash = ?', hash);
       continue;
     }
     expression.and(`title ILIKE ?`, `%${keyword}%`);
