@@ -13,6 +13,7 @@ import server from './tracker';
  * Controllers
  */
 import * as LoginController from './controllers/login_controller';
+import * as RSSController from './controllers/rss_controller';
 import * as TorrentController from './controllers/torrent_controller';
 import * as TorrentDetailController from './controllers/torrent_detail_controller';
 import { authMiddleware } from './middlewares/auth_middleware';
@@ -98,6 +99,11 @@ app.get('/api/torrent/:hash', authMiddleware, TorrentController.downloadTorrent)
 app.get('/api/torrent/detail/:hash', authMiddleware, TorrentDetailController.getPostDetail);
 app.post('/api/torrent/detail/comment', authMiddleware, TorrentDetailController.postComment);
 app.post('/api/torrent/detail/rating', authMiddleware, TorrentDetailController.postRating);
+
+app.get('/rss/:torrentKey/', RSSController.getRSSFeed);
+app.get('/rss/:torrentKey/:user', RSSController.getRSSFeed);
+app.get('/rss/:torrentKey/:user/:tag', RSSController.getRSSFeed);
+app.get('/rss-download/:torrentKey/:hash', RSSController.rssDownloadTorrent);
 
 /**
  * Serve client app with history api fallback support

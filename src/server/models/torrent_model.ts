@@ -1,3 +1,4 @@
+import { isString } from 'lodash';
 import * as parseTorrent from 'parse-torrent';
 import * as squel from 'squel';
 import { NotFoundError } from '../utils/error';
@@ -5,6 +6,14 @@ import { getFormattedRatio } from '../utils/ratio_calculator';
 import { pool } from './database';
 
 squel.useFlavour('postgres');
+
+interface RSSTorrentResponse {
+  hash: string;
+  title: string;
+  size: string;
+  uploaded_at: Date;
+  torrent_file: Buffer;
+}
 
 export const getTorrentPosts = async (dateOffset: Date, queryString: string = '', limit: number = 20) => {
   let expression = generateExpressionForQueryString(queryString);
@@ -16,8 +25,8 @@ export const getTorrentPosts = async (dateOffset: Date, queryString: string = ''
     numberedParameters: true,
     numberedParametersStartAt: 2, // start at 2 because we need $1 for the LIMIT
   })
-  .where(expression)
-  .toParam();
+    .where(expression)
+    .toParam();
 
   // Remove the SELECT from the generated query because we only care about the
   // WHERE clause
@@ -114,6 +123,63 @@ export const getTorrentFile = async (hash: string): Promise<{ file: Buffer, titl
   }
 };
 
+export const getRssTorrents = async (
+  userString: string,
+  tagString: string,
+  limit: number = 30,
+): Promise<RSSTorrentResponse[]> => {
+  squel.useFlavour('postgres');
+
+  // Handle the star-sign which means `all users` or `all tags`
+  if (userString === '*') { userString = ''; }
+  if (tagString === '*') { tagString = ''; }
+
+  const users = isString(userString) ? turnStringToArray(userString, '+') : [];
+  const tags = isString(tagString) ? turnStringToArray(tagString, '+') : [];
+
+  let userExpression = squel.expr();
+  let tagExpression = squel.expr();
+
+  for (let user of users) {
+    userExpression.or('u.username = ?', user);
+  }
+  for (let tag of tags) {
+    tagExpression.and(`concatedLabels.labels ~ ?`, `(^|,)${tag}(,|$)`);
+  }
+
+  let sql = squel.select({
+    autoQuoteAliasNames: false,
+    numberedParameters: true,
+  })
+    .field('torrents.hash')
+    .field('torrents.title')
+    .field('torrents.size')
+    .field('torrents.uploaded_at')
+    .field('torrents.torrent_file')
+    .from(concatedLabelsSELECT(), 'concatedLabels')
+    .join('torrents', null, 'torrents.hash = concatedLabels.hash')
+    .join('"user"', 'u', 'torrents.user_id = u.id')
+    .where(userExpression)
+    .where(tagExpression)
+    .order('torrents.uploaded_at', false)
+    .limit(limit)
+    .toParam();
+
+  let result = await pool.query(sql.text, sql.values);
+  return result.rows;
+};
+
+function concatedLabelsSELECT() {
+  return squel
+    .select({ autoQuoteAliasNames: false })
+    .field('torrents.hash')
+    .field(`string_agg(tags.label, ',') AS labels`)
+    .from('torrents')
+    .left_join('tag_torrent_link', 't2', 'torrents.hash = t2.torrent')
+    .left_join('tags', null, 't2.tag_id = tags.id')
+    .group('torrents.hash');
+}
+
 function getHexString(buffer: Buffer) {
   // Prepend \x to the hex string of the buffer to tell postgres that the
   // `bytea` type uses hex format instead of the escape format.
@@ -125,7 +191,7 @@ const userMatcher = /^user:([a-z0-9-]+?)$/i;
 const hashMatcher = /^hash:([a-f0-9]{40})$/;
 
 function generateExpressionForQueryString(query: string) {
-  let keywords = query.trim().split(/\s+/).filter((k) => k.length > 0);
+  let keywords = turnStringToArray(query, /\s+/);
 
   let expression = squel.expr();
 
@@ -161,4 +227,8 @@ function generateExpressionForQueryString(query: string) {
   }
 
   return expression;
+}
+
+function turnStringToArray(input: string, splitBy: string | RegExp) {
+  return input.trim().split(splitBy).filter((part) => part.length > 0);
 }
