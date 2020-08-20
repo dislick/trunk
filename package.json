@@ -17,7 +17,7 @@
   "author": "Patrick Muff",
   "license": "ISC",
   "dependencies": {
-    "bcrypt": "^3.0.0",
+    "bcrypt": "^5.0.0",
     "bittorrent-rss-feed": "git+https://github.com/dislick/bittorrent-rss-feed.git",
     "bittorrent-tracker": "^9.10.1",
     "body-parser": "^1.18.3",
